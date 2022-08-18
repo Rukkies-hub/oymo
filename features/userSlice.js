@@ -4,22 +4,23 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: {
     value: 0,
-    name: 'rukkiecodes'
+    email: '',
+    password: '',
+    signInLoading: false,
+    googleLoadng: false
   },
   reducers: {
-    increment: state => {
-      state.value += 1
+    setEmail: (state, action) => {
+      state.email = action.payload
     },
-    decrement: state => {
-      state.value -= 1
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
+
+    setPassword: (state, action) => {
+      state.password = action.payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = userSlice.actions
+export const { setEmail, setPassword } = userSlice.actions
 
 export default userSlice.reducer
