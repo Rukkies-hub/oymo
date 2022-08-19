@@ -1,23 +1,59 @@
-import { View, Text, ImageBackground, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TextInput, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import {
+  View,
+  ImageBackground,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+  Image,
+  Alert
+} from 'react-native'
 import { login } from '../style/login'
 import Bar from '../components/Bar'
-import Font from '../components/Font'
+import OymoFont from '../components/OymoFont'
 import color from '../style/color'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
-import { useDispatch, useSelector } from 'react-redux'
-import { setEmail, setPassword } from '../features/userSlice'
-import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../features/userSlice'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../hooks/firebase'
 
 const Signup = ({ navigation }) => {
-  const email = useSelector(state => state.user.email)
-  const password = useSelector(state => state.user.password)
-  const signInLoading = useSelector(state => state.user.signInLoading)
-  const googleLoadng = useSelector(state => state.user.googleLoadng)
+  const [securePasswordEntry, setSecurePasswordEntry] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [googleLoadng, setGoogleLoadng] = useState(false)
+  const [email, setEmail] = useState('rukkiecodes4@gmail.com')
+  const [password, setPassword] = useState('amagboro')
 
   const dispatch = useDispatch()
 
-  const [securePasswordEntry, setSecurePasswordEntry] = useState(false)
+  let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+  const signupUser = () => {
+    if (email.match(regexEmail) && password != '') {
+      setLoading(true)
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(user => {
+          setLoading(false)
+          return dispatch(setUser(user))
+        })
+        .catch(error => {
+          Alert.alert('Signup error. Seems you already have an account.')
+          setLoading(false)
+        })
+    } else {
+      Alert.alert('please complete the form to signin')
+    }
+  }
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', () => {
+      Keyboard.dismiss()
+    })
+  }, [Keyboard])
 
   return (
     <ImageBackground
@@ -31,8 +67,8 @@ const Signup = ({ navigation }) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <>
             <View style={login.heading}>
-              <Font style={login.headingText} font='montserrat_medium' text='Hello there' />
-              <Font style={login.headingSubText} font='montserrat_medium' text='create an account😊' />
+              <OymoFont fontStyle={login.headingText} fontFamily='montserrat_medium' message='Hello there' />
+              <OymoFont fontStyle={login.headingSubText} fontFamily='montserrat_medium' message='create an account😊' />
             </View>
 
             <View style={{ marginTop: 40, width: '100%' }}>
@@ -42,9 +78,9 @@ const Signup = ({ navigation }) => {
                   autoCapitalize='none'
                   placeholder='Email'
                   value={email}
-                  onChangeText={value => dispatch(setEmail(value))}
+                  onChangeText={setEmail}
+                  style={login.textInput}
                   placeholderTextColor={color.white}
-                  style={[login.textInput, { fontFamily: 'text' }]}
                 />
               </View>
 
@@ -54,10 +90,10 @@ const Signup = ({ navigation }) => {
                   autoCapitalize='none'
                   placeholder='Email'
                   value={password}
+                  onChangeText={setPassword}
+                  style={login.textInput}
                   placeholderTextColor={color.white}
                   secureTextEntry={securePasswordEntry}
-                  style={[login.textInput, { fontFamily: 'text' }]}
-                  onChangeText={value => dispatch(setPassword(value))}
                 />
                 <TouchableOpacity
                   onPress={() => setSecurePasswordEntry(!securePasswordEntry)}
@@ -73,17 +109,20 @@ const Signup = ({ navigation }) => {
               </View>
 
               <View style={login.signupButtonContainer}>
-                <TouchableOpacity style={login.signupButton}>
+                <TouchableOpacity
+                  onPress={signupUser}
+                  style={login.signupButton}
+                >
                   {
-                    signInLoading ?
+                    loading ?
                       <ActivityIndicator color={color.white} size='small' /> :
-                      <Font
-                        style={{
+                      <OymoFont
+                        fontStyle={{
                           fontSize: 16,
                           color: color.white
                         }}
-                        font='montserrat_medium'
-                        text='Sign Up'
+                        fontFamily='montserrat_medium'
+                        message='Sign Up'
                       />
                   }
                 </TouchableOpacity>
@@ -105,12 +144,13 @@ const Signup = ({ navigation }) => {
               <View style={login.bottomContainer}>
                 <View />
                 <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                  <Font
-                    style={{
+                  <OymoFont
+                    fontStyle={{
                       color: color.white,
                       fontSize: 12
                     }}
-                    font='montserrat_medium' text="Already have an account?"
+                    fontFamily='montserrat_medium'
+                    message="Already have an account?"
                   />
                 </TouchableOpacity>
               </View>

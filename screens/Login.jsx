@@ -1,23 +1,69 @@
-import { View, Text, ImageBackground, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, TextInput, TouchableOpacity, ActivityIndicator, Image } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
+import {
+  View,
+  ImageBackground,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TextInput,
+  TouchableOpacity,
+  ActivityIndicator,
+  Image,
+  Alert
+} from 'react-native'
 import { login } from '../style/login'
 import Bar from '../components/Bar'
-import Font from '../components/Font'
 import color from '../style/color'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
-import { useDispatch, useSelector } from 'react-redux'
-import { setEmail, setPassword } from '../features/userSlice'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../features/userSlice'
 import { useState } from 'react'
+import { useFonts } from 'expo-font'
+import OymoFont from '../components/OymoFont'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../hooks/firebase'
 
 const Login = ({ navigation }) => {
-  const email = useSelector(state => state.user.email)
-  const password = useSelector(state => state.user.password)
-  const signInLoading = useSelector(state => state.user.signInLoading)
-  const googleLoadng = useSelector(state => state.user.googleLoadng)
-
   const dispatch = useDispatch()
 
-  const [securePasswordEntry, setSecurePasswordEntry] = useState(false)
+  const [securePasswordEntry, setSecurePasswordEntry] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [googleLoadng, setGoogleLoadng] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+  const signinUser = () => {
+    if (email.match(regexEmail) && password != '') {
+      setLoading(true)
+      signInWithEmailAndPassword(auth, email, password)
+        .then(user => {
+          setLoading(false)
+          return dispatch(setUser(user))
+        })
+        .catch(error => {
+          Alert.alert('Signin error. Check your details and try again.')
+          setLoading(false)
+        })
+    } else {
+      Alert.alert('please complete the form to signin')
+    }
+  }
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidHide', () => {
+      Keyboard.dismiss()
+    })
+  }, [Keyboard])
+
+
+  const [loaded] = useFonts({
+    pacifico: require('../assets/fonts/Pacifico/Pacifico-Regular.ttf'),
+    montserrat_medium: require('../assets/fonts/Montserrat_Alternates/MontserratAlternates-Medium.ttf')
+  })
+
+  if (!loaded) return null
 
   return (
     <ImageBackground
@@ -31,8 +77,8 @@ const Login = ({ navigation }) => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <>
             <View style={login.heading}>
-              <Font style={login.headingText} font='montserrat_medium' text='Welcome back' />
-              <Font style={login.headingSubText} font='montserrat_medium' text='Log into your account' />
+              <OymoFont message='Welcome back' fontStyle={login.headingText} fontFamily='montserrat_medium' />
+              <OymoFont message='Log into your account' fontStyle={login.headingSubText} fontFamily='montserrat_medium' />
             </View>
 
             <View style={{ marginTop: 40, width: '100%' }}>
@@ -42,9 +88,9 @@ const Login = ({ navigation }) => {
                   autoCapitalize='none'
                   placeholder='Email'
                   value={email}
-                  onChangeText={value => dispatch(setEmail(value))}
+                  onChangeText={setEmail}
                   placeholderTextColor={color.white}
-                  style={[login.textInput, { fontFamily: 'text' }]}
+                  style={login.textInput}
                 />
               </View>
 
@@ -52,12 +98,12 @@ const Login = ({ navigation }) => {
                 <MaterialIcons name='alternate-email' size={24} color={color.white} style={{ marginHorizontal: 10 }} />
                 <TextInput
                   autoCapitalize='none'
-                  placeholder='Email'
+                  placeholder='Password'
                   value={password}
+                  onChangeText={setPassword}
                   placeholderTextColor={color.white}
                   secureTextEntry={securePasswordEntry}
-                  style={[login.textInput, { fontFamily: 'text' }]}
-                  onChangeText={value => dispatch(setPassword(value))}
+                  style={login.textInput}
                 />
                 <TouchableOpacity
                   onPress={() => setSecurePasswordEntry(!securePasswordEntry)}
@@ -73,17 +119,20 @@ const Login = ({ navigation }) => {
               </View>
 
               <View style={login.signupButtonContainer}>
-                <TouchableOpacity style={login.signupButton}>
+                <TouchableOpacity
+                  onPress={signinUser}
+                  style={login.signupButton}
+                >
                   {
-                    signInLoading ?
+                    loading ?
                       <ActivityIndicator color={color.white} size='small' /> :
-                      <Font
-                        style={{
+                      <OymoFont
+                        message='Sign In'
+                        fontStyle={{
                           fontSize: 16,
-                          color: color.white
+                          color: color.white,
                         }}
-                        font='montserrat_medium'
-                        text='Sign Up'
+                        fontFamily='montserrat_medium'
                       />
                   }
                 </TouchableOpacity>
@@ -105,12 +154,13 @@ const Login = ({ navigation }) => {
               <View style={login.bottomContainer}>
                 <View />
                 <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-                  <Font
-                    style={{
+                  <OymoFont
+                    message="Don't have an account?"
+                    fontStyle={{
+                      fontSize: 12,
                       color: color.white,
-                      fontSize: 12
                     }}
-                    font='montserrat_medium' text="Don't have an account?"
+                    fontFamily='montserrat_medium'
                   />
                 </TouchableOpacity>
               </View>

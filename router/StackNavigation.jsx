@@ -7,8 +7,12 @@ const Stack = createStackNavigator()
 
 import Login from '../screens/Login'
 import Signup from '../screens/Signup'
+import BottomNavigation from './BottomNavigation'
+import { useSelector } from 'react-redux'
 
 const StackNavigation = () => {
+  const user = useSelector(state => state.user.user)
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -20,8 +24,19 @@ const StackNavigation = () => {
         ...TransitionPresets.SlideFromRightIOS
       }}
     >
-      <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-      <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
+      {
+        user ? (
+          <>
+            <Stack.Screen name="BottomNavigation" component={BottomNavigation} />
+          </>
+        ) :
+          (
+            <>
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Signup" component={Signup} />
+            </>
+          )
+      }
     </Stack.Navigator>
   )
 }
