@@ -50,7 +50,7 @@ const Header = ({
   return (
     <View>
       <View
-        style={header.container}
+        style={[header.container, {backgroundColor: backgroundColor ? backgroundColor : color.transparent}]}
       >
         <View
           style={header.subContainer1}

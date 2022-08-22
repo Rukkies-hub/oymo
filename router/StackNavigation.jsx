@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack'
 
-const Stack = createStackNavigator()
+const { Navigator, Screen, Group } = createStackNavigator()
 
 import Login from '../screens/Login'
 import Signup from '../screens/Signup'
@@ -13,6 +13,7 @@ import { auth, db, onAuthStateChanged } from '../hooks/firebase'
 import { logout, setProfile, setUser } from '../features/userSlice'
 import Splash from './Splash'
 import { doc, onSnapshot } from 'firebase/firestore'
+import Profile from '../screens/profile/Profile'
 
 const StackNavigation = () => {
   const user = useSelector(state => state.user.user)
@@ -42,7 +43,7 @@ const StackNavigation = () => {
   }, [user, db])
 
   return (
-    <Stack.Navigator
+    <Navigator
       screenOptions={{
         headerShown: false,
         gestureEnabled: true,
@@ -54,24 +55,27 @@ const StackNavigation = () => {
     >
       {
         loadingInitial ?
-          <Stack.Screen name="Splash" component={Splash} /> :
+          <Screen name="Splash" component={Splash} /> :
           <>
             {
               user ? (
                 <>
-                  <Stack.Screen name="BottomNavigation" component={BottomNavigation} />
+                  <Group>
+                    <Screen name="BottomNavigation" component={BottomNavigation} />
+                    <Screen name="Profile" component={Profile} />
+                  </Group>
                 </>
               ) :
                 (
                   <>
-                    <Stack.Screen name="Login" component={Login} />
-                    <Stack.Screen name="Signup" component={Signup} />
+                    <Screen name="Login" component={Login} />
+                    <Screen name="Signup" component={Signup} />
                   </>
                 )
             }
           </>
       }
-    </Stack.Navigator>
+    </Navigator>
   )
 }
 

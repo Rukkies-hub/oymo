@@ -1,9 +1,8 @@
-import { Dimensions, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import color from "./color"
 
 export const header = StyleSheet.create({
   container: {
-    backgroundColor: color.white,
     height: 50,
     marginTop: 40,
     paddingHorizontal: 10,
