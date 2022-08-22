@@ -31,6 +31,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
 import { useDispatch, useSelector } from 'react-redux'
 import { setProfiles } from '../features/matchSlice'
+import { match } from '../style/match'
 const { width, height } = Dimensions.get('window')
 
 // import { user } from '../features/matchSlice'
@@ -39,6 +40,7 @@ const Match = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const user = useSelector(state => state.user.user)
+  const profile = useSelector(state => state.user.profile)
   const profiles = useSelector(state => state.match.profiles)
 
   const swipeRef = useRef(null)
@@ -95,7 +97,7 @@ const Match = () => {
           // CREAT A MATCH
           setDoc(doc(db, 'matches', generateId(user?.uid, userSwiped?.id)), {
             users: {
-              [user?.uid]: userProfile,
+              [user?.uid]: profile,
               [userSwiped?.id]: userSwiped
             },
             usersMatched: [user?.uid, userSwiped?.id],
@@ -103,12 +105,12 @@ const Match = () => {
           }).then(async () => await deleteDoc(doc(db, 'users', user?.uid, 'pendingSwipes', userSwiped?.id)))
 
           navigation.navigate('NewMatch', {
-            loggedInProfile: userProfile,
+            loggedInProfile: profile,
             userSwiped
           })
         } else {
           setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
-          setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', user?.uid), userProfile)
+          setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', user?.uid), profile)
         }
       })
 
@@ -127,10 +129,7 @@ const Match = () => {
 
   return (
     <View
-      style={{
-        flex: 1,
-        backgroundColor: color.white
-      }}
+      style={match.container}
     >
       <View style={{ flex: 1, marginTop: -5 }}>
         {
@@ -149,118 +148,42 @@ const Match = () => {
               backgroundColor={color.transparent}
               cardHorizontalMargin={0}
               cardVerticalMargin={0}
-              onSwipedLeft={cardIndex => userProfile ? swipeLeft(cardIndex) : disabled()}
-              onSwipedRight={cardIndex => userProfile ? swipeRight(cardIndex) : disabled()}
+              onSwipedLeft={cardIndex => profile ? swipeLeft(cardIndex) : disabled()}
+              onSwipedRight={cardIndex => profile ? swipeRight(cardIndex) : disabled()}
               overlayLabels={{
-                left: {
-                  title: 'NOPE',
-                  style: {
-                    label: {
-                      textAlign: 'center',
-                      color: color.red,
-                      fontFamily: 'text',
-                      borderWidth: 4,
-                      borderRadius: 20,
-                      borderColor: color.red,
-                      position: 'absolute',
-                      top: 0,
-                      right: 20,
-                      width: 150
-                    }
-                  }
-                },
-
-                right: {
-                  title: 'MATCH',
-                  style: {
-                    label: {
-                      textAlign: 'center',
-                      color: color.lightGreen,
-                      fontFamily: 'text',
-                      borderWidth: 4,
-                      borderRadius: 20,
-                      borderColor: color.lightGreen,
-                      position: 'absolute',
-                      top: 0,
-                      left: 20,
-                      width: 160
-                    }
-                  }
-                }
+                left: { title: 'NOPE', style: { label: match.nope } },
+                right: { title: 'MATCH', style: { label: match.match } }
               }}
 
               renderCard={card => (
                 <View
                   key={card?.id}
-                  style={{
-                    backgroundColor: color.transparent,
-                    width,
-                    height: height - 112,
-                    marginTop: -25,
-                    borderRadius: 12,
-                    position: 'relative',
-                    overflow: 'hidden'
-                  }}
+                  style={match.card}
                 >
                   <Image
-                    style={{
-                      flex: 1,
-                      width: '100%',
-                      height: '100%',
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                    }}
+                    style={match.cardImage}
                     source={{ uri: card?.photoURL }}
                   />
 
                   <LinearGradient
                     colors={['transparent', color.dark]}
-                    style={{
-                      width: '100%',
-                      minHeight: 60,
-                      position: 'absolute',
-                      bottom: 0,
-                      padding: 20,
-                      marginBottom: -2
-                    }}
+                    style={match.cardGradient}
                   >
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
-                      }}
-                    >
+                    <View style={match.userDetail}>
                       <TouchableOpacity
-                        // onPress={() => userProfile ? navigation.navigate('UserProfile', { user: card }) : disabled()}
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'flex-start',
-                          alignItems: 'center'
-                        }}
+                        onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()}
+                        style={match.usernameButton}
                       >
                         <OymoFont
-                          fontStyle={{
-                            fontSize: 30,
-                            color: color.white,
-                            marginBottom: 10,
-                            textTransform: 'capitalize'
-                          }}
+                          fontStyle={match.username}
                           fontFamily='montserrat_bold'
                           message={card?.username}
                         />
                       </TouchableOpacity>
 
                       <TouchableOpacity
-                        // onPress={() => userProfile ? navigation.navigate('UserProfile', { user: card }) : disabled()}
-                        style={{
-                          width: 40,
-                          height: 40,
-                          justifyContent: 'center',
-                          alignItems: 'center'
-                        }}
+                        onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()}
+                        style={match.moreInfoButton}
                       >
                         <MaterialCommunityIcons name='information-outline' size={20} color={color.white} />
                       </TouchableOpacity>
@@ -268,21 +191,9 @@ const Match = () => {
 
                     {
                       card?.job != '' &&
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'flex-start',
-                          alignItems: 'center'
-                        }}
-                      >
+                      <View style={match.detailesContainer}>
                         <MaterialCommunityIcons name='briefcase-variant-outline' size={17} color={color.white} />
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: color.white,
-                            fontFamily: 'lightText'
-                          }}
-                        >
+                        <Text style={[match.detail, { fontFamily: 'lightText' }]}>
                           {` ${card?.job}`} {card?.job ? 'at' : null} {card?.company}
                         </Text>
                       </View>
@@ -290,106 +201,35 @@ const Match = () => {
 
                     {
                       card?.school != '' &&
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'flex-start',
-                          alignItems: 'center',
-                          marginTop: 10
-                        }}
-                      >
+                      <View style={match.detailesContainer}>
                         <MaterialCommunityIcons name='school-outline' size={17} color={color.white} />
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: color.white,
-                            fontFamily: 'lightText'
-                          }}
-                        >
-                          {` ${card?.school}`}
-                        </Text>
+                        <OymoFont message={` ${card.school}`} fontStyle={match.detail} fontFamily='montserrat_light' />
                       </View>
                     }
 
                     {
                       card?.city != '' &&
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'flex-start',
-                          alignItems: 'center',
-                          marginTop: 10
-                        }}
-                      >
+                      <View style={match.detailesContainer}>
                         <MaterialCommunityIcons name='home-outline' size={17} color={color.white} />
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: color.white,
-                            fontFamily: 'lightText'
-                          }}
-                        >
-                          {` ${card?.city}`}
-                        </Text>
+                        <OymoFont message={` ${card.city}`} fontStyle={match.detail} fontFamily='montserrat_light' />
                       </View>
                     }
 
                     {
                       card?.about?.length >= 20 &&
-                      <Text
-                        numberOfLines={4}
-                        style={{
-                          color: color.white,
-                          fontSize: 18,
-                          fontFamily: 'lightText',
-                          marginTop: 10
-                        }}
-                      >
+                      <Text numberOfLines={4} style={[match.about, { fontFamily: 'lightText' }]}>
                         {card?.about}
                       </Text>
                     }
 
                     {
                       card?.passions?.length > 0 &&
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'flex-start',
-                          alignItems: 'center',
-                          marginTop: 10
-                        }}
-                      >
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
-                            flexWrap: 'wrap'
-                          }}
-                        >
+                      <View style={match.detailesContainer}>
+                        <View style={match.passionsContainer}>
                           {
                             card?.passions?.map((passion, index) => (
-                              <View
-                                key={index}
-                                style={{
-                                  paddingHorizontal: 10,
-                                  paddingVertical: 5,
-                                  borderRadius: 50,
-                                  marginBottom: 10,
-                                  marginRight: 10,
-                                  backgroundColor: `${color.faintBlack}`
-                                }}
-                              >
-                                <Text
-                                  style={{
-                                    color: color.white,
-                                    fontSize: 12,
-                                    fontFamily: 'lightText',
-                                    textTransform: 'capitalize'
-                                  }}
-                                >
-                                  {passion}
-                                </Text>
+                              <View key={index} style={match.passions}>
+                                <OymoFont message={passion} fontFamily='montserrat_light' fontStyle={match.passion} />
                               </View>
                             ))
                           }
@@ -401,14 +241,7 @@ const Match = () => {
               )}
             /> :
             (
-              <View
-                style={{
-                  flex: 1,
-                  backgroundColor: color.transparent,
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-              >
+              <View style={match.indicator}>
                 <ActivityIndicator color={color.red} size='large' />
               </View>
             )

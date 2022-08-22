@@ -1,88 +1,139 @@
 import { Dimensions, StyleSheet } from "react-native"
 import color from "./color"
 
-export const login = StyleSheet.create({
+const { width, height } = Dimensions.get('window')
+
+export const match = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.black,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    width: Dimensions.get('window').width
+    backgroundColor: color.white
   },
 
-  KeyboardView: {
+  nope: {
+    textAlign: 'center',
+    color: color.red,
+    fontFamily: 'text',
+    borderWidth: 4,
+    borderRadius: 20,
+    borderColor: color.red,
+    position: 'absolute',
+    top: 0,
+    right: 20,
+    width: 150
+  },
+
+  match: {
+    textAlign: 'center',
+    color: color.lightGreen,
+    fontFamily: 'text',
+    borderWidth: 4,
+    borderRadius: 20,
+    borderColor: color.lightGreen,
+    position: 'absolute',
+    top: 0,
+    left: 20,
+    width: 160
+  },
+
+  card: {
+    backgroundColor: color.transparent,
+    width,
+    height: height - 112,
+    marginTop: -25,
+    borderRadius: 12,
+    position: 'relative',
+    overflow: 'hidden'
+  },
+
+  cardImage: {
     flex: 1,
     width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+  },
+
+  cardGradient: {
+    width: '100%',
+    minHeight: 60,
+    position: 'absolute',
+    bottom: 0,
+    padding: 20,
+    marginBottom: -2
+  },
+
+  userDetail: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+
+  usernameButton: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+
+  username: {
+    fontSize: 30,
+    color: color.white,
+    marginBottom: 10,
+    textTransform: 'capitalize'
+  },
+
+  moreInfoButton: {
+    width: 40,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center'
   },
 
-  heading: {
-    width: '100%',
-    alignItems: 'flex-start'
+  detailesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 10
   },
 
-  headingText: {
+  detail: {
+    fontSize: 18,
+    color: color.white
+  },
+
+  about: {
     color: color.white,
-    fontSize: 40
+    fontSize: 18,
+    marginTop: 10
   },
 
-  headingSubText: {
-    fontSize: 16,
-    color: color.white
-  },
-
-  textInputContainer: {
-    height: 45,
+  passionsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: color.lightBorderColor,
-    borderRadius: 12,
-    overflow: 'hidden'
+    flexWrap: 'wrap'
   },
 
-  textInput: {
+  passions: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 50,
+    marginBottom: 10,
+    marginRight: 10,
+    backgroundColor: color.faintBlack
+  },
+
+  passion: {
+    color: color.white,
+    fontSize: 12,
+    textTransform: 'capitalize'
+  },
+
+  indicator: {
     flex: 1,
-    color: color.white
-  },
-
-  signupButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-
-  signupButton: {
-    flex: 1,
-    height: 45,
-    borderRadius: 12,
+    backgroundColor: color.transparent,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: color.red
-  },
-
-  googleLoginButton: {
-    width: 45,
-    height: 45,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: color.white,
-    borderRadius: 12,
-    marginLeft: 20
-  },
-
-  googleImage: {
-    width: 25,
-    height: 25
-  },
-
-  bottomContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 20
+    alignItems: 'center'
   }
 })

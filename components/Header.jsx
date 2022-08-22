@@ -24,6 +24,7 @@ import { db } from '../hooks/firebase'
 import getMatchedUserInfo from '../lib/getMatchedUserInfo'
 import { useSelector } from 'react-redux'
 import OymoFont from './OymoFont'
+import { header } from '../style/header'
 
 const Header = ({
   showAratar,
@@ -42,41 +43,24 @@ const Header = ({
 }) => {
   const navigation = useNavigation()
   const user = useSelector(state => state.user.user)
+  const profile = useSelector(state => state.user.profile)
 
   const [notificationCount, setNotificationCount] = useState([])
 
   return (
     <View>
       <View
-        style={{
-          backgroundColor: color.white,
-          height: 50,
-          marginTop: 40,
-          paddingHorizontal: 10,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}
+        style={header.container}
       >
         <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'center'
-          }}
+          style={header.subContainer1}
         >
           {
             showBack &&
             <TouchableOpacity
               onPress={() => navigation.goBack()}
               onLongPress={() => navigation.navigate('Match')}
-              style={{
-                width: 40,
-                height: 40,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginRight: 10
-              }}
+              style={header.backButton}
             >
               <Entypo name='chevron-left' size={24} color={color.black} />
             </TouchableOpacity>
@@ -85,15 +69,38 @@ const Header = ({
           {
             showLogo &&
             <OymoFont
-              fontStyle={{
-                fontSize: 30,
-                margin: 0,
-                marginTop: -10,
-                color: color.black
-              }}
+              fontStyle={header.logo}
               fontFamily='pacifico'
               message='Oymo'
             />
+          }
+
+          {
+            showAratar &&
+            <>
+              {
+                !profile &&
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('EditProfile')}
+                  style={header.placeholderImage}
+                >
+                  <SimpleLineIcons name='user' size={20} color={color.dark} />
+                </TouchableOpacity>
+              }
+
+              {
+                profile &&
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Profile')}
+                  style={header.profileImageButton}
+                >
+                  <Image
+                    source={{ uri: profile?.photoURL }}
+                    style={header.profileImage}
+                  />
+                </TouchableOpacity>
+              }
+            </>
           }
         </View>
       </View>
