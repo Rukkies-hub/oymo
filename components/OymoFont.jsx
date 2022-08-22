@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { useFonts } from 'expo-font'
 
-const OymoFont = ({ message, fontStyle, fontFamily }) => {
+const OymoFont = ({ lines, message, fontStyle, fontFamily }) => {
   const [loaded] = useFonts({
     pacifico: require('../assets/fonts/Pacifico/Pacifico-Regular.ttf'),
     montserrat_light: require('../assets/fonts/Montserrat_Alternates/MontserratAlternates-Light.ttf'),
@@ -13,7 +13,15 @@ const OymoFont = ({ message, fontStyle, fontFamily }) => {
   if (!loaded) return null
 
   return (
-    <Text style={{ ...fontStyle, fontFamily: fontFamily || 'montserrat_medium' }}>{message}</Text>
+    <Text
+      numberOfLines={lines || 20}
+      style={{
+        ...fontStyle,
+        fontFamily: fontFamily || 'montserrat_medium'
+      }}
+    >
+      {message}
+    </Text>
   )
 }
 
