@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, SafeAreaView, Image, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 
@@ -32,9 +32,6 @@ import { useFonts } from 'expo-font'
 import { useDispatch, useSelector } from 'react-redux'
 import { setProfiles } from '../features/matchSlice'
 import { match } from '../style/match'
-const { width, height } = Dimensions.get('window')
-
-// import { user } from '../features/matchSlice'
 
 const Match = () => {
   const navigation = useNavigation()
@@ -120,9 +117,7 @@ const Match = () => {
   const disabled = () => navigation.navigate('SetupModal')
 
   const [loaded] = useFonts({
-    text: require('../assets/fonts/Montserrat_Alternates/MontserratAlternates-Medium.ttf'),
-    lightText: require('../assets/fonts/Montserrat_Alternates/MontserratAlternates-Light.ttf'),
-    boldText: require('../assets/fonts/Montserrat_Alternates/MontserratAlternates-Bold.ttf')
+    lightText: require('../assets/fonts/Montserrat_Alternates/MontserratAlternates-Light.ttf')
   })
 
   if (!loaded) return null
