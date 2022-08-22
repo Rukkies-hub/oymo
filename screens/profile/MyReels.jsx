@@ -15,7 +15,7 @@ const MyReels = ({ profile, user }) => {
   const navigation = useNavigation()
 
   const [reels, setReels] = useState([])
-  const [reelsLimit, setLimit] = useState(20)
+  const [reelsLimit, setLimit] = useState(50)
 
   useLayoutEffect(() => {
     return onSnapshot(query(collection(db, 'reels'),
@@ -77,42 +77,16 @@ const MyReels = ({ profile, user }) => {
                   <OymoFont message={reel?.description} lines={1} fontStyle={pReels.desctiption} />
                   <OymoFont message={`Video - ${profile?.username}`} lines={1} fontStyle={pReels.username} />
 
-                  <View
-                    style={{
-                      marginTop: 10,
-                      flexDirection: 'row',
-                      justifyContent: 'flex-start',
-                      alignItems: 'flex-end'
-                    }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: 'row'
-                      }}
-                    >
-                      <OymoFont message={reel?.likesCount} lines={1} fontStyle={pReels.desctiption} />
-                      <Text
-                        style={{
-                          color: color.lightText,
-                          fontFamily: 'text'
-                        }}
-                      >
+                  <View style={pReels.statsContainer}>
+                    <View style={pReels.statsContainerRow}>
+                      <OymoFont message={reel?.likesCount} lines={1} fontStyle={pReels.reelsCount} />
+                      <Text style={pReels.reelsCountText}>
                         {reel?.likesCount == 1 ? 'Like' : 'Likes'}
                       </Text>
                     </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        marginLeft: 10
-                      }}
-                    >
-                      <OymoFont message={reel?.commentsCount} lines={1} fontStyle={pReels.desctiption} />
-                      <Text
-                        style={{
-                          color: color.lightText,
-                          fontFamily: 'text'
-                        }}
-                      >
+                    <View style={pReels.statsContainerRow}>
+                      <OymoFont message={reel?.commentsCount} lines={1} fontStyle={pReels.reelsCount} />
+                      <Text style={pReels.reelsCountText}>
                         {reel?.commentsCount == 1 ? 'Comment' : 'Comments'}
                       </Text>
                     </View>

@@ -33,8 +33,8 @@ export const pReels = StyleSheet.create({
   },
 
   reelsThumb: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     borderRadius: 12,
     marginRight: 10
   },
@@ -47,5 +47,26 @@ export const pReels = StyleSheet.create({
   username: {
     color: color.dark,
     fontSize: 13
+  },
+
+  statsContainer: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end'
+  },
+
+  statsContainerRow: {
+    flexDirection: 'row',
+    marginRight: 10
+  },
+
+  reelsCount: {
+    marginRight: 2
+  },
+
+  reelsCountText: {
+    color: color.lightText,
+    fontFamily: 'text'
   }
 })
