@@ -9,15 +9,17 @@ import Login from '../screens/Login'
 import Signup from '../screens/Signup'
 import BottomNavigation from './BottomNavigation'
 import { useDispatch, useSelector } from 'react-redux'
-import { auth, onAuthStateChanged } from '../hooks/firebase'
-import { logout, setUser } from '../features/userSlice'
+import { auth, db, onAuthStateChanged } from '../hooks/firebase'
+import { logout, setProfile, setUser } from '../features/userSlice'
 import Splash from './Splash'
+import { doc, onSnapshot } from 'firebase/firestore'
 
 const StackNavigation = () => {
   const user = useSelector(state => state.user.user)
   const loadingInitial = useSelector(state => state.user.loadingInitial)
 
   const dispatch = useDispatch()
+
   useEffect(() => {
     onAuthStateChanged(auth, userAuth => {
       if (userAuth) {
@@ -27,6 +29,17 @@ const StackNavigation = () => {
       }
     })
   }, [])
+
+  useEffect(() => {
+    (() => {
+      if (user)
+        onSnapshot(doc(db, 'users', user?.uid),
+          doc => {
+            let profile = doc?.data()
+            dispatch(setProfile(profile))
+          })
+    })()
+  }, [user, db])
 
   return (
     <Stack.Navigator
