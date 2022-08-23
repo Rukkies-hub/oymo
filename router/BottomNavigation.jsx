@@ -5,8 +5,9 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 
 import { Ionicons, Feather, MaterialCommunityIcons, SimpleLineIcons, Octicons } from '@expo/vector-icons'
 
-import Profile from '../screens/profile/Profile'
 import Match from '../screens/Match'
+import Reels from '../screens/reels/Reels'
+import Profile from '../screens/profile/Profile'
 
 import Bar from '../components/Bar'
 
@@ -32,6 +33,14 @@ const BottomNavigation = () => {
           component={Match}
           options={{
             tabBarIcon: () => <MaterialCommunityIcons name='heart-multiple-outline' size={20} color={color.black} />
+          }}
+        />
+
+        <Screen
+          name='Reels'
+          component={Reels}
+          options={{
+            tabBarIcon: () => <Ionicons name='videocam-outline' size={20} color={color.black} />
           }}
         />
 
