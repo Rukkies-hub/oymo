@@ -16,12 +16,14 @@ import { useFonts } from 'expo-font'
 import { LinearGradient } from 'expo-linear-gradient'
 
 import { useIsFocused, useNavigation } from '@react-navigation/native'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { reels } from '../../style/reels'
 
-// import LikeReels from '../../components/LikeReels'
+import LikeReels from '../../components/reelsComponents/LikeReels'
 import UserInfo from './components/UserInfo'
-// import UserAvatar from './components/UserAvatar'
+import OymoFont from '../../components/OymoFont'
+import UserAvatar from './components/UserAvatar'
+import { setReelsProps } from '../../features/reelsSlice'
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout))
@@ -31,6 +33,8 @@ const Reels = () => {
   const { user, profile } = useSelector(state => state.user)
   const { reelsList } = useSelector(state => state.reels)
   const mediaRefs = useRef([])
+
+  const dispatch = useDispatch()
 
   const [refreshing, setRefreshing] = useState(false)
 
@@ -74,11 +78,43 @@ const Reels = () => {
       >
         <ReelsSingle item={item} ref={ReelSingleRef => (mediaRefs.current[item?.id] = ReelSingleRef)} />
 
-        <LinearGradient colors={['transparent', color.labelColor]} style={reels.controlersContainer}>
+        <LinearGradient colors={['transparent', color.labelColor]} style={reels.gradientContainer}>
           {/* CAPTION */}
           <View style={reels.captionContainer}>
             <UserInfo _user={item?.user?.id} />
+
+            {
+              item?.description != '' &&
+              <OymoFont
+                message={item?.description}
+                fontStyle={reels.videoDescription}
+                fontFamily='montserrat_light'
+              />
+            }
           </View>
+
+          {/* CONTROLS */}
+          {
+            profile &&
+            <View style={reels.controlersContainer}>
+              <UserAvatar _user={item?.user?.id} />
+
+              <View style={reels.controleButtonContainer}>
+                <LikeReels reel={item} />
+
+                <TouchableOpacity
+                  onPress={() => {
+                    profile ? dispatch(setReelsProps(item)) : null
+                    profile ? navigation.navigate('ReelsComment', { item }) : disabled()
+                  }}
+                  style={reels.commentsButton}
+                >
+                  <FontAwesome name='comment' size={24} color={color.white} />
+                  <OymoFont message={item?.commentsCount ? item?.commentsCount : '0'} fontStyle={reels.commentsCount} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          }
         </LinearGradient>
       </ImageBackground>
     )

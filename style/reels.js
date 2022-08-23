@@ -25,7 +25,7 @@ export const reels = StyleSheet.create({
     overflow: 'hidden'
   },
 
-  controlersContainer: {
+  gradientContainer: {
     position: 'absolute',
     bottom: 0,
     width,
@@ -44,5 +44,67 @@ export const reels = StyleSheet.create({
   captionUsername: {
     color: color.white,
     fontSize: 16
+  },
+
+  videoDescription: {
+    color: color.white,
+    fontSize: 16
+  },
+
+  controlersContainer: {
+    marginVertical: 30,
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    margin: 20
+  },
+
+  userAvatarContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+    borderColor: color.white,
+    overflow: 'hidden',
+    backgroundColor: color.faintBlack,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  userAvatar: {
+    width: 50,
+    height: 50
+  },
+
+  controleButtonContainer: {
+    paddingVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 70
+  },
+
+  commentsButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  commentsCount: {
+    color: color.white,
+    marginTop: 5
+  },
+
+  likeButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 30
+  },
+
+  likesCounter: {
+    color: color.white,
+    marginTop: 5
   }
 })
