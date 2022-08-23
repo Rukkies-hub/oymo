@@ -18,7 +18,7 @@ import { nav } from '../style/navigation'
 const { Navigator, Screen } = createMaterialBottomTabNavigator()
 
 const BottomNavigation = () => {
-  const profile = useSelector(state => state.user.profile)
+  const { profile } = useSelector(state => state.user)
 
   return (
     <View style={nav.container}>

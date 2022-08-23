@@ -36,8 +36,7 @@ import { match } from '../style/match'
 const Match = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user.user)
-  const profile = useSelector(state => state.user.profile)
+  const { user, profile } = useSelector(state => state.user)
   const profiles = useSelector(state => state.match.profiles)
 
   const swipeRef = useRef(null)

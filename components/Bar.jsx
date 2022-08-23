@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar'
 
 const Bar = ({ color }) => {
   return (
-    <StatusBar style={color} translucent={true} animated={true} />
+    <StatusBar style={color || 'dark'} translucent={true} animated={true} />
   )
 }
 

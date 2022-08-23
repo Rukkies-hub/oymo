@@ -14,10 +14,13 @@ import { logout, setProfile, setUser } from '../features/userSlice'
 import Splash from './Splash'
 import { doc, onSnapshot } from 'firebase/firestore'
 import Profile from '../screens/profile/Profile'
+import EditProfile from '../screens/editProfile/EditProfile'
+import SaveAvatar from '../screens/editProfile/SaveAvatar'
+import Gender from '../screens/editProfile/components/Gender'
+import color from '../style/color'
 
 const StackNavigation = () => {
-  const user = useSelector(state => state.user.user)
-  const loadingInitial = useSelector(state => state.user.loadingInitial)
+  const { user, loadingInitial } = useSelector(state => state.user)
 
   const dispatch = useDispatch()
 
@@ -55,21 +58,37 @@ const StackNavigation = () => {
     >
       {
         loadingInitial ?
-          <Screen name="Splash" component={Splash} /> :
+          <Screen name='Splash' component={Splash} /> :
           <>
             {
               user ? (
                 <>
                   <Group>
-                    <Screen name="BottomNavigation" component={BottomNavigation} />
-                    <Screen name="Profile" component={Profile} />
+                    <Screen name='BottomNavigation' component={BottomNavigation} />
+                    <Screen name='Profile' component={Profile} />
+                    <Screen name='EditProfile' component={EditProfile} options={{ gestureEnabled: false }} />
+                    <Screen name='SaveAvatar' component={SaveAvatar} options={{ gestureEnabled: false }} />
+                  </Group>
+
+                  <Group screenOptions={{ presentation: 'transparentModal' }}>
+                    <Screen
+                      name='Gender'
+                      component={Gender}
+                      options={{
+                        gestureEnabled: false,
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
                   </Group>
                 </>
               ) :
                 (
                   <>
-                    <Screen name="Login" component={Login} />
-                    <Screen name="Signup" component={Signup} />
+                    <Screen name='Login' component={Login} />
+                    <Screen name='Signup' component={Signup} />
                   </>
                 )
             }

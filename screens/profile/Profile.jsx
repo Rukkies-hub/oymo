@@ -24,8 +24,8 @@ const Profile = () => {
 
   navigation.addListener('blur', () => {
     NavigationBar.setPositionAsync('relative')
-    NavigationBar.setBackgroundColorAsync(theme == 'dark' ? color.black : color.white)
-    NavigationBar.setButtonStyleAsync(theme == 'dark' ? 'light' : 'dark')
+    NavigationBar.setBackgroundColorAsync(color.white)
+    NavigationBar.setButtonStyleAsync('dark')
   })
 
   const [loaded] = useFonts({

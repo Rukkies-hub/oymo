@@ -42,8 +42,7 @@ const Header = ({
   showMessageOptions
 }) => {
   const navigation = useNavigation()
-  const user = useSelector(state => state.user.user)
-  const profile = useSelector(state => state.user.profile)
+  const { user, profile } = useSelector(state => state.user)
 
   const [notificationCount, setNotificationCount] = useState([])
 
