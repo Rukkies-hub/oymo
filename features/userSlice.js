@@ -20,9 +20,7 @@ export const userSlice = createSlice({
 
     setProfile: (state, action) => {
       state.profile = action.payload
-    },
-
-    setOverlay: state => {}
+    }
   }
 })
 
