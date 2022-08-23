@@ -5,7 +5,9 @@ export const userSlice = createSlice({
   initialState: {
     reelsList: [],
     reelsLimit: 20,
-    reelsProps: null
+    reelsProps: null,
+    reelsCommentType: 'comment',
+    replyCommentProps: null
   },
   reducers: {
     setReels: (state, action) => {
@@ -14,11 +16,22 @@ export const userSlice = createSlice({
 
     setReelsProps: (state, action) => {
       state.reelsProps = action.payload
-    }
+    },
+
+    setReelsCommentType: (state, action) => {
+      state.reelsCommentType = action.payload
+    },
+
+    setReplyCommentProps: state => { }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { setReels, setReelsProps } = userSlice.actions
+export const {
+  setReels,
+  setReelsProps,
+  setReelsCommentType,
+  setReplyCommentProps
+} = userSlice.actions
 
 export default userSlice.reducer
