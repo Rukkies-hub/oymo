@@ -315,9 +315,9 @@ const EditProfile = () => {
 
             {profile && <LookingFor />}
 
-            {profile && <AppTheme />}
+            {/* {profile && <AppTheme />} */}
 
-            {profile && <Payment />}
+            {/* {profile && <Payment />} */}
 
             <TouchableOpacity
               onPress={() => profile ? updateUserProfile() : setupUser()}
