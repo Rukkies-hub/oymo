@@ -20,11 +20,13 @@ import { useFonts } from 'expo-font'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { Octicons } from '@expo/vector-icons'
 import { useSelector } from 'react-redux'
-import { _comments } from '../../style/reelsComment'
+import { rc, _comments } from '../../style/reelsComment'
 import UserAvatar from './components/UserAvatar'
 import UserInfo from './components/UserInfo'
 import OymoFont from '../OymoFont'
 import LikeReelsComment from './LikeReelsComment'
+import ReelsCommentReply from './ReelsCommentReply'
+import ReelsCommentReplies from '../reelsCommentReplies/ReelsCommentReplies'
 
 const { width } = Dimensions.get('window')
 
@@ -78,7 +80,26 @@ const ReelsComments = ({ reel, background }) => {
               <View style={_comments.commentBottom}>
                 <View style={_comments.commentActions}>
                   <LikeReelsComment comment={comment} reelId={reel?.id} />
+                  <ReelsCommentReply comment={comment} />
                 </View>
+
+                {
+                  route.name != 'ReelsComment' &&
+                  <ReelsCommentReplies comment={comment} background={background} />
+                }
+
+                {
+                  comment?.repliesCount >= 1 &&
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('ViewReelsComments', { comment, background })}
+                    style={rc.viewReelsCommentsButton}
+                  >
+                    <Octicons name='reply' size={18} color={color.white} />
+                    <Text style={[rc.viewReelsCommentsButtonText, { fontFamily: 'text' }]}>
+                      {comment?.repliesCount} {comment?.repliesCount <= 1 ? 'Reply' : 'Replies'}
+                    </Text>
+                  </TouchableOpacity>
+                }
               </View>
             </View>
           </View>

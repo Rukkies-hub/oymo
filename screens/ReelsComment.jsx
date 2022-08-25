@@ -5,7 +5,6 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-  Platform,
   Keyboard,
   ImageBackground,
   KeyboardAvoidingView,
@@ -15,7 +14,7 @@ import {
 import Bar from '../components/Bar'
 
 import color from '../style/color'
-import { useNavigation, useIsFocused, useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import { FontAwesome5, Entypo } from '@expo/vector-icons'
 
@@ -30,9 +29,13 @@ import axios from 'axios'
 import { BlurView } from 'expo-blur'
 import { useDispatch, useSelector } from 'react-redux'
 import { setReelsCommentType } from '../features/reelsSlice'
-import { rc } from '../style/reelsComment'
+import { ci, rc } from '../style/reelsComment'
 import OymoFont from '../components/OymoFont'
 import ReelsComments from '../components/reelsComponents/ReelsComments'
+
+import { notificationUri } from '@env'
+
+import { Audio } from 'expo-av'
 
 const ReelsComment = () => {
   const { user, profile } = useSelector(state => state.user)
@@ -45,89 +48,110 @@ const ReelsComment = () => {
   const [comment, setComment] = useState('')
   const [reply, setReply] = useState('')
   const [height, setHeight] = useState(40)
+  const [sound, setSound] = React.useState()
 
   Keyboard.addListener('keyboardDidHide', () => dispatch(setReelsCommentType('comment')))
 
+  const playSound = async () => {
+    console.log('Loading Sound')
+    const { sound } = await Audio.Sound.createAsync(require('../assets/sent.mp3'))
+    setSound(sound)
+    console.log('Playing Sound')
+    await sound.playAsync()
+  }
+
+  useEffect(() => {
+    return sound
+      ? () => {
+        console.log('Unloading Sound')
+        sound.unloadAsync()
+      } : undefined
+  }, [sound])
+
   const sendComment = async () => {
-    if (comment != '') {
-      addDoc(collection(db, 'reels', item?.id, 'comments'), {
-        comment,
+    if (comment == '') return
+
+    await addDoc(collection(db, 'reels', item?.id, 'comments'), {
+      comment,
+      reel: item,
+      commentsCount: 0,
+      likesCount: 0,
+      user: { id: user?.uid },
+      timestamp: serverTimestamp()
+    })
+    setComment('')
+    setHeight(40)
+
+    playSound()
+
+    await updateDoc(doc(db, 'reels', item?.id), {
+      commentsCount: increment(1)
+    })
+
+    if (item?.user?.id != user?.uid) {
+      await addDoc(collection(db, 'users', item?.user?.id, 'notifications'), {
+        action: 'reel',
+        activity: 'comments',
+        text: 'commented on your post',
+        notify: item?.user,
+        id: item?.id,
+        seen: false,
         reel: item,
-        commentsCount: 0,
-        likesCount: 0,
         user: { id: user?.uid },
         timestamp: serverTimestamp()
       })
 
-      await updateDoc(doc(db, 'reels', item?.id), {
-        commentsCount: increment(1)
+      await axios.post(notificationUri, {
+        subID: item?.user?.id,
+        appId: 3167,
+        appToken,
+        title: 'Oymo',
+        message: `@${profile?.username} commented on your video \n ${comment.slice(0, 100)}`
       })
-
-      if (item?.user?.id != user?.uid) {
-        await addDoc(collection(db, 'users', item?.user?.id, 'notifications'), {
-          action: 'reel',
-          activity: 'comments',
-          text: 'commented on your post',
-          notify: item?.user,
-          id: item?.id,
-          seen: false,
-          reel: item,
-          user: { id: user?.uid },
-          timestamp: serverTimestamp()
-        }).then(() => {
-          axios.post(`https://app.nativenotify.com/api/indie/notification`, {
-            subID: item?.user?.id,
-            appId: 3167,
-            appToken,
-            title: 'Oymo',
-            message: `@${profile?.username} commented on your video \n ${comment.slice(0, 100)}`
-          })
-        })
-      }
-
-      setComment('')
-      setHeight(40)
     }
   }
 
   const sendCommentReply = async () => {
     let comment = replyCommentProps
-    if (reply != '')
-      await addDoc(collection(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'replies'), {
-        reply,
-        reel: comment?.reel,
-        comment: comment?.id,
-        reelComment: comment,
-        likesCount: 0,
-        repliesCount: 0,
-        user: { id: user?.uid },
-        timestamp: serverTimestamp()
-      }).then(async () => {
-        if (comment?.reel?.user?.id != user?.uid) {
-          await addDoc(collection(db, 'users', comment?.reel?.user?.id, 'notifications'), {
-            action: 'reel',
-            activity: 'reply',
-            text: 'replied to a post you commented on',
-            notify: comment?.reel?.user,
-            id: comment?.reel?.id,
-            seen: false,
-            reel: comment?.reel,
-            user: { id: user?.uid },
-            timestamp: serverTimestamp()
-          }).then(() => {
-            axios.post(`https://app.nativenotify.com/api/indie/notification`, {
-              subID: item?.user?.id,
-              appId: 3167,
-              appToken,
-              title: 'Oymo',
-              message: `@${profile?.username} replied to your comment \n ${comment.slice(0, 100)}`
-            })
-          })
-        }
-      })
+    if (reply == '') return
+
+    await addDoc(collection(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'replies'), {
+      reply,
+      reel: comment?.reel,
+      comment: comment?.id,
+      reelComment: comment,
+      likesCount: 0,
+      repliesCount: 0,
+      user: { id: user?.uid },
+      timestamp: serverTimestamp()
+    })
 
     setReply('')
     setHeight(40)
+
+    playSound()
+
+    if (comment?.reel?.user?.id != user?.uid) {
+      await addDoc(collection(db, 'users', comment?.reel?.user?.id, 'notifications'), {
+        action: 'reel',
+        activity: 'reply',
+        text: 'replied to a post you commented on',
+        notify: comment?.reel?.user,
+        id: comment?.reel?.id,
+        seen: false,
+        reel: comment?.reel,
+        user: { id: user?.uid },
+        timestamp: serverTimestamp()
+      })
+
+      await axios.post(notificationUri, {
+        subID: item?.user?.id,
+        appId: 3167,
+        appToken,
+        title: 'Oymo',
+        message: `@${profile?.username} replied to your comment \n ${comment.slice(0, 100)}`
+      })
+    }
 
     await updateDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id), {
       repliesCount: increment(1)
@@ -149,7 +173,7 @@ const ReelsComment = () => {
         user: { id: user?.uid },
         timestamp: serverTimestamp()
       }).then(() => {
-        axios.post(`https://app.nativenotify.com/api/indie/notification`, {
+        axios.post(notificationUri, {
           subID: item?.user?.id,
           appId: 3167,
           appToken,
@@ -164,20 +188,23 @@ const ReelsComment = () => {
   const sendCommentReplyReply = async () => {
     let comment = replyCommentProps
 
-    if (reply != '')
-      await addDoc(collection(db, 'reels', comment?.reel?.id, 'comments', comment?.comment, 'replies', comment?.id, 'reply'), {
-        reply,
-        reel: comment?.reel,
-        comment: comment?.comment,
-        reelReply: comment,
-        likesCount: 0,
-        repliesCount: 0,
-        user: { id: user?.uid },
-        timestamp: serverTimestamp()
-      })
+    if (reply == '') return
+
+    await addDoc(collection(db, 'reels', comment?.reel?.id, 'comments', comment?.comment, 'replies', comment?.id, 'reply'), {
+      reply,
+      reel: comment?.reel,
+      comment: comment?.comment,
+      reelReply: comment,
+      likesCount: 0,
+      repliesCount: 0,
+      user: { id: user?.uid },
+      timestamp: serverTimestamp()
+    })
 
     setReply('')
     setHeight(40)
+
+    playSound()
 
     dispatch(setReelsCommentType('comment'))
 
@@ -215,6 +242,53 @@ const ReelsComment = () => {
             </View>
 
             <ReelsComments reel={item} background={item?.thumbnail} />
+
+            <View style={ci.emojiView}>
+              <TouchableOpacity onPress={() => reelsCommentType == 'comment' ? setComment(comment + '🤣') : reelsCommentType == 'reply' ? setReply(reply + '🤣') : setReply(reply + '🤣')}>
+                <Text style={{ fontSize: 30 }}>🤣</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => reelsCommentType == 'comment' ? setComment(comment + '😭') : reelsCommentType == 'reply' ? setReply(reply + '😭') : setReply(reply + '😭')}>
+                <Text style={{ fontSize: 30 }}>😭</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => reelsCommentType == 'comment' ? setComment(comment + '🥺') : reelsCommentType == 'reply' ? setReply(reply + '🥺') : setReply(reply + '🥺')}>
+                <Text style={{ fontSize: 30 }}>🥺</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => reelsCommentType == 'comment' ? setComment(comment + '😏') : reelsCommentType == 'reply' ? setReply(reply + '😏') : setReply(reply + '😏')}>
+                <Text style={{ fontSize: 30 }}>😏</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => reelsCommentType == 'comment' ? setComment(comment + '🤨') : reelsCommentType == 'reply' ? setReply(reply + '🤨') : setReply(reply + '🤨')}>
+                <Text style={{ fontSize: 30 }}>🤨</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => reelsCommentType == 'comment' ? setComment(comment + '🙄') : reelsCommentType == 'reply' ? setReply(reply + '🙄') : setReply(reply + '🙄')}>
+                <Text style={{ fontSize: 30 }}>🙄</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => reelsCommentType == 'comment' ? setComment(comment + '😍') : reelsCommentType == 'reply' ? setReply(reply + '😍') : setReply(reply + '😍')}>
+                <Text style={{ fontSize: 30 }}>😍</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => reelsCommentType == 'comment' ? setComment(comment + '❤️') : reelsCommentType == 'reply' ? setReply(reply + '❤️') : setReply(reply + '❤️')}>
+                <Text style={{ fontSize: 30 }}>❤️</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={ci.inputView}>
+              <TextInput
+                multiline
+                value={reelsCommentType == 'comment' ? comment : reelsCommentType == 'reply' ? reply : reply}
+                onChangeText={reelsCommentType == 'comment' ? setComment : reelsCommentType == 'reply' ? setReply : setReply}
+                onSubmitEditing={sendComment}
+                placeholder={reelsCommentType == 'comment' ? 'Write a comment...' : reelsCommentType == 'reply' ? `Reply @${replyCommentProps?.user?.username}` : `Reply @${replyCommentProps?.user?.username}`}
+                placeholderTextColor={color.lightText}
+                onContentSizeChange={e => setHeight(e.nativeEvent.contentSize.height)}
+                style={[ci.input, { height }]}
+              />
+
+              <TouchableOpacity
+                style={ci.sendButton}
+                onPress={reelsCommentType == 'comment' ? sendComment : reelsCommentType == 'reply' ? sendCommentReply : sendCommentReplyReply}
+              >
+                <FontAwesome5 name='paper-plane' color={color.lightText} size={20} />
+              </TouchableOpacity>
+            </View>
           </BlurView>
         </ImageBackground>
       </TouchableWithoutFeedback>
