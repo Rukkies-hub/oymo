@@ -150,35 +150,16 @@ const Match = () => {
               }}
 
               renderCard={card => (
-                <View
-                  key={card?.id}
-                  style={match.card}
-                >
-                  <Image
-                    style={match.cardImage}
-                    source={{ uri: card?.photoURL }}
-                  />
+                <View key={card?.id} style={match.card}>
+                  <Image style={match.cardImage} source={{ uri: card?.photoURL }} />
 
-                  <LinearGradient
-                    colors={['transparent', color.dark]}
-                    style={match.cardGradient}
-                  >
+                  <LinearGradient colors={['transparent', color.black]} style={match.cardGradient}>
                     <View style={match.userDetail}>
-                      <TouchableOpacity
-                        onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()}
-                        style={match.usernameButton}
-                      >
-                        <OymoFont
-                          fontStyle={match.username}
-                          fontFamily='montserrat_bold'
-                          message={card?.username}
-                        />
+                      <TouchableOpacity onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.usernameButton}>
+                        <OymoFont fontStyle={match.username} fontFamily='montserrat_bold' message={card?.username} />
                       </TouchableOpacity>
 
-                      <TouchableOpacity
-                        onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()}
-                        style={match.moreInfoButton}
-                      >
+                      <TouchableOpacity onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.moreInfoButton}>
                         <MaterialCommunityIcons name='information-outline' size={20} color={color.white} />
                       </TouchableOpacity>
                     </View>

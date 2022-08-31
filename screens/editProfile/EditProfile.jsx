@@ -27,7 +27,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { editProfile } from '../../style/editProfile'
 import OymoFont from '../../components/OymoFont'
 import { logout } from '../../features/userSlice'
-import AppTheme from './components/AppTheme'
 import LookingFor from './components/LookingFor'
 import Payment from './components/Payment'
 import { signOut } from 'firebase/auth'
@@ -321,8 +320,6 @@ const EditProfile = () => {
             }
 
             {profile && <LookingFor />}
-
-            {/* {profile && <AppTheme />} */}
 
             {/* {profile && <Payment />} */}
 

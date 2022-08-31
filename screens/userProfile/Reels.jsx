@@ -3,7 +3,6 @@ import { View, Text, Pressable, Image, FlatList, ActivityIndicator } from 'react
 
 import color from '../../style/color'
 
-import { useFonts } from 'expo-font'
 import { useNavigation } from '@react-navigation/native'
 import { collection, getDocs, limit, onSnapshot, query, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
@@ -11,7 +10,7 @@ import OymoFont from '../../components/OymoFont'
 
 import { pReels } from '../../style/profileReels'
 
-const MyReels = ({ profile, user }) => {
+const Reels = ({ profile, user }) => {
   const navigation = useNavigation()
 
   const [reels, setReels] = useState([])
@@ -19,7 +18,7 @@ const MyReels = ({ profile, user }) => {
 
   useLayoutEffect(() => {
     return onSnapshot(query(collection(db, 'reels'),
-      where('user.id', '==', user?.uid), limit(reelsLimit)),
+      where('user.id', '==', user?.id), limit(reelsLimit)),
       snapshot => setReels(
         snapshot?.docs?.map(doc => ({
           id: doc?.id,
@@ -30,7 +29,7 @@ const MyReels = ({ profile, user }) => {
   }, [reelsLimit, db])
 
   const getReels = async () => {
-    const queryReels = await getDocs(query(collection(db, 'reels'), where('user.id', '==', user?.uid), limit(reelsLimit)))
+    const queryReels = await getDocs(query(collection(db, 'reels'), where('user.id', '==', user?.id), limit(reelsLimit)))
 
     setReels(
       queryReels?.docs?.map(doc => ({
@@ -39,13 +38,6 @@ const MyReels = ({ profile, user }) => {
       }))
     )
   }
-
-  const [loaded] = useFonts({
-    text: require('../../assets/fonts/Montserrat_Alternates/MontserratAlternates-Medium.ttf'),
-    boldText: require('../../assets/fonts/Montserrat_Alternates/MontserratAlternates-Bold.ttf')
-  })
-
-  if (!loaded) return null
 
   return (
     <>
@@ -100,5 +92,5 @@ const MyReels = ({ profile, user }) => {
   )
 }
 
-export default MyReels
+export default Reels
 // in use

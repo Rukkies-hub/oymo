@@ -15,6 +15,7 @@ import Gender from '../screens/editProfile/components/Gender'
 import color from '../style/color'
 import ReelsComment from '../screens/ReelsComment'
 import ViewReelsComments from '../screens/viewReelsComments/ViewReelsComments'
+import UserProfile from '../screens/userProfile/UserProfile'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -44,6 +45,7 @@ const StackNavigation = () => {
                     <Screen name='SaveAvatar' component={SaveAvatar} options={{ gestureEnabled: false }} />
                     <Screen name='ReelsComment' component={ReelsComment} />
                     <Screen name='ViewReelsComments' component={ViewReelsComments} />
+                    <Screen name='UserProfile' component={UserProfile} />
                   </Group>
 
                   <Group screenOptions={{ presentation: 'transparentModal' }}>

@@ -1,21 +1,32 @@
-import React from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { View } from 'react-native'
 import color from '../../style/color'
 import { profile } from '../../style/profile'
 
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 
 import * as NavigationBar from 'expo-navigation-bar'
 import { useSelector } from 'react-redux'
 import { useFonts } from 'expo-font'
-import ProfileDetails from './ProfileDetailes'
-import Reels from './Reels'
 
-const Profile = () => {
-  const user = useSelector(state => state.user.user)
-  const _profile = useSelector(state => state.user.profile)
+import ProfileDetails from './ProfileDetails'
+import Reels from './Reels'
+import { doc, getDoc } from 'firebase/firestore'
+import { db } from '../../hooks/firebase'
+
+const UserProfile = () => {
+  const { user } = useRoute().params
   const focus = useIsFocused()
   const navigation = useNavigation()
+
+  const [_profile, setProfile] = useState(null)
+
+  useLayoutEffect(() => {
+    (async () => {
+      const _user = await (await getDoc(doc(db, 'users', user?.id))).data()
+      setProfile(_user)
+    })()
+  }, [])
 
   if (focus) {
     NavigationBar.setPositionAsync('absolute')
@@ -49,4 +60,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default UserProfile
