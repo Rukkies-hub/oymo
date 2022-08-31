@@ -5,7 +5,6 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 const { Navigator, Screen, Group } = createStackNavigator()
 
 import Login from '../screens/Login'
-import Signup from '../screens/Signup'
 import BottomNavigation from './BottomNavigation'
 import { useSelector } from 'react-redux'
 import Splash from './Splash'
@@ -62,12 +61,7 @@ const StackNavigation = () => {
                   </Group>
                 </>
               ) :
-                (
-                  <>
-                    <Screen name='Login' component={Login} />
-                    <Screen name='Signup' component={Signup} />
-                  </>
-                )
+                <Screen name='Login' component={Login} />
             }
           </>
       }

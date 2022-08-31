@@ -33,7 +33,7 @@ const Splash = () => {
             dispatch(setProfile(profile))
           })
     })()
-  }, [user, db])
+  }, [user])
 
   useEffect(() => {
     (async () => {
@@ -46,7 +46,7 @@ const Splash = () => {
         }))
       ))
     })()
-  }, [user, db])
+  }, [user])
 
   return (
     <View

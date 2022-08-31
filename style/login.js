@@ -33,21 +33,6 @@ export const login = StyleSheet.create({
     color: color.white
   },
 
-  textInputContainer: {
-    height: 45,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: color.lightBorderColor,
-    borderRadius: 12,
-    overflow: 'hidden'
-  },
-
-  textInput: {
-    flex: 1,
-    color: color.white
-  },
-
   signupButtonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -55,23 +40,13 @@ export const login = StyleSheet.create({
     marginTop: 20,
   },
 
-  signupButton: {
-    flex: 1,
-    height: 45,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: color.red
-  },
-
   googleLoginButton: {
-    width: 45,
-    height: 45,
+    flex: 1,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: color.white,
-    borderRadius: 12,
-    marginLeft: 20
+    borderRadius: 12
   },
 
   googleImage: {
