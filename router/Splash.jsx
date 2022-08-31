@@ -17,7 +17,7 @@ const Splash = () => {
 
   useEffect(() => {
     onAuthStateChanged(auth, userAuth => {
-      if (userAuth)
+      if (userAuth) 
         dispatch(setUser(userAuth))
       else
         dispatch(logout())

@@ -17,24 +17,26 @@ import { AntDesign, SimpleLineIcons } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
 import { useNavigation } from '@react-navigation/native'
 import { doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
-import { db } from '../../hooks/firebase'
+import { auth, db } from '../../hooks/firebase'
 import { getStorage } from 'firebase/storage'
 import Constants from 'expo-constants'
 import * as ImagePicker from 'expo-image-picker'
 import * as Notifications from 'expo-notifications'
 import * as Device from 'expo-device'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { editProfile } from '../../style/editProfile'
 import OymoFont from '../../components/OymoFont'
 import { logout } from '../../features/userSlice'
 import AppTheme from './components/AppTheme'
 import LookingFor from './components/LookingFor'
 import Payment from './components/Payment'
+import { signOut } from 'firebase/auth'
 
 const EditProfile = () => {
   const { user, profile } = useSelector(state => state.user)
   const storage = getStorage()
   const navigation = useNavigation()
+  const dispatch = useDispatch()
 
   const responseListener = useRef()
   const notificationListener = useRef()
@@ -131,6 +133,11 @@ const EditProfile = () => {
     })
     schedulePushNotification('Update successful', 'Your profile has been updated successfully')
     setUpdateLoading(false)
+  }
+
+  const logoutUser = () => {
+    signOut(auth)
+    dispatch(logout())
   }
 
   const [loaded] = useFonts({
@@ -331,7 +338,7 @@ const EditProfile = () => {
               }
             </TouchableOpacity>
 
-            <TouchableOpacity style={editProfile.logoutButton}>
+            <TouchableOpacity onPress={logoutUser} style={editProfile.logoutButton}>
               <OymoFont message='Logout' fontStyle={editProfile.logoutButtonText} />
             </TouchableOpacity>
 
