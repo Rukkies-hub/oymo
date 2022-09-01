@@ -3,7 +3,7 @@ import { View, Text, Image, SafeAreaView } from 'react-native'
 
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 
-import { Ionicons, Feather, MaterialCommunityIcons, SimpleLineIcons, Octicons } from '@expo/vector-icons'
+import { Ionicons, Feather, MaterialCommunityIcons, SimpleLineIcons, Octicons, AntDesign } from '@expo/vector-icons'
 
 import Match from '../screens/Match'
 import Reels from '../screens/reels/Reels'
@@ -15,6 +15,7 @@ import color from '../style/color'
 import Header from '../components/Header'
 import { useSelector } from 'react-redux'
 import { nav } from '../style/navigation'
+import Chat from '../screens/chat/Chat'
 
 const { Navigator, Screen } = createMaterialBottomTabNavigator()
 
@@ -32,7 +33,7 @@ const BottomNavigation = () => {
           name='Match'
           component={Match}
           options={{
-            tabBarIcon: () => <MaterialCommunityIcons name='heart-multiple-outline' size={20} color={color.black} />
+            tabBarIcon: () => <AntDesign name='find' size={20} color={color.black} />
           }}
         />
 
@@ -41,6 +42,14 @@ const BottomNavigation = () => {
           component={Reels}
           options={{
             tabBarIcon: () => <Ionicons name='videocam-outline' size={20} color={color.black} />
+          }}
+        />
+
+        <Screen
+          name='Chat'
+          component={Chat}
+          options={{
+            tabBarIcon: () => <Ionicons name='chatbubbles-outline' size={20} color={color.black} />
           }}
         />
 
