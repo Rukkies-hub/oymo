@@ -13,7 +13,6 @@ import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 
 import Bar from '../../components/Bar'
 
-import * as NavigationBar from 'expo-navigation-bar'
 import { reels } from '../../style/viewReels'
 import color from '../../style/color'
 import UserInfo from './components/UserInfo'
