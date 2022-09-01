@@ -16,6 +16,7 @@ import color from '../style/color'
 import ReelsComment from '../screens/ReelsComment'
 import ViewReelsComments from '../screens/viewReelsComments/ViewReelsComments'
 import UserProfile from '../screens/userProfile/UserProfile'
+import ViewReel from '../screens/viewReel/ViewReel'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -46,6 +47,7 @@ const StackNavigation = () => {
                     <Screen name='ReelsComment' component={ReelsComment} />
                     <Screen name='ViewReelsComments' component={ViewReelsComments} />
                     <Screen name='UserProfile' component={UserProfile} />
+                    <Screen name='ViewReel' component={ViewReel} />
                   </Group>
 
                   <Group screenOptions={{ presentation: 'transparentModal' }}>
