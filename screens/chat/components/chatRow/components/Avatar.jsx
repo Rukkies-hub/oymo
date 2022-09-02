@@ -18,14 +18,11 @@ const Avatar = ({ user }) => {
   return (
     <>
       {
-        userInfo?.photoURL &&
-        <Image source={{ uri: userInfo?.photoURL }} style={chat.avatar} />
-      }
-      {
-        !userInfo?.photoURL &&
-        <View style={chat.avatarPlaceholder}>
-          <SimpleLineIcons name='user' size={20} color={color.dark} />
-        </View>
+        userInfo?.photoURL ?
+          <Image source={{ uri: userInfo?.photoURL }} style={chat.avatar} /> :
+          <View style={chat.avatarPlaceholder}>
+            <SimpleLineIcons name='user' size={20} color={color.dark} />
+          </View>
       }
     </>
   )
