@@ -16,7 +16,7 @@ const ChatRow = ({ matchDetails }) => {
   const { user, profile } = useSelector(state => state.user)
   const navigation = useNavigation()
 
-  const [matchedUserInfo, setMatchedUserInfo] = useState({})
+  const [matchedUserInfo, setMatchedUserInfo] = useState(null)
   const [lastMessage, setLastMessage] = useState('')
   const [unreadMessage, setUnreadMessage] = useState([])
 
@@ -24,7 +24,7 @@ const ChatRow = ({ matchDetails }) => {
     (() => {
       setMatchedUserInfo(getMatchedUserInfo(matchDetails?.users, user?.uid))
     })()
-  }, [matchDetails, user])
+  }, [matchDetails])
 
   useLayoutEffect(() => {
     (() => {
@@ -72,19 +72,25 @@ const ChatRow = ({ matchDetails }) => {
               borderRadius: 100
             }}
           >
-            <Avatar user={matchedUserInfo?.id} />
+            {
+              matchedUserInfo &&
+              <Avatar user={matchedUserInfo?.id} />
+            }
           </View>
-          {/* {
+          {
             unreadMessage?.length > 0 &&
             <View style={chat.unreadMessageView}>
               <OymoFont message={unreadMessage?.length} fontStyle={chat.unreadMessageViewText} />
             </View>
-          } */}
+          }
         </View>
-        {/* <View style={chat.chatInfoView}>
-          <Username user={matchedUserInfo?.id} />
-          <OymoFont message={lastMessage || 'Say Hi!'} fontStyle={chat.lastMessage} />
-        </View> */}
+        {
+          matchedUserInfo &&
+          <View style={chat.chatInfoView}>
+            <Username user={matchedUserInfo?.id} />
+            <OymoFont message={lastMessage || 'Say Hi!'} fontStyle={chat.lastMessage} />
+          </View>
+        }
       </View>
     </Pressable>
   )
