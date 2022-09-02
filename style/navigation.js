@@ -8,7 +8,7 @@ export const nav = StyleSheet.create({
   },
 
   barStyle: {
-    backgroundColor: color.white,
+    backgroundColor: color.transparent,
     height: 54,
     elevation: 0
   },

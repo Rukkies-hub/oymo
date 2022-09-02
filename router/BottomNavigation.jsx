@@ -1,9 +1,9 @@
 import React from 'react'
-import { View, Text, Image, SafeAreaView } from 'react-native'
+import { View, Image } from 'react-native'
 
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 
-import { Ionicons, Feather, MaterialCommunityIcons, SimpleLineIcons, Octicons, AntDesign } from '@expo/vector-icons'
+import { Ionicons, SimpleLineIcons, AntDesign } from '@expo/vector-icons'
 
 import Match from '../screens/Match'
 import Reels from '../screens/reels/Reels'
