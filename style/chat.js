@@ -123,5 +123,12 @@ export const chat = StyleSheet.create({
     alignItems: 'center',
     margin: 10,
     paddingHorizontal: 10
+  },
+
+  searchInput: {
+    flex: 1,
+    marginLeft: 10,
+    fontFamily: 'text',
+    color: color.dark
   }
 })

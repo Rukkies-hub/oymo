@@ -34,18 +34,13 @@ const SearchChat = () => {
   return (
     <View style={chat.searchView}>
       <Entypo name='magnifying-glass' size={24} color={color.lightText} />
-      {/* <TextInput
+      <TextInput
         value={search}
         placeholder='Search'
         onChangeText={text => searchFilter(text)}
         placeholderTextColor={color.lightText}
-        style={{
-          flex: 1,
-          marginLeft: 10,
-          fontFamily: 'text',
-          color: color.dark
-        }}
-      /> */}
+        style={chat.searchInput}
+      />
     </View>
   )
 }

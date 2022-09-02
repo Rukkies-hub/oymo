@@ -9,7 +9,7 @@ export const chatSlice = createSlice({
   },
   reducers: {
     setSearch: (state, action) => {
-      state.profiles.push(...action.payload)
+      state.search = action.payload
     },
 
     setMatches: (state, action) => {
