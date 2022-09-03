@@ -338,3 +338,152 @@ export const sm = StyleSheet.create({
     alignItems: 'center'
   }
 })
+
+export const rm = StyleSheet.create({
+  container: {
+    flexDirection: 'row-reverse',
+    marginBottom: 10
+  },
+
+  avatar: {
+    width: 25,
+    height: 25,
+    borderRadius: 50
+  },
+
+  messagView: {
+    alignSelf: 'flex-end',
+    maxWidth: '80%',
+    marginLeft: 10
+  },
+
+  replyView: {
+    borderTopRightRadius: 12,
+    borderBottomRightRadius: 12,
+    borderBottomLeftRadius: 12
+  },
+
+  messageReplyMediaTouchableOpacity: {
+    padding: 5,
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
+    borderBottomLeftRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    overflow: 'hidden'
+  },
+
+  messageReplyMedia: {
+    width: 50,
+    height: 50,
+    borderRadius: 8
+  },
+
+  messageReplyVoicenoteView: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+
+  replyMessageText: {
+    color: color.dark,
+    fontSize: 16,
+    textAlign: 'left'
+  },
+
+  chatView: {
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    borderTopRightRadius: 12
+  },
+
+  messageText: {
+    color: color.white,
+    fontSize: 16,
+    textAlign: 'left'
+  },
+
+  messageTimestampView: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+
+  messageTimestamp: {
+    color: color.dark,
+    fontSize: 8,
+    textAlign: 'left',
+    marginLeft: 10,
+    marginBottom: 10
+  },
+
+  messagSeenText: {
+    color: color.dark,
+    fontSize: 8,
+    textAlign: 'right',
+    marginRight: 10,
+    marginBottom: 10,
+    marginTop: 10
+  },
+
+  messageMediaView: {
+    position: 'relative',
+    borderRadius: 20,
+    backgroundColor: color.offWhite,
+    overflow: 'hidden'
+  },
+
+  messageMediaImage: {
+    minWidth: 250,
+    minHeight: 250,
+    borderRadius: 20
+  },
+
+  messageMediaCaptionView: {
+    flex: 1,
+    height: 30,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    padding: 5,
+    margin: 5,
+    backgroundColor: color.white,
+    borderRadius: 4,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20
+  },
+
+  mediaCaption: {
+    color: color.dark,
+    fontSize: 16,
+    textAlign: 'left'
+  },
+
+  messageMediaViewVoicenote: {
+    position: 'relative',
+    width: 200,
+    height: 35,
+    borderRadius: 20,
+    overflow: 'hidden',
+    backgroundColor: color.offWhite,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 2,
+    paddingLeft: 10
+  },
+
+  playMessagVoicenoteButton: {
+    backgroundColor: color.blue,
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+})
