@@ -7,10 +7,12 @@ import { Provider } from 'react-redux'
 import { store } from './store'
 
 import { LogBox } from 'react-native'
-LogBox.ignoreAllLogs()
+import { useFonts } from 'expo-font'
+// LogBox.ignoreAllLogs()
 
 
 export default function App () {
+
   return (
     <Provider store={store}>
       <NavigationContainer>
