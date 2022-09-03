@@ -30,10 +30,7 @@ const StackNavigation = () => {
         gestureDirection: 'horizontal',
         keyboardHandlingEnabled: true,
         animationEnabled: true,
-        ...TransitionPresets.SlideFromRightIOS,
-        cardStyle: {
-          backgroundColor: color.transparent
-        }
+        ...TransitionPresets.SlideFromRightIOS
       }}
     >
       {

@@ -2186,6 +2186,11 @@
     prompts "^2.4.0"
     semver "^6.3.0"
 
+"@react-native-community/slider@^4.3.1":
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.3.1.tgz#3d5a43b93ff225577097c767c73f5fca2452105f"
+  integrity sha512-1UOKwABK+F2+Vzj7pI3UjRzWXrjI7yNECW/JNvfIXdpaS2/Vf/YH3XEszpG+8ZueEPSxNK2S271NGEWlheaExg==
+
 "@react-native-masked-view/masked-view@0.2.7":
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/@react-native-masked-view/masked-view/-/masked-view-0.2.7.tgz#d19f1fc646df9440c23c834b4ff3f2b8fe15e175"
@@ -4008,6 +4013,11 @@ expo-status-bar@~1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.4.0.tgz#c0317de2c53878340f4b4f00ff7e4ba14399a7fb"
   integrity sha512-vh98g8qMIjig/2XTBsoAWS6Vo2dIIwDWjB3/GiuZ9Lazpxc9GO/APfJ4dar7MibzIDUKIrjotrcL6rLdPH13Ew==
+
+expo-video-thumbnails@~6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/expo-video-thumbnails/-/expo-video-thumbnails-6.4.0.tgz#59603af06c1d2122c2f7db854562236bbd8319ec"
+  integrity sha512-KsO84yjWkemJTdNdArC/qVhx1YGLQJojRBC7/BtwohNiJXVV1sxX1L4Yioh/grnpnfLXDPcBxYxv+pLN6k4x/Q==
 
 expo-web-browser@^11.0.0, expo-web-browser@~11.0.0:
   version "11.0.0"
