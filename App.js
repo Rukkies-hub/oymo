@@ -7,8 +7,7 @@ import { Provider } from 'react-redux'
 import { store } from './store'
 
 import { LogBox } from 'react-native'
-import { useFonts } from 'expo-font'
-// LogBox.ignoreAllLogs()
+LogBox.ignoreAllLogs()
 
 
 export default function App () {
