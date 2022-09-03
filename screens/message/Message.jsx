@@ -41,7 +41,7 @@ import Avatar from './components/Avatar'
 import OymoFont from '../../components/OymoFont'
 
 import SenderMessage from './components/SenderMessage'
-import RecieverMessage from './components/RecieverMessage'
+import RecieverMessage from './components/recieverMessage/RecieverMessage'
 import color from '../../style/color'
 import { AntDesign, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
 

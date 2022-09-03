@@ -34,7 +34,9 @@ const ChatRow = ({ matchDetails }) => {
         snapshot =>
           setLastMessage(
             snapshot?.docs[0]?.data()?.voiceNote ?
-              `${matchedUserInfo?.username} Sent you a voice note...` :
+              matchedUserInfo?.username == undefined ?
+                'Voice note...' :
+                `${matchedUserInfo?.username} Sent you a voice note...` :
               snapshot?.docs[0]?.data()?.mediaType == 'video' ?
                 `${snapshot?.docs[0]?.data()?.username != profile?.username ? snapshot?.docs[0]?.data().username : 'You'} ${snapshot?.docs[0]?.data()?.username == profile?.username ? 'sent a video' : 'Sent you a video'}...` :
                 snapshot?.docs[0]?.data()?.mediaType == 'image' ?
