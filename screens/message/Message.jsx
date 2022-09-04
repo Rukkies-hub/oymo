@@ -345,13 +345,13 @@ const Message = () => {
                         }}
                       />
                     }
-                    {
-                      messageReply &&
-                      <TouchableOpacity onPress={() => dispatch(setMessageReply(null))} style={msg.canselMessageReply}>
-                        <AntDesign name='close' size={24} color={color.dark} />
-                      </TouchableOpacity>
-                    }
                   </View>
+                  {
+                    messageReply &&
+                    <TouchableOpacity onPress={() => dispatch(setMessageReply(null))} style={msg.canselMessageReply}>
+                      <AntDesign name='close' size={24} color={color.dark} />
+                    </TouchableOpacity>
+                  }
                 </TouchableOpacity>
               }
 

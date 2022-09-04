@@ -20,6 +20,7 @@ import ViewReel from '../screens/viewReel/ViewReel'
 import Message from '../screens/message/Message'
 import ViewAvatar from '../screens/modals/ViewAvatar'
 import ViewVideo from '../screens/modals/ViewVideo'
+import MessageOptions from '../screens/modals/MessageOptions'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -60,6 +61,17 @@ const StackNavigation = () => {
                     <Screen
                       name='Gender'
                       component={Gender}
+                      options={{
+                        gestureEnabled: false,
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
+                    <Screen
+                      name='MessageOptions'
+                      component={MessageOptions}
                       options={{
                         gestureEnabled: false,
                         ...TransitionPresets.FadeFromBottomAndroid,
