@@ -18,6 +18,8 @@ import ViewReelsComments from '../screens/viewReelsComments/ViewReelsComments'
 import UserProfile from '../screens/userProfile/UserProfile'
 import ViewReel from '../screens/viewReel/ViewReel'
 import Message from '../screens/message/Message'
+import ViewAvatar from '../screens/modals/ViewAvatar'
+import ViewVideo from '../screens/modals/ViewVideo'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -50,6 +52,8 @@ const StackNavigation = () => {
                     <Screen name='UserProfile' component={UserProfile} />
                     <Screen name='ViewReel' component={ViewReel} />
                     <Screen name='Message' component={Message} />
+                    <Screen name='ViewAvatar' component={ViewAvatar} />
+                    <Screen name='ViewVideo' component={ViewVideo} />
                   </Group>
 
                   <Group screenOptions={{ presentation: 'transparentModal' }}>
