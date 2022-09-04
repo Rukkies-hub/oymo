@@ -5,6 +5,7 @@ import AutoHeightImage from 'react-native-auto-height-image'
 
 import { useRoute } from '@react-navigation/native'
 import color from '../../style/color'
+import { img } from '../../style/viewAssets'
 
 const ViewAvatar = () => {
   const { avatar } = useRoute().params
@@ -14,12 +15,7 @@ const ViewAvatar = () => {
       source={{ uri: avatar }}
       resizeMode='cover'
       blurRadius={100}
-      style={{
-        flex: 1,
-        backgroundColor: color.white,
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}
+      style={img.background}
     >
       <AutoHeightImage
         source={{ uri: avatar }}
