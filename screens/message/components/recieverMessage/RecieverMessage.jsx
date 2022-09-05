@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Image, Pressable, TouchableOpacity, UIManager, LayoutAnimation, Platform } from 'react-native'
-import { AntDesign } from '@expo/vector-icons'
+import { AntDesign, Feather } from '@expo/vector-icons'
 import Slider from '@react-native-community/slider'
 import { Audio, Video } from 'expo-av'
 import { useNavigation } from '@react-navigation/native'
@@ -194,7 +194,19 @@ const RecieverMessage = ({ messages, matchDetails }) => {
                   onPress={() => messages?.mediaType == 'video' ? navigation.navigate('ViewVideo', { video: messages?.media }) : null}
                   onLongPress={() => navigation.navigate('MessageOptions', { messages, matchDetails })}
                 >
-                  <Image source={{ uri: messages?.thumbnail }} resizeMode='cover' style={rm.messageMediaImage} />
+                    {
+                      messages?.thumbnail ?
+                        <Image source={{ uri: messages?.thumbnail }} resizeMode='cover' style={rm.messageMediaImage} /> :
+                        <ImageBackground
+                          source={profile?.photoURL ? { uri: profile?.photoURL } : require('../../../../assets/background2.jpg')}
+                          style={rm.thumbnailPlaceholdr}
+                          blurRadius={200}
+                        >
+                          <View style={rm.playView}>
+                            <Feather name='video' size={24} color={color.white} />
+                          </View>
+                        </ImageBackground>
+                    }
                 </Pressable>
                 {
                   messages?.caption != '' &&

@@ -462,6 +462,24 @@ export const rm = StyleSheet.create({
     borderRadius: 20
   },
 
+  thumbnailPlaceholdr: {
+    minWidth: 250,
+    minHeight: 250,
+    borderRadius: 20,
+    backgroundColor: color.white,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  playView: {
+    backgroundColor: color.faintBlack,
+    width: 70,
+    height: 70,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
   messageMediaCaptionView: {
     flex: 1,
     height: 30,
