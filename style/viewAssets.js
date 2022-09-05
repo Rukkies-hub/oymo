@@ -14,7 +14,7 @@ export const img = StyleSheet.create({
 
 export const vid = StyleSheet.create({
   background: {
-    backgroundColor: color.whitee,
+    backgroundColor: color.white,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

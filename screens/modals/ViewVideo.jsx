@@ -5,9 +5,11 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { Entypo } from '@expo/vector-icons'
 import color from '../../style/color'
 import { vid } from '../../style/viewAssets'
+import { useSelector } from 'react-redux'
 
 const ViewVideo = () => {
   const { video, thumbnail } = useRoute().params
+  const { profile } = useSelector(state => state.user)
   const videoRef = useRef(null)
   const navigation = useNavigation()
   const [status, setStatus] = useState({})
@@ -16,9 +18,9 @@ const ViewVideo = () => {
 
   return (
     <ImageBackground
-      source={{ uri: thumbnail }}
-      blurRadius={50}
+      blurRadius={200}
       style={vid.background}
+      source={thumbnail ? { uri: thumbnail } : profile?.photoURL ? { uri: profile?.photoURL } : require('../../assets/background2.jpg')}
     >
       <TouchableOpacity onPress={() => navigation.goBack()} style={vid.goBackButton}>
         <Entypo name='chevron-left' size={24} color={color.white} />
