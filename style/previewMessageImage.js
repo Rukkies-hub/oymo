@@ -6,7 +6,7 @@ const { width } = Dimensions.get('window')
 export const pm = StyleSheet.create({
   safeView: {
     flex: 1,
-    backgroundColor: color.transparent
+    backgroundColor: color.white
   },
 
   inputView: {

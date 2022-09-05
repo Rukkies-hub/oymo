@@ -97,11 +97,9 @@ const MessageCamera = () => {
 
   const pickFromGallery = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,
-      aspect: [16, 9],
-      quality: 1,
-      videoMaxDuration: 30
+      quality: 1
     })
 
     if (!result?.cancelled) {
@@ -114,22 +112,18 @@ const MessageCamera = () => {
           }
         })
       if (result?.type === 'video') {
-        let source = result?.uri
-        let thumbnail = await generateThumbnail(source)
-        console.log(thumbnail)
-        // if (thumbnail)
-        //   navigation.navigate('PreviewMessageImage', {
-        //     matchDetails,
-        //     media: {
-        //       uri: result?.uri,
-        //       thumbnail,
-        //       type: 'video',
-        //       width,
-        //       height: null,
-        //       duration: null,
-        //       rotation: 1
-        //     }
-        //   })
+        navigation.navigate('PreviewMessageImage', {
+          matchDetails,
+          media: {
+            uri: result?.uri,
+            type: 'video',
+            width,
+            thumbnail: null,
+            height: null,
+            duration: null,
+            rotation: 1
+          }
+        })
       }
     }
   }
@@ -139,7 +133,7 @@ const MessageCamera = () => {
       const { uri } = await VideoThumbnails.getThumbnailAsync(source, { time: 3000 })
       return uri
     } catch (e) {
-      console.warn(e)
+      console.warn(e.message)
     }
   }
 
