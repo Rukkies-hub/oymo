@@ -377,9 +377,9 @@ const Message = () => {
                       <MaterialCommunityIcons name='camera-outline' color={color.lightText} size={20} />
                     </TouchableOpacity>
 
-                    <TouchableOpacity onPress={pickImage} style={iv.mediaButton}>
+                    {/* <TouchableOpacity onPress={pickImage} style={iv.mediaButton}>
                       <MaterialCommunityIcons name='image-outline' color={color.lightText} size={20} />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </View>
                 }
 

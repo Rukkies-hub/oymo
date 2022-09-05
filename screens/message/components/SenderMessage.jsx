@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, Text, Pressable, Image, TouchableOpacity, UIManager, LayoutAnimation, Platform, ImageBackground } from 'react-native'
 
-import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons'
+import { AntDesign, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
 
 import Slider from '@react-native-community/slider'
 
@@ -243,7 +243,19 @@ const SenderMessage = ({ messages, matchDetails }) => {
                   })}
                   onLongPress={() => navigation.navigate('MessageOptions', { messages, matchDetails })}
                 >
-                  <Image source={{ uri: messages?.thumbnail }} resizeMode='cover' style={sm.messageMediaImage} />
+                  {
+                    messages?.thumbnail ?
+                      <Image source={{ uri: messages?.thumbnail }} resizeMode='cover' style={sm.messageMediaImage} /> :
+                      <ImageBackground
+                        source={profile?.photoURL ? { uri: profile?.photoURL } : require('../../../assets/background2.jpg')}
+                        style={sm.thumbnailPlaceholdr}
+                        blurRadius={200}
+                      >
+                        <View style={sm.playView}>
+                          <Feather name='video' size={24} color={color.white} />
+                        </View>
+                      </ImageBackground>
+                  }
                 </Pressable>
                 {
                   messages?.caption != '' &&
