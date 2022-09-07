@@ -26,7 +26,7 @@ const BottomNavigation = () => {
     <View style={nav.container}>
       <Bar color='dark' />
 
-      <Header showLogo showAdd showNotification />
+      <Header showLogo showAdd showAratar showNotification />
 
       <Navigator barStyle={nav.barStyle}>
         <Screen
@@ -53,7 +53,7 @@ const BottomNavigation = () => {
           }}
         />
 
-        {
+        {/* {
           profile &&
           <Screen
             name='ProfileTab'
@@ -88,7 +88,7 @@ const BottomNavigation = () => {
               tabBarLabel: false
             }}
           />
-        }
+        } */}
       </Navigator>
     </View>
   )
