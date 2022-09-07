@@ -10,8 +10,8 @@ export const header = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center'
   },
-
-  subContainer1: {
+  
+  leftContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center'
@@ -52,5 +52,63 @@ export const header = StyleSheet.create({
     width: 35,
     height: 35,
     borderRadius: 50
+  },
+
+  showMatchAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 50,
+    marginRight: 10
+  },
+
+  rightContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+
+  showPhone: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10
+  },
+
+  notificationButton: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    marginRight: 10
+  },
+
+  notificationCountView: {
+    borderRadius: 50,
+    backgroundColor: color.red,
+    paddingHorizontal: 5,
+    position: 'absolute',
+    top: 0,
+    right: 0
+  },
+
+  notificationCountText: {
+    color: color.white,
+    fontSize: 10
+  },
+
+  showAdd: {
+    width: 30,
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  showMessageOptions: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
