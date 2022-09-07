@@ -170,12 +170,12 @@ const Header = ({
             </>
           }
 
-          {/* {
+          {
             showMessageOptions &&
             <TouchableOpacity onPress={() => navigation.navigate('MessageOptions', { matchDetails })} style={header.showMessageOptions}>
               <MaterialCommunityIcons name='dots-vertical' size={24} color={color.dark} />
             </TouchableOpacity>
-          } */}
+          }
         </View>
       </View>
     </View>
