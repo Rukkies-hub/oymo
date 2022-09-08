@@ -3,7 +3,7 @@ import { View, Image } from 'react-native'
 
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 
-import { Ionicons, SimpleLineIcons, AntDesign } from '@expo/vector-icons'
+import { Ionicons, SimpleLineIcons, AntDesign, FontAwesome } from '@expo/vector-icons'
 
 import Match from '../screens/Match'
 import Reels from '../screens/reels/Reels'
@@ -16,6 +16,7 @@ import Header from '../components/Header'
 import { useSelector } from 'react-redux'
 import { nav } from '../style/navigation'
 import Chat from '../screens/chat/Chat'
+import AddReels from '../screens/addReels/AddReels'
 
 const { Navigator, Screen } = createMaterialBottomTabNavigator()
 
@@ -46,49 +47,26 @@ const BottomNavigation = () => {
         />
 
         <Screen
+          name='AddReelsNav'
+          component={AddReels}
+          listeners={({ navigation }) => ({
+            tabPress: e => {
+              e.preventDefault()
+              navigation.navigate('AddReels')
+            }
+          })}
+          options={{
+            tabBarIcon: () => <FontAwesome name='plus-square-o' color={color.black} size={22} />
+          }}
+        />
+
+        <Screen
           name='Chat'
           component={Chat}
           options={{
             tabBarIcon: () => <Ionicons name='chatbubbles-outline' size={20} color={color.black} />
           }}
         />
-
-        {/* {
-          profile &&
-          <Screen
-            name='ProfileTab'
-            component={Profile}
-            listeners={({ navigation }) => ({
-              tabPress: e => {
-                e.preventDefault()
-                navigation.navigate('Profile')
-              }
-            })}
-            options={{
-              tabBarIcon: () => (
-                <>
-                  {
-                    profile?.photoURL &&
-                    <View style={{ position: 'relative' }}>
-                      {
-                        profile?.paid &&
-                        <View style={nav.paidImageContainer}>
-                          <Image source={require('../assets/vip.png')} style={nav.paidImage} />
-                        </View>
-                      }
-                      <Image source={{ uri: profile?.photoURL }} style={nav.avatar} />
-                    </View>
-                  }
-                  {
-                    !profile?.photoURL &&
-                    <SimpleLineIcons name='user' size={20} color={color.dark} />
-                  }
-                </>
-              ),
-              tabBarLabel: false
-            }}
-          />
-        } */}
       </Navigator>
     </View>
   )

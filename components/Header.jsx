@@ -1,7 +1,6 @@
-import React, { useState, useLayoutEffect, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
-  Text,
   Image,
   TouchableOpacity
 } from 'react-native'
@@ -26,6 +25,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import OymoFont from './OymoFont'
 import { header } from '../style/header'
 import { setNotificatios } from '../features/notificationSlice'
+import { nav } from '../style/navigation'
 
 const Header = ({
   showAratar,
@@ -36,7 +36,6 @@ const Header = ({
   showMatchAvatar,
   matchAvatar,
   showPhone,
-  showAdd,
   matchDetails,
   showNotification,
   backgroundColor,
@@ -110,6 +109,11 @@ const Header = ({
               <Image source={{ uri: matchAvatar }} style={header.showMatchAvatar} />
             </TouchableOpacity>
           }
+
+          {
+            showTitle &&
+            <OymoFont message={title} fontStyle={header.showTitle} />
+          }
         </View>
 
         <View style={header.rightContainer}>
@@ -140,31 +144,31 @@ const Header = ({
           }
 
           {
-            profile &&
-            <>
-              {
-                showAdd &&
-                <TouchableOpacity onPress={() => navigation.navigate('AddReels')} style={header.showAdd}>
-                  <FontAwesome name='plus-square-o' color={color.dark} size={26} />
-                </TouchableOpacity>
-              }
-            </>
-          }
-
-          {
             showAratar &&
             <>
               {
                 !profile &&
                 <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={header.placeholderImage}>
-                  <SimpleLineIcons name='user' size={20} color={color.dark} />
+                  <FontAwesome name="user-o" size={22} color={color.dark} />
                 </TouchableOpacity>
               }
 
               {
                 profile &&
                 <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={header.profileImageButton}>
-                  <Image source={{ uri: profile?.photoURL }} style={header.profileImage} />
+                  {
+                    profile?.photoURL ?
+                      <View style={{ position: 'relative' }}>
+                        {
+                          profile?.paid &&
+                          <View style={nav.paidImageContainer}>
+                            <Image source={require('../assets/vip.png')} style={nav.paidImage} />
+                          </View>
+                        }
+                        <Image source={{ uri: profile?.photoURL }} style={header.profileImage} />
+                      </View> :
+                      <FontAwesome name="user-o" size={22} color={color.dark} />
+                  }
                 </TouchableOpacity>
               }
             </>

@@ -98,17 +98,16 @@ export const header = StyleSheet.create({
     fontSize: 10
   },
 
-  showAdd: {
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-
   showMessageOptions: {
     width: 40,
     height: 40,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+
+  showTitle: {
+    fontSize: 18,
+    textTransform: 'capitalize',
+    color: color.dark
   }
 })

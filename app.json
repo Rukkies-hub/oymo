@@ -29,7 +29,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.rukkiecodes.oymo"
     },
     "web": {
       "favicon": "./assets/favicon.png"
