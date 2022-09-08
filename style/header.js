@@ -78,6 +78,8 @@ export const header = StyleSheet.create({
   notificationButton: {
     width: 40,
     height: 40,
+    backgroundColor: color.offWhite,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',

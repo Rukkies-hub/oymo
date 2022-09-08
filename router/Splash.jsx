@@ -6,9 +6,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout, setProfile, setUser } from '../features/userSlice'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth, db } from '../hooks/firebase'
-import { doc, onSnapshot } from 'firebase/firestore'
+import { doc, onSnapshot, where } from 'firebase/firestore'
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore'
 import { setReels } from '../features/reelsSlice'
+import { setPendingSwipes } from '../features/matchSlice'
 
 const Splash = () => {
   const { user } = useSelector(state => state.user)
@@ -17,7 +18,7 @@ const Splash = () => {
 
   useEffect(() => {
     onAuthStateChanged(auth, userAuth => {
-      if (userAuth) 
+      if (userAuth)
         dispatch(setUser(userAuth))
       else
         dispatch(logout())
@@ -32,6 +33,27 @@ const Splash = () => {
             let profile = doc?.data()
             dispatch(setProfile(profile))
           })
+    })()
+  }, [user])
+
+  useEffect(() => {
+    (() => {
+      if (user)
+        onSnapshot(query(collection(db, 'users', user?.uid, 'pendingSwipes'),
+          where('photoURL', '!=', null)
+        ),
+          snapshot => {
+            if (snapshot?.docs?.length >= 1)
+              dispatch(
+                setPendingSwipes(
+                  snapshot?.docs?.map(doc => ({
+                    id: doc?.id,
+                    ...doc?.data()
+                  }))
+                )
+              )
+          }
+        )
     })()
   }, [user])
 
