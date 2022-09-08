@@ -17,11 +17,13 @@ import { useSelector } from 'react-redux'
 import { nav } from '../style/navigation'
 import Chat from '../screens/chat/Chat'
 import AddReels from '../screens/addReels/AddReels'
+import LikesNavigation from '../screens/likes/LikesNavigation'
 
 const { Navigator, Screen } = createMaterialBottomTabNavigator()
 
 const BottomNavigation = () => {
   const { profile } = useSelector(state => state.user)
+  const { pendingSwipes } = useSelector(state => state.match)
 
   return (
     <View style={nav.container}>
@@ -59,6 +61,26 @@ const BottomNavigation = () => {
             tabBarIcon: () => <FontAwesome name='plus-square-o' color={color.black} size={22} />
           }}
         />
+
+        {
+          pendingSwipes?.length > 0 ?
+            <Screen
+              name='Likes'
+              component={LikesNavigation}
+              options={{
+                tabBarIcon: () => <SimpleLineIcons name='like' size={20} color={color.black} />,
+                tabBarBadge: pendingSwipes?.length,
+                title: 'Likes'
+              }}
+            /> :
+            <Screen
+              name='Likes'
+              component={LikesNavigation}
+              options={{
+                tabBarIcon: () => <SimpleLineIcons name='like' size={20} color={color.black} />
+              }}
+            />
+        }
 
         <Screen
           name='Chat'
