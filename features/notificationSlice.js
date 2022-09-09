@@ -7,6 +7,7 @@ export const notificationSlice = createSlice({
   },
   reducers: {
     setNotificatios: (state, action) => {
+      state.notifications = []
       state.notifications.push(...action.payload)
     }
   }

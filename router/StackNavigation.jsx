@@ -25,6 +25,7 @@ import MessageCamera from '../screens/message/MessageCamera'
 import PreviewMessageImage from '../screens/message/PreviewMessageImage'
 import AddReels from '../screens/addReels/AddReels'
 import SaveReels from '../screens/addReels/SaveReels'
+import Notifications from '../screens/notification/Notifications'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -63,6 +64,7 @@ const StackNavigation = () => {
                     <Screen name='PreviewMessageImage' component={PreviewMessageImage} />
                     <Screen name='AddReels' component={AddReels} />
                     <Screen name='SaveReels' component={SaveReels} />
+                    <Screen name='Notifications' component={Notifications} />
                   </Group>
 
                   <Group screenOptions={{ presentation: 'transparentModal' }}>
