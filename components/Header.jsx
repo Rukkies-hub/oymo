@@ -149,7 +149,7 @@ const Header = ({
               {
                 !profile &&
                 <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={header.placeholderImage}>
-                  <FontAwesome name="user-o" size={22} color={color.dark} />
+                  <FontAwesome name='user-o' size={22} color={color.dark} />
                 </TouchableOpacity>
               }
 
@@ -167,7 +167,7 @@ const Header = ({
                         }
                         <Image source={{ uri: profile?.photoURL }} style={header.profileImage} />
                       </View> :
-                      <FontAwesome name="user-o" size={22} color={color.dark} />
+                      <FontAwesome name='user-o' size={22} color={color.dark} />
                   }
                 </TouchableOpacity>
               }

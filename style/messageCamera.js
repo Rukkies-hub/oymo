@@ -1,7 +1,5 @@
-import { Dimensions, StyleSheet } from "react-native"
-import color from "./color"
-
-const { width } = Dimensions.get('window')
+import { Dimensions, StyleSheet } from 'react-native'
+import color from './color'
 
 export const mc = StyleSheet.create({
   containr: {
@@ -9,7 +7,7 @@ export const mc = StyleSheet.create({
     backgroundColor: color.black
   },
 
-  camera: {
+  camera: { 
     flex: 1,
     backgroundColor: color.black,
     aspectRatio: 9 / 16

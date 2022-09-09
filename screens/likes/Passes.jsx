@@ -32,7 +32,7 @@ const Passes = () => {
   }, [])
 
   const undoPass = async pass =>
-    await deleteDoc(doc(db, "users", user?.uid, 'passes', pass?.id))
+    await deleteDoc(doc(db, 'users', user?.uid, 'passes', pass?.id))
 
   const disabled = () => navigation.navigate('SetupModal')
 

@@ -4,13 +4,10 @@ import { useFonts } from 'expo-font'
 import color from '../../../style/color'
 import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../../../hooks/firebase'
-import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 
 const LookingFor = () => {
   const { user, profile } = useSelector(state => state.user)
-
-  const navigation = useNavigation()
 
   const [lookingFor, setLookingFor] = useState(profile?.lookingFor)
 
@@ -24,7 +21,7 @@ const LookingFor = () => {
   const lookingForWomen = async () => {
     setLookingFor('female')
     try {
-      await updateDoc(doc(db, 'users', profile?.uid), { lookingFor: 'female' })
+      await updateDoc(doc(db, 'users', user?.uid), { lookingFor: 'female' })
     } catch (error) { return }
   }
 
