@@ -99,7 +99,9 @@ const MessageCamera = () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,
-      quality: 1
+      aspect: [16, 9],
+      quality: 1,
+      videoMaxDuration: 30
     })
 
     if (!result?.cancelled) {
@@ -112,18 +114,20 @@ const MessageCamera = () => {
           }
         })
       if (result?.type === 'video') {
-        navigation.navigate('PreviewMessageImage', {
-          matchDetails,
-          media: {
-            uri: result?.uri,
-            type: 'video',
-            width,
-            thumbnail: null,
-            height: null,
-            duration: null,
-            rotation: 1
-          }
-        })
+        let thumbnail = await generateThumbnail(result?.uri)
+        if (thumbnail)
+          navigation.navigate('PreviewMessageImage', {
+            matchDetails,
+            media: {
+              uri: result?.uri,
+              type: result?.type,
+              width,
+              thumbnail,
+              height: result?.height || null,
+              duration: result?.duration || null,
+              rotation: 1
+            }
+          })
       }
     }
   }

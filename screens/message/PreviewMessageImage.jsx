@@ -161,53 +161,6 @@ const PreviewMessageImage = () => {
                 })
             })
         })
-    } else if (media?.type == 'video' && !media?.thumbnail) {
-      const blob = await new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest()
-        xhr.onload = () => resolve(xhr.response)
-
-        xhr.responseType = 'blob'
-        xhr.open('GET', media?.uri, true)
-        xhr.send(null)
-      })
-
-      setDisableButton(true)
-      setSendLoading(true)
-
-      const mediaRef = ref(storage, `messages/${matchDetails?.id}/'video'/${uuid()}`)
-
-      uploadBytes(mediaRef, blob)
-        .then(snapshot => { 
-          getDownloadURL(snapshot?.ref)
-            .then(downloadURL => {
-              addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
-                userId: user?.uid,
-                username: profile?.username,
-                photoURL: matchDetails?.users[user?.uid].photoURL,
-                mediaLink: snapshot?.ref?._location?.path,
-                mediaType: media?.type,
-                media: downloadURL,
-                thumbnail: null,
-                caption: input,
-                duration: media?.duration,
-                mediaSize: {
-                  width: media?.width,
-                  height: media?.height
-                },
-                seen: false,
-                timestamp: serverTimestamp(),
-              }).then(async () => {
-                await updateDoc(doc(db, 'matches', matchDetails?.id), {
-                  timestamp: serverTimestamp()
-                })
-              }).finally(() => {
-                setSendLoading(false)
-                setDisableButton(false)
-                setInput('')
-                navigation.navigate('Message', { matchDetails })
-              })
-            })
-        })
     }
   }
 
