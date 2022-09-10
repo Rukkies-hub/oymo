@@ -26,6 +26,8 @@ import PreviewMessageImage from '../screens/message/PreviewMessageImage'
 import AddReels from '../screens/addReels/AddReels'
 import SaveReels from '../screens/addReels/SaveReels'
 import Notifications from '../screens/notification/Notifications'
+import NewMatch from '../screens/modals/NewMatch'
+import SetupModal from '../screens/modals/SetupModal'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -68,6 +70,8 @@ const StackNavigation = () => {
                   </Group>
 
                   <Group screenOptions={{ presentation: 'transparentModal' }}>
+                    <Screen name='NewMatch' component={NewMatch} />
+                    <Screen name='SetupModal' component={SetupModal} />
                     <Screen
                       name='Gender'
                       component={Gender}

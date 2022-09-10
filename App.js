@@ -13,6 +13,7 @@ LogBox.ignoreAllLogs()
 
 export default function App () {
   const [loaded] = useFonts({
+    logo: require('./assets/fonts/Pacifico/Pacifico-Regular.ttf'),
     text: require('./assets/fonts/Montserrat_Alternates/MontserratAlternates-Medium.ttf'),
     boldText: require('./assets/fonts/Montserrat_Alternates/MontserratAlternates-Bold.ttf')
   })
