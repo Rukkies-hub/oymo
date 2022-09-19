@@ -7,7 +7,9 @@ import {
   Keyboard,
   TouchableOpacity,
   ActivityIndicator,
-  Image
+  Image,
+  TextInput,
+  Text
 } from 'react-native'
 import { login } from '../style/login'
 import Bar from '../components/Bar'
@@ -15,18 +17,28 @@ import color from '../style/color'
 import { useState } from 'react'
 import { useFonts } from 'expo-font'
 import OymoFont from '../components/OymoFont'
-import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth'
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithCredential, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../hooks/firebase'
 
 import { webClientId, iosClientId, androidClientId } from '@env'
 
 import * as Google from 'expo-auth-session/providers/google'
 import * as WebBrowser from 'expo-web-browser'
+import { Ionicons, MaterialIcons } from '@expo/vector-icons'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../features/userSlice'
 
 WebBrowser.maybeCompleteAuthSession()
 
 const Login = () => {
+  const dispatch = useDispatch()
   const [googleLoadng, setGoogleLoadng] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [securePasswordEntry, setSecurePasswordEntry] = useState(true)
+  const [authType, setAuthType] = useState('login')
+  const [authLoading, setAuthLoading] = useState(false)
+  const [showError, setShowError] = useState(false)
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidHide', () => {
@@ -50,6 +62,36 @@ const Login = () => {
       setGoogleLoadng(false)
     }
   }, [response])
+
+  let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+
+  const signin = () => {
+    if (email.match(regexEmail) && password != '') {
+      setAuthLoading(true)
+      signInWithEmailAndPassword(auth, email, password)
+        .then(userCredential => {
+          dispatch(setUser(userCredential))
+          setAuthLoading(false)
+        }).catch(error => {
+          alert('Signin Error. Seems like you don`t have an account')
+        }).finally(() => setAuthLoading(false))
+    }
+  }
+
+  const signup = () => {
+    if (email.match(regexEmail) && password != '') {
+      setAuthLoading(true)
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(userCredential => {
+          dispatch(setUser(userCredential))
+          setAuthLoading(false)
+        }).catch(error => {
+          alert('Email already in use')
+        }).finally(() => setAuthLoading(false))
+    }
+  }
+
+  const recoverPassword = () => { }
 
 
   const [loaded] = useFonts({
@@ -76,17 +118,83 @@ const Login = () => {
             </View>
 
             <View style={{ marginTop: 40, width: '100%' }}>
-              <View style={login.signupButtonContainer}>
+              <View style={login.inputView}>
+                <MaterialIcons name='alternate-email' size={24} color={color.white} style={{ marginHorizontal: 10 }} />
+                <TextInput
+                  autoCapitalize='none'
+                  placeholder='Email'
+                  value={email}
+                  onChangeText={setEmail}
+                  placeholderTextColor={color.white}
+                  style={login.input}
+                />
+              </View>
+
+              {
+                email.length >= 2 &&
+                <Text style={[login.errorText, { display: !showError ? 'none' : 'flex' }]}>
+                  Please, enter a valid email
+                </Text>
+              }
+
+              {
+                authType != 'forgotPassword' &&
+                <View style={login.passwordView}>
+                  <Ionicons name='lock-open-outline' size={24} color={color.white} style={{ marginHorizontal: 10 }} />
+                  <TextInput
+                    autoCapitalize='none'
+                    placeholder='Password'
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholderTextColor={color.white}
+                    secureTextEntry={securePasswordEntry}
+                    style={login.input}
+                  />
+                  <TouchableOpacity onPress={() => setSecurePasswordEntry(!securePasswordEntry)} style={login.peekButton}>
+                    <Ionicons name={!securePasswordEntry ? 'ios-eye-off-outline' : 'ios-eye-outline'} size={24} color={color.white} style={{ marginHorizontal: 10 }} />
+                  </TouchableOpacity>
+                </View>
+              }
+
+              <View style={login.authButtonView}>
+                <TouchableOpacity
+                  onPress={() => authType == 'login' ? signin() : authType == 'signup' ? signup() : recoverPassword()}
+                  style={[login.authButton, { backgroundColor: authType == 'login' ? color.red : color.white }]}
+                >
+                  {
+                    authLoading ? <ActivityIndicator size='small' color={authType == 'login' ? color.white : color.red} /> :
+                      <Text
+                        style={{
+                          fontFamily: 'text',
+                          fontSize: 16,
+                          color: authType == 'login' ? color.white : color.red
+                        }}
+                      >
+                        {authType == 'login' ? 'Login' : authType == 'signup' ? 'Sign Up' : 'Forgot Password'}
+                      </Text>
+                  }
+                </TouchableOpacity>
+
                 <TouchableOpacity onPress={() => promptAsync()} style={login.googleLoginButton}>
                   {
                     googleLoadng ?
                       <ActivityIndicator size='small' color={color.red} /> :
                       <View style={{ flexDirection: 'row' }}>
                         <Image source={require('../assets/google.png')} style={login.googleImage} />
-                        <OymoFont message='Continue with Google' fontStyle={{ fontSize: 16, marginLeft: 10 }} />
+                        {/* <OymoFont message='Continue with Google' fontStyle={{ fontSize: 16, marginLeft: 10 }} /> */}
                       </View>
                   }
                 </TouchableOpacity>
+              </View>
+
+              <View style={login.buttomView}>
+                <TouchableOpacity onPress={() => setAuthType(authType == 'login' ? 'signup' : 'login')}>
+                  <Text style={{ color: color.white, fontSize: 12, fontFamily: 'text' }}>Don't have an account?</Text>
+                </TouchableOpacity>
+
+                {/* <TouchableOpacity onPress={() => setAuthType(authType == 'forgotPassword' ? 'signin' : 'forgotPassword')}>
+                  <Text style={{ color: color.white, fontSize: 12 }}>Forgot your password?</Text>
+                </TouchableOpacity> */}
               </View>
             </View>
           </>

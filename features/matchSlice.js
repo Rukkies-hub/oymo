@@ -12,7 +12,7 @@ export const matchSlice = createSlice({
     },
 
     setPendingSwipes: (state, action) => {
-      state.pendingSwipes(...action.payload)
+      state.pendingSwipes.push(...action.payload)
     }
   }
 })
