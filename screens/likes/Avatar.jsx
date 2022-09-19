@@ -6,6 +6,7 @@ import { SimpleLineIcons } from '@expo/vector-icons'
 import AutoHeightImage from 'react-native-auto-height-image'
 import { likes } from '../../style/likes'
 const { width } = Dimensions.get('window')
+import color from '../../style/color'
 
 const Avatar = ({ user }) => {
   const [userInfo, setUserInfo] = useState(null)
@@ -21,7 +22,7 @@ const Avatar = ({ user }) => {
     <>
       {
         userInfo?.photoURL ?
-          <AutoHeightImage source={{ uri: userInfo?.photoURL }} width={(width / 3.5)} style={likes.avatar} /> :
+          <AutoHeightImage source={{ uri: userInfo?.photoURL }} width={width / 4} style={[likes.avatar, { height: width / 4 }]} /> :
           <View style={likes.avatarPlaceholder}>
             <SimpleLineIcons name='user' size={20} color={color.dark} />
           </View>

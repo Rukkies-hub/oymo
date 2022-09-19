@@ -1,5 +1,5 @@
-import { Dimensions, StyleSheet } from "react-native"
-import color from "./color"
+import { Dimensions, StyleSheet } from 'react-native'
+import color from './color'
 
 const { width } = Dimensions.get('window')
 
@@ -73,11 +73,6 @@ export const likes = StyleSheet.create({
     marginLeft: 10
   },
 
-  aboutText: {
-    fontFamily: 'text',
-    color: color.dark
-  },
-
   infoContainer: {
     marginTop: 10,
     flexDirection: 'row',
@@ -89,7 +84,7 @@ export const likes = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginLeft: 10
+    marginLeft: 5
   },
 
   infoText: {
@@ -117,7 +112,7 @@ export const likes = StyleSheet.create({
   },
 
   matchButon: {
-    backgroundColor: color.goldDark,
+    backgroundColor: color.red,
     paddingHorizontal: 10,
     height: 35,
     borderRadius: 8,
@@ -133,7 +128,6 @@ export const likes = StyleSheet.create({
   },
 
   avatar: {
-    maxHeight: 250,
     borderRadius: 12
   },
 

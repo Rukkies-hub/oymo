@@ -258,7 +258,7 @@ const Message = () => {
     <View style={msg.container}>
       <MessageHeader matchDetails={matchDetails} user={getMatchedUserInfo(matchDetails?.users, user?.uid)} />
 
-      <ImageBackground source={require('../../assets/chatBG2.png')} style={msg.messageBackground}>
+      <ImageBackground source={require('../../assets/chatBG.png')} style={msg.messageBackground}>
         <BlurView intensity={110} tint='light' style={msg.messageBackground}>
           <KeyboardAvoidingView style={{ flex: 1 }}>
             {

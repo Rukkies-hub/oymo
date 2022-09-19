@@ -1,5 +1,5 @@
-import { Dimensions, StyleSheet } from "react-native"
-import color from "./color"
+import { Dimensions, StyleSheet } from 'react-native'
+import color from './color'
 
 export const login = StyleSheet.create({
   container: {
@@ -33,20 +33,74 @@ export const login = StyleSheet.create({
     color: color.white
   },
 
-  signupButtonContainer: {
+  inputView: {
+    height: 45,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: color.lightBorderColor,
+    borderRadius: 12,
+    overflow: 'hidden'
+  },
+
+  input: {
+    flex: 1,
+    fontFamily: 'text',
+    color: color.white
+  },
+
+  errorText: {
+    color: color.red,
+    marginHorizontal: 20,
+  },
+
+  passwordView: {
+    height: 45,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: color.lightBorderColor,
+    borderRadius: 12,
     marginTop: 20,
+    overflow: 'hidden'
+  },
+
+  peekButton: {
+    width: 45,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  authButtonView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20
+  },
+
+  authButton: {
+    flex: 1,
+    height: 45,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   googleLoginButton: {
-    flex: 1,
-    height: 50,
+    width: 45,
+    height: 45,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: color.white,
-    borderRadius: 12
+    borderRadius: 12,
+    marginLeft: 20
+    // flex: 1,
+    // height: 50,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // backgroundColor: color.white,
+    // borderRadius: 12
   },
 
   googleImage: {
@@ -55,6 +109,13 @@ export const login = StyleSheet.create({
   },
 
   bottomContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20
+  },
+
+  buttomView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

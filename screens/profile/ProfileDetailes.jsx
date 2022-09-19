@@ -19,10 +19,7 @@ const ProfileDetails = ({ profile, user }) => {
   const [aboutLimit, setAboutLimit] = useState(2)
 
   return (
-    <ImageBackground
-      source={!profile?.photoURL ? require('../../assets/background2.jpg') : { uri: profile?.photoURL }}
-      blurRadius={50}
-    >
+    <ImageBackground source={!profile?.photoURL ? require('../../assets/background2.jpg') : { uri: profile?.photoURL }} blurRadius={50}>
       <LinearGradient colors={[color.transparent, color.white]}>
         <Bar color={'dark'} />
 

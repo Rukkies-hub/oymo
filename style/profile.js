@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native"
-import color from "./color"
+import { StyleSheet } from 'react-native'
+import color from './color'
 
 export const profile = StyleSheet.create({
   container: {
@@ -56,6 +56,15 @@ export const profile = StyleSheet.create({
     borderRadius: 12,
     height: 40,
     width: 40,
+  },
+
+  matchButton: {
+    width: 45,
+    height: 45,
+    borderRadius: 12,
+    backgroundColor: color.red,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   aboutContainer: {

@@ -49,10 +49,10 @@ const LikesNavigation = ({ navigation }) => {
             <Likes />
           }
 
-          {
+          {/* {
             visible == 'passes' &&
             <Passes />
-          }
+          } */}
         </>
       }
     </View>

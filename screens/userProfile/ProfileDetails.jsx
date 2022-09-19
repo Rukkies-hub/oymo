@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { View, Text, ImageBackground, Image, TouchableOpacity } from 'react-native'
 
 import { LinearGradient } from 'expo-linear-gradient'
-import { FontAwesome, Feather, Fontisto, SimpleLineIcons } from '@expo/vector-icons'
+import { FontAwesome, Feather, Fontisto, SimpleLineIcons, AntDesign } from '@expo/vector-icons'
 import color from '../../style/color'
 import { useNavigation } from '@react-navigation/native'
 
@@ -12,11 +12,68 @@ import { BlurView } from 'expo-blur'
 import OymoFont from '../../components/OymoFont'
 
 import { profile as _profile } from '../../style/profile'
+import { useSelector } from 'react-redux'
+import { deleteDoc, doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { db } from '../../hooks/firebase'
+import generateId from '../../lib/generateId'
 
 const ProfileDetails = ({ profile, user }) => {
   const navigation = useNavigation()
+  const { profiles } = useSelector(state => state.match)
+  const { user: _user, profile: __profile } = useSelector(state => state.user)
 
   const [aboutLimit, setAboutLimit] = useState(2)
+
+  const [showMatch, setShowMatch] = useState(false)
+
+  useLayoutEffect(() => {
+    const needle = user?.id
+    const cardIndex = profiles?.findIndex(item => item.id === needle)
+
+    if (!profiles[cardIndex]) return
+
+    const userSwiped = profiles[cardIndex]
+
+    if (userSwiped) setShowMatch(true)
+  }, [user])
+
+  // MATCH WITH USER
+  const swipeRight = async () => {
+    const needle = user?.id
+    const cardIndex = profiles?.findIndex(item => item.id === needle)
+
+    if (!profiles[cardIndex]) return
+
+    const userSwiped = profiles[cardIndex]
+
+    getDoc(doc(db, 'users', _user.uid, 'swipes', userSwiped.id))
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists()) {
+          setDoc(doc(db, 'users', _user.uid, 'swipes', userSwiped.id), userSwiped)
+
+          // CREAT A MATCH
+          setDoc(doc(db, 'matches', generateId(_user.uid, userSwiped.id)), {
+            users: {
+              [_user.uid]: __profile,
+              [userSwiped.id]: userSwiped
+            },
+            usersMatched: [_user.uid, userSwiped.id],
+            timestamp: serverTimestamp()
+          }).finally(async () => await deleteDoc(doc(db, 'users', _user.uid, 'pendingSwipes', userSwiped.id)))
+
+          navigation.navigate('NewMatch', {
+            loggedInProfile: __profile,
+            userSwiped
+          })
+        } else {
+          setDoc(doc(db, 'users', _user.uid, 'swipes', userSwiped.id), userSwiped)
+          setShowMatch(false)
+        }
+      })
+
+    setDoc(doc(db, 'users', userSwiped.id, 'pendingSwipes', user?.id), __profile)
+    setDoc(doc(db, 'users', user?.id, 'swipes', userSwiped.id), userSwiped)
+  }
 
   return (
     <ImageBackground
@@ -59,7 +116,12 @@ const ProfileDetails = ({ profile, user }) => {
               <OymoFont message={profile?.displayName} fontStyle={_profile.displayName} fontFamily='montserrat_medium' />
             }
           </View>
-          {/* match button goes here */}
+          {
+            showMatch &&
+            <TouchableOpacity onPress={swipeRight} style={_profile.matchButton}>
+              <AntDesign name='hearto' size={20} color={color.white} />
+            </TouchableOpacity>
+          }
         </View>
 
         {

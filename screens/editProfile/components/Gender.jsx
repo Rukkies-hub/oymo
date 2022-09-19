@@ -114,7 +114,7 @@ const Gender = () => {
 async function schedulePushNotification () {
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "Update successful",
+      title: 'Update successful',
       body: 'Your profile has been updated successfully'
     },
     trigger: { seconds: 1 },

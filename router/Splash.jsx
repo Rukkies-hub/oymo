@@ -99,7 +99,7 @@ const Splash = () => {
           alignItems: 'center'
         }}
       >
-        <OymoFont message='Find a date on your own tems' />
+        <OymoFont message='Find the fun you forgot' />
       </View>
     </View>
   )

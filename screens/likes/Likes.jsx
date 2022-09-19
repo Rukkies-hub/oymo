@@ -14,7 +14,7 @@ import color from '../../style/color'
 
 const Likes = () => {
   const { user, profile } = useSelector(state => state.user)
-  const { pendingSwipes } = useSelector(state => state.match)
+  const { pendingSwipes, profiles } = useSelector(state => state.match)
   const navigation = useNavigation()
 
   const swipeLeft = async like => {
@@ -74,33 +74,15 @@ const Likes = () => {
                     <Username user={like?.id} />
                   </TouchableOpacity>
 
-                  {
-                    like?.about && like?.about != '' &&
-                    <View style={{ marginTop: 10 }}>
-                      <OymoFont message={like?.about} lines={2} fontStyle={likes.aboutText} />
-                    </View>
-                  }
                   <View style={likes.infoContainer}>
                     <Feather name='home' size={12} color={color.dark} />
 
                     <View style={likes.infoView}>
                       <OymoFont message='Lives in' fontStyle={likes.infoText} />
-                      <OymoFont message={like?.city} fontStyle={likes.infoText} fontFamily='montserrat_bold' />
+                      <OymoFont message={like?.city} lines={1} fontStyle={likes.infoText} fontFamily='montserrat_bold' />
                     </View>
                   </View>
-                  {
-                    like?.job != '' &&
-                    <View style={likes.infoContainer}>
-                      <Feather name='briefcase' size={12} color={color.dark} />
-
-                      <View style={likes.infoView}>
-                        <OymoFont message='Lives in' fontStyle={likes.infoText} />
-                        <Text style={[likes.infoText, { fontFamily: 'text' }]}>
-                          {like?.job} {like?.job ? 'at' : null} {like?.company}
-                        </Text>
-                      </View>
-                    </View>
-                  }
+                  
                   <View style={likes.controlesView}>
                     <TouchableOpacity onPress={() => swipeLeft(like)} style={likes.nopeButton}>
                       <OymoFont message='Nope' fontStyle={{ color: color.red }} />

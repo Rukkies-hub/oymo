@@ -1,5 +1,5 @@
-import { Dimensions, StyleSheet } from "react-native"
-import color from "./color"
+import { Dimensions, StyleSheet } from 'react-native'
+import color from './color'
 
 const { width, height } = Dimensions.get('window')
 
@@ -135,5 +135,34 @@ export const match = StyleSheet.create({
     backgroundColor: color.transparent,
     justifyContent: 'center',
     alignItems: 'center'
+  }
+})
+
+export const nm = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+
+  screenGradient: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'space-between'
+  },
+
+  glitchView: {
+    alignItems: 'center'
+  },
+
+  itis: {
+    color: color.lightGreen,
+    textAlign: 'center',
+    marginTop: 300,
+    fontSize: 30,
+    textTransform: 'uppercase'
+  },
+
+  glitch: {
+    color: color.lightGreen,
+    fontSize: 120
   }
 })
