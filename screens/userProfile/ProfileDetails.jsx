@@ -69,6 +69,7 @@ const ProfileDetails = ({ profile, user }) => {
           setDoc(doc(db, 'users', _user.uid, 'swipes', userSwiped.id), userSwiped)
           setShowMatch(false)
         }
+        // match usr
       })
 
     setDoc(doc(db, 'users', userSwiped.id, 'pendingSwipes', user?.id), __profile)
