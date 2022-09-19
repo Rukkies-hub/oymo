@@ -14,7 +14,7 @@ import color from '../../style/color'
 
 const Likes = () => {
   const { user, profile } = useSelector(state => state.user)
-  const { pendingSwipes } = useSelector(state => state.match)
+  const { pendingSwipes, profiles } = useSelector(state => state.match)
   const navigation = useNavigation()
 
   const swipeLeft = async like => {

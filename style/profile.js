@@ -58,6 +58,15 @@ export const profile = StyleSheet.create({
     width: 40,
   },
 
+  matchButton: {
+    width: 45,
+    height: 45,
+    borderRadius: 12,
+    backgroundColor: color.red,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
   aboutContainer: {
     marginTop: 20,
     paddingHorizontal: 10
