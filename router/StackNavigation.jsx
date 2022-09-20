@@ -28,6 +28,7 @@ import SaveReels from '../screens/addReels/SaveReels'
 import Notifications from '../screens/notification/Notifications'
 import NewMatch from '../screens/modals/NewMatch'
 import SetupModal from '../screens/modals/SetupModal'
+import Passion from '../screens/editProfile/components/Passion'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -94,6 +95,10 @@ const StackNavigation = () => {
                         }
                       }}
                     />
+                  </Group>
+
+                  <Group screenOptions={{ presentation: 'modal' }}>
+                    <Screen name='Passion' component={Passion} />
                   </Group>
                 </>
               ) :
