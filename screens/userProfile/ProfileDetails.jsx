@@ -38,6 +38,43 @@ const ProfileDetails = ({ profile, user }) => {
   }, [user])
 
   // MATCH WITH USER
+  // const swipeRight = async () => {
+  //   const needle = user?.id
+  //   const cardIndex = profiles?.findIndex(item => item.id === needle)
+
+  //   if (!profiles[cardIndex]) return
+
+  //   const userSwiped = profiles[cardIndex]
+
+
+  //   getDoc(doc(db, 'users', _user?.uid, 'swipes', userSwiped?.id))
+  //     .then(documentSnapshot => {
+  //       if (documentSnapshot.exists()) {
+  //         setDoc(doc(db, 'users', _user?.uid, 'swipes', userSwiped?.id), userSwiped)
+
+  //         // CREAT A MATCH
+  //         setDoc(doc(db, 'matches', generateId(_user?.uid, userSwiped?.id)), {
+  //           users: {
+  //             [_user?.uid]: __profile,
+  //             [userSwiped?.id]: userSwiped
+  //           },
+  //           usersMatched: [_user?.uid, userSwiped?.id],
+  //           timestamp: serverTimestamp()
+  //         }).finally(async () => await deleteDoc(doc(db, 'users', _user?.uid, 'pendingSwipes', userSwiped?.id)))
+
+  //         navigation.navigate('NewMatch', {
+  //           loggedInProfile: __profile,
+  //           userSwiped
+  //         })
+  //       } else {
+  //         setDoc(doc(db, 'users', _user?.uid, 'swipes', userSwiped.id), userSwiped)
+  //         setShowMatch(false)
+  //       }
+  //     })
+
+  //   setDoc(doc(db, 'users', userSwiped.id, 'pendingSwipes', user?.id), __profile)
+  //   setDoc(doc(db, 'users', user?.id, 'swipes', userSwiped.id), userSwiped)
+  // }
   const swipeRight = async () => {
     const needle = user?.id
     const cardIndex = profiles?.findIndex(item => item.id === needle)
@@ -46,34 +83,31 @@ const ProfileDetails = ({ profile, user }) => {
 
     const userSwiped = profiles[cardIndex]
 
-    getDoc(doc(db, 'users', _user.uid, 'swipes', userSwiped.id))
+
+    getDoc(doc(db, 'users', userSwiped?.id, 'swipes', _user?.uid))
       .then(documentSnapshot => {
-        if (documentSnapshot.exists()) {
-          setDoc(doc(db, 'users', _user.uid, 'swipes', userSwiped.id), userSwiped)
+        if (documentSnapshot?.exists()) {
+          setDoc(doc(db, 'users', _user?.uid, 'swipes', userSwiped?.id), userSwiped)
 
           // CREAT A MATCH
-          setDoc(doc(db, 'matches', generateId(_user.uid, userSwiped.id)), {
+          setDoc(doc(db, 'matches', generateId(_user?.uid, userSwiped?.id)), {
             users: {
-              [_user.uid]: __profile,
-              [userSwiped.id]: userSwiped
+              [_user?.uid]: profile,
+              [userSwiped?.id]: userSwiped
             },
-            usersMatched: [_user.uid, userSwiped.id],
+            usersMatched: [_user?.uid, userSwiped?.id],
             timestamp: serverTimestamp()
-          }).finally(async () => await deleteDoc(doc(db, 'users', _user.uid, 'pendingSwipes', userSwiped.id)))
+          }).then(async () => await deleteDoc(doc(db, 'users', _user?.uid, 'pendingSwipes', userSwiped?.id)))
 
           navigation.navigate('NewMatch', {
             loggedInProfile: __profile,
             userSwiped
           })
         } else {
-          setDoc(doc(db, 'users', _user.uid, 'swipes', userSwiped.id), userSwiped)
-          setShowMatch(false)
+          setDoc(doc(db, 'users', _user?.uid, 'swipes', userSwiped?.id), userSwiped)
+          setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', _user?.uid), __profile)
         }
-        // match usr
       })
-
-    setDoc(doc(db, 'users', userSwiped.id, 'pendingSwipes', user?.id), __profile)
-    setDoc(doc(db, 'users', user?.id, 'swipes', userSwiped.id), userSwiped)
   }
 
   return (

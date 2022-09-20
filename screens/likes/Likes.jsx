@@ -30,20 +30,20 @@ const Likes = () => {
 
     const userSwiped = profiles[cardIndex]
 
-    getDoc(doc(db, 'users', user?.uid, 'pendingSwipes', userSwiped.id))
+    getDoc(doc(db, 'users', user?.uid, 'pendingSwipes', userSwiped?.id))
       .then(documentSnapshot => {
         if (documentSnapshot.exists()) {
-          setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped.id), userSwiped)
+          setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
 
           // CREAT A MATCH
-          setDoc(doc(db, 'matches', generateId(user?.uid, userSwiped.id)), {
+          setDoc(doc(db, 'matches', generateId(user?.uid, userSwiped?.id)), {
             users: {
               [user?.uid]: profile,
-              [userSwiped.id]: userSwiped
+              [userSwiped?.id]: userSwiped
             },
-            usersMatched: [user?.uid, userSwiped.id],
+            usersMatched: [user?.uid, userSwiped?.id],
             timestamp: serverTimestamp()
-          }).then(async () => await deleteDoc(doc(db, 'users', user?.uid, 'pendingSwipes', userSwiped.id)))
+          }).then(async () => await deleteDoc(doc(db, 'users', user?.uid, 'pendingSwipes', userSwiped?.id)))
 
           navigation.navigate('NewMatch', {
             loggedInProfile: profile,
@@ -52,7 +52,7 @@ const Likes = () => {
         }
       })
 
-    setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
+    // setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
   }
 
   return (
