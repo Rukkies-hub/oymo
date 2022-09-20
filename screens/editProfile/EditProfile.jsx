@@ -47,7 +47,7 @@ const EditProfile = () => {
   const [notification, setNotification] = useState(false)
 
   // INPUTS
-  const [displayName, setDisplayName] = useState(user?.displayName || profile?.displayName)
+  const [displayName, setDisplayName] = useState(user?.displayName)
   const [username, setUsername] = useState(profile?.username)
   const [phone, setPhone] = useState(profile?.phone)
   const [job, setJob] = useState(profile?.job)
@@ -110,7 +110,7 @@ const EditProfile = () => {
       username,
       city,
       phone,
-      theme: 'dark',
+      displayName,
       timestamp: serverTimestamp()
     })
     schedulePushNotification('Update successful', 'Your profile has been updated successfully')
@@ -152,7 +152,7 @@ const EditProfile = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={editProfile.mainView}>
           {
-            profile.photoURL ?
+            profile?.photoURL ?
               <Image
                 source={{ uri: profile?.photoURL }}
                 style={editProfile.avatar}
@@ -167,12 +167,7 @@ const EditProfile = () => {
               <OymoFont
                 message={profile?.username ? profile?.username : 'username'}
                 fontFamily='montserrat_bold'
-                fontStyle={[
-                  editProfile.username,
-                  {
-                    color: profile?.username ? color.dark : color.lightText
-                  }
-                ]}
+                fontStyle={editProfile.username}
               />
             </View>
             <OymoFont

@@ -43,7 +43,10 @@ export const editProfile = StyleSheet.create({
     alignItems: 'center'
   },
 
-  username: { fontSize: 20 },
+  username: {
+    fontSize: 20,
+    color: color.dark
+  },
 
   displayName: { fontSize: 18 },
 

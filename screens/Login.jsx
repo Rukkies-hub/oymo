@@ -17,7 +17,7 @@ import color from '../style/color'
 import { useState } from 'react'
 import { useFonts } from 'expo-font'
 import OymoFont from '../components/OymoFont'
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithCredential, signInWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, GoogleAuthProvider, sendPasswordResetEmail, signInWithCredential, signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../hooks/firebase'
 
 import { webClientId, iosClientId, androidClientId } from '@env'
@@ -91,7 +91,11 @@ const Login = () => {
     }
   }
 
-  const recoverPassword = () => { }
+  const recoverPassword = () => {
+    if(email == '') return
+    sendPasswordResetEmail(auth, email)
+    alert("Email sent.\nCheck ur inbox, rest ur password then try logging in again.")
+  }
 
 
   const [loaded] = useFonts({
@@ -170,7 +174,7 @@ const Login = () => {
                           color: authType == 'login' ? color.white : color.red
                         }}
                       >
-                        {authType == 'login' ? 'Login' : authType == 'signup' ? 'Sign Up' : 'Forgot Password'}
+                        {authType == 'login' ? 'Login' : authType == 'signup' ? 'Sign Up' : 'Recover Password'}
                       </Text>
                   }
                 </TouchableOpacity>
@@ -181,7 +185,6 @@ const Login = () => {
                       <ActivityIndicator size='small' color={color.red} /> :
                       <View style={{ flexDirection: 'row' }}>
                         <Image source={require('../assets/google.png')} style={login.googleImage} />
-                        {/* <OymoFont message='Continue with Google' fontStyle={{ fontSize: 16, marginLeft: 10 }} /> */}
                       </View>
                   }
                 </TouchableOpacity>
@@ -189,12 +192,12 @@ const Login = () => {
 
               <View style={login.buttomView}>
                 <TouchableOpacity onPress={() => setAuthType(authType == 'login' ? 'signup' : 'login')}>
-                  <Text style={{ color: color.white, fontSize: 12, fontFamily: 'text' }}>Don't have an account?</Text>
+                  <Text style={{ color: color.white, fontSize: 12, fontFamily: 'text' }}>{authType == 'login' ? "Don't have an account?" : "Already have an account?" }</Text>
                 </TouchableOpacity>
 
-                {/* <TouchableOpacity onPress={() => setAuthType(authType == 'forgotPassword' ? 'signin' : 'forgotPassword')}>
-                  <Text style={{ color: color.white, fontSize: 12 }}>Forgot your password?</Text>
-                </TouchableOpacity> */}
+                <TouchableOpacity onPress={() => setAuthType(authType == 'forgotPassword' ? 'signin' : 'forgotPassword')}>
+                  <Text style={{ color: color.white, fontSize: 12, fontFamily: 'text' }}>Forgot your password?</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </>
