@@ -5,7 +5,8 @@ export const userSlice = createSlice({
   initialState: {
     user: null,
     loadingInitial: true,
-    profile: null
+    profile: null,
+    passsions: []
   },
   reducers: {
     setUser: (state, action) => {
@@ -20,11 +21,15 @@ export const userSlice = createSlice({
 
     setProfile: (state, action) => {
       state.profile = action.payload
+    },
+
+    setPassions: (state, action) => {
+      state.passsions.push(...action.payload)
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser, logout, setProfile } = userSlice.actions
+export const { setUser, logout, setProfile, setPassions } = userSlice.actions
 
 export default userSlice.reducer
