@@ -54,12 +54,6 @@ const Passes = () => {
                   <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: pass })}>
                     <Username user={pass?.id} />
                   </TouchableOpacity>
-                  {
-                    pass?.about && pass?.about != '' &&
-                    <View style={{ marginTop: 10 }}>
-                      <OymoFont message={pass?.about} lines={2} fontStyle={likes.aboutText} />
-                    </View>
-                  }
                   <View style={likes.infoContainer}>
                     <Feather name='home' size={12} color={color.dark} />
 
@@ -68,24 +62,7 @@ const Passes = () => {
                       <OymoFont message={pass?.city} fontStyle={likes.infoText} fontFamily='montserrat_bold' />
                     </View>
                   </View>
-                  {
-                    pass?.job != '' &&
-                    <View style={likes.infoContainer}>
-                      <Feather name='briefcase' size={12} color={color.dark} />
-
-                      <View style={likes.infoView}>
-                        <OymoFont message='Lives in' fontStyle={likes.infoText} />
-                        <Text style={[likes.infoText, { fontFamily: 'text' }]}>
-                          {pass?.job} {pass?.job ? 'at' : null} {pass?.company}
-                        </Text>
-                      </View>
-                    </View>
-                  }
                   <View style={likes.controlesView}>
-                    <TouchableOpacity onPress={() => swipeLeft(like)} style={likes.nopeButton}>
-                      <OymoFont message='Nope' fontStyle={{ color: color.red }} />
-                    </TouchableOpacity>
-
                     <TouchableOpacity onPress={() => profile ? undoPass(pass) : disabled()} style={likes.matchButon}>
                       <Feather name='trash-2' size={20} color={color.white} />
                     </TouchableOpacity>

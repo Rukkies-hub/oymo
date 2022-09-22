@@ -15,45 +15,35 @@ const LikesNavigation = ({ navigation }) => {
   return (
     <View style={likes.container}>
       {
-        !profile &&
-        <View style={likes.setupView}>
-          <View style={likes.setupViewSub}>
-            <OymoFont message='Creat a profile' fontFamily='montserrat_bold' fontStyle={likes.cp} />
-            <OymoFont message='You do not have a profile.' fontStyle={{ color: color.dark }} />
-            <OymoFont message='Please create a profile to perform any action' fontStyle={{ color: color.dark }} />
-            <TouchableOpacity
-              onPress={() => navigation.navigate('EditProfile')}
-              style={likes.ep}
-            >
-              <OymoFont message='Create a profile' fontStyle={{ color: color.white }} />
-            </TouchableOpacity>
-          </View>
-        </View>
-      }
+        !profile ?
+          <View style={likes.setupView}>
+            <View style={likes.setupViewSub}>
+              <OymoFont message='Creat a profile' fontFamily='montserrat_bold' fontStyle={likes.cp} />
+              <OymoFont message='You do not have a profile.' fontStyle={{ color: color.dark }} />
+              <OymoFont message='Please create a profile to perform any action' fontStyle={{ color: color.dark }} />
+              <TouchableOpacity
+                onPress={() => navigation.navigate('EditProfile')}
+                style={likes.ep}
+              >
+                <OymoFont message='Create a profile' fontStyle={{ color: color.white }} />
+              </TouchableOpacity>
+            </View>
+          </View> :
+          <>
+            <View style={likes.nav}>
+              <TouchableOpacity onPress={() => setVisible('likes')} style={likes.navButton}>
+                <OymoFont message='Likes' fontStyle={{ color: visible == 'likes' ? color.red : color.dark }} />
+              </TouchableOpacity>
 
-      {
-        profile &&
-        <>
-          <View style={likes.nav}>
-            <TouchableOpacity onPress={() => setVisible('likes')} style={likes.navButton}>
-              <OymoFont message='Likes' fontStyle={{ color: visible == 'likes' ? color.red : color.dark }} />
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => setVisible('passes')} style={likes.navButton}>
+                <OymoFont message='Passes' fontStyle={{ color: visible == 'passes' ? color.red : color.dark }} />
+              </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity onPress={() => setVisible('passes')} style={likes.navButton}>
-              <OymoFont message='Passes' fontStyle={{ color: visible == 'passes' ? color.red : color.dark }} />
-            </TouchableOpacity>
-          </View>
+            {visible == 'likes' && <Likes />}
 
-          {
-            visible == 'likes' &&
-            <Likes />
-          }
-
-          {/* {
-            visible == 'passes' &&
-            <Passes />
-          } */}
-        </>
+            {visible == 'passes' && <Passes />}
+          </>
       }
     </View>
   )
