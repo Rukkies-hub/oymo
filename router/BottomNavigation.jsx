@@ -54,7 +54,10 @@ const BottomNavigation = () => {
           listeners={({ navigation }) => ({
             tabPress: e => {
               e.preventDefault()
-              navigation.navigate('AddReels')
+              if (profile)
+                navigation.navigate('AddReels')
+              else
+                navigation.navigate('SetupModal')
             }
           })}
           options={{

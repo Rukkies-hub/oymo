@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, Image, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native'
+import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 
@@ -144,6 +144,8 @@ const Match = () => {
               cardVerticalMargin={0}
               onSwipedLeft={cardIndex => profile ? swipeLeft(cardIndex) : disabled()}
               onSwipedRight={cardIndex => profile ? swipeRight(cardIndex) : disabled()}
+              onTapCard={() => !profile ? disabled() : null}
+              dragStart={() => !profile ? disabled() : null}
               overlayLabels={{
                 left: { title: 'NOPE', style: { label: match.nope } },
                 right: { title: 'MATCH', style: { label: match.match } }

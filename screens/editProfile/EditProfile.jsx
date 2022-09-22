@@ -26,7 +26,7 @@ import * as Device from 'expo-device'
 import { useDispatch, useSelector } from 'react-redux'
 import { editProfile } from '../../style/editProfile'
 import OymoFont from '../../components/OymoFont'
-import { logout } from '../../features/userSlice'
+import { logout, setProfile } from '../../features/userSlice'
 import LookingFor from './components/LookingFor'
 import Payment from './components/Payment'
 import { signOut } from 'firebase/auth'
@@ -54,7 +54,6 @@ const EditProfile = () => {
   const [company, setCompany] = useState(profile?.company)
   const [school, setSchool] = useState(profile?.school)
   const [about, setAbout] = useState(profile?.about)
-  const [_passions, setPassions] = useState(profile?.passions)
   const [city, setCity] = useState(profile?.city)
 
   useEffect(() => {
@@ -137,6 +136,7 @@ const EditProfile = () => {
   const logoutUser = () => {
     signOut(auth)
     dispatch(logout())
+    dispatch(setProfile(null))
   }
 
   const [loaded] = useFonts({
@@ -280,24 +280,29 @@ const EditProfile = () => {
 
             {
               profile &&
-              <TouchableOpacity onPress={() => navigation.navigate('Passion')}>
-                <OymoFont message='Passions' fontStyle={editProfile.passionsText} fontFamily='montserrat_bold' />
+              <>
+                {
+                  profile?.passions != undefined &&
+                  <TouchableOpacity onPress={() => navigation.navigate('Passion')}>
+                    <OymoFont message='Passions' fontStyle={editProfile.passionsText} fontFamily='montserrat_bold' />
 
-                <View
-                  style={[
-                    editProfile.passionContainer,
-                    { backgroundColor: _passions?.length < 1 ? color.offWhite : color.transparent }
-                  ]}
-                >
-                  {
-                    _passions?.map((passion, index) => (
-                      <View key={index} style={editProfile.passions}>
-                        <OymoFont message={passion} fontStyle={editProfile.passion} />
-                      </View>
-                    ))
-                  }
-                </View>
-              </TouchableOpacity>
+                    <View
+                      style={[
+                        editProfile.passionContainer,
+                        { backgroundColor: profile?.passions.length < 1 ? color.offWhite : color.transparent }
+                      ]}
+                    >
+                      {
+                        profile?.passions?.map((passion, index) => (
+                          <View key={index} style={editProfile.passions}>
+                            <OymoFont message={passion} fontStyle={editProfile.passion} />
+                          </View>
+                        ))
+                      }
+                    </View>
+                  </TouchableOpacity>
+                }
+              </>
             }
 
             {

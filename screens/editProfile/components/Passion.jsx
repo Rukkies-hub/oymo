@@ -85,7 +85,7 @@ const Passion = () => {
   const { profile, user } = useSelector(state => state.user)
 
   const [passionsLoading, setPassionLoading] = useState(false)
-  const [passions, setPassions] = useState(profile?.passions)
+  const [passions, setPassions] = useState(profile?.passions == undefined ? [] : profile?.passions)
 
   const updateIntrests = async () => {
     if (passions?.length >= 3) {

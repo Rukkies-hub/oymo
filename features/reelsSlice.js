@@ -15,6 +15,7 @@ export const userSlice = createSlice({
   },
   reducers: {
     setReels: (state, action) => {
+      state.reelsList = []
       state.reelsList.push(...action.payload)
     },
 
