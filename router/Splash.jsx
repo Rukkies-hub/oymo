@@ -6,10 +6,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout, setProfile, setUser } from '../features/userSlice'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth, db } from '../hooks/firebase'
-import { doc, onSnapshot, where } from 'firebase/firestore'
+import { doc, getDoc, onSnapshot, where } from 'firebase/firestore'
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore'
 import { setReels } from '../features/reelsSlice'
 import { setPendingSwipes } from '../features/matchSlice'
+import { useLayoutEffect } from 'react'
 
 const Splash = () => {
   const { user } = useSelector(state => state.user)
@@ -22,18 +23,24 @@ const Splash = () => {
         dispatch(setUser(userAuth))
       else
         dispatch(logout())
+      getprofile(userAuth)
     })
   }, [])
 
-  useEffect(() => {
-    (() => {
-      if (user)
-        onSnapshot(doc(db, 'users', user?.uid),
-          doc => {
-            let profile = doc?.data()
-            dispatch(setProfile(profile))
-          })
-    })()
+  const getprofile = async user => {
+    const profile = await (await getDoc(doc(db, 'users', user?.uid))).data()
+    if (profile)
+      dispatch(setProfile(profile))
+  }
+
+  useLayoutEffect(() => {
+    if (user)
+      onSnapshot(doc(db, 'users', user?.uid),
+        doc => {
+          let profile = doc?.data()
+          dispatch(setProfile(profile))
+        }
+      )
   }, [user])
 
   useEffect(() => {
