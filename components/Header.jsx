@@ -147,32 +147,54 @@ const Header = ({
             showAratar &&
             <>
               {
-                !profile &&
-                <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={header.placeholderImage}>
-                  <FontAwesome name='user-o' size={22} color={color.dark} />
-                </TouchableOpacity>
-              }
-
-              {
-                profile &&
-                <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={header.profileImageButton}>
-                  {
-                    profile?.photoURL ?
-                      <View style={{ position: 'relative' }}>
-                        {
-                          profile?.paid &&
-                          <View style={nav.paidImageContainer}>
-                            <Image source={require('../assets/vip.png')} style={nav.paidImage} />
-                          </View>
-                        }
-                        <Image source={{ uri: profile?.photoURL }} style={header.profileImage} />
-                      </View> :
-                      <FontAwesome name='user-o' size={22} color={color.dark} />
-                  }
-                </TouchableOpacity>
+                !profile ?
+                  <TouchableOpacity onPress={() => navigation.openDrawer()} style={header.placeholderImage}>
+                    <FontAwesome name='user-o' size={22} color={color.dark} />
+                  </TouchableOpacity> :
+                  <TouchableOpacity onPress={() => navigation.openDrawer()} style={header.profileImageButton}>
+                    {
+                      profile?.photoURL ?
+                        <View style={{ position: 'relative' }}>
+                          {
+                            profile?.paid &&
+                            <View style={nav.paidImageContainer}>
+                              <Image source={require('../assets/vip.png')} style={nav.paidImage} />
+                            </View>
+                          }
+                          <Image source={{ uri: profile?.photoURL }} style={header.profileImage} />
+                        </View> :
+                        <FontAwesome name='user-o' size={22} color={color.dark} />
+                    }
+                  </TouchableOpacity>
               }
             </>
           }
+          {/* {
+            showAratar &&
+            <>
+              {
+                !profile ?
+                  <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={header.placeholderImage}>
+                    <FontAwesome name='user-o' size={22} color={color.dark} />
+                  </TouchableOpacity> :
+                  <TouchableOpacity onPress={() => navigation.navigate('Profile')} style={header.profileImageButton}>
+                    {
+                      profile?.photoURL ?
+                        <View style={{ position: 'relative' }}>
+                          {
+                            profile?.paid &&
+                            <View style={nav.paidImageContainer}>
+                              <Image source={require('../assets/vip.png')} style={nav.paidImage} />
+                            </View>
+                          }
+                          <Image source={{ uri: profile?.photoURL }} style={header.profileImage} />
+                        </View> :
+                        <FontAwesome name='user-o' size={22} color={color.dark} />
+                    }
+                  </TouchableOpacity>
+              }
+            </>
+          } */}
 
           {
             showMessageOptions &&

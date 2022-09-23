@@ -5,7 +5,6 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 const { Navigator, Screen, Group } = createStackNavigator()
 
 import Login from '../screens/Login'
-import BottomNavigation from './BottomNavigation'
 import { useSelector } from 'react-redux'
 import Splash from './Splash'
 import Profile from '../screens/profile/Profile'
@@ -29,6 +28,7 @@ import Notifications from '../screens/notification/Notifications'
 import NewMatch from '../screens/modals/NewMatch'
 import SetupModal from '../screens/modals/SetupModal'
 import Passion from '../screens/editProfile/components/Passion'
+import Drawer from './Drawer'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -52,7 +52,7 @@ const StackNavigation = () => {
               user ? (
                 <>
                   <Group>
-                    <Screen name='BottomNavigation' component={BottomNavigation} />
+                    <Screen name='Drawer' component={Drawer} />
                     <Screen name='Profile' component={Profile} />
                     <Screen name='EditProfile' component={EditProfile} options={{ gestureEnabled: false }} />
                     <Screen name='SaveAvatar' component={SaveAvatar} options={{ gestureEnabled: false }} />
