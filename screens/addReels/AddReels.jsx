@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, SafeAreaView, Text, TouchableOpacity, Image } from 'react-native'
+import { View, TouchableOpacity, Image } from 'react-native'
 import { Camera } from 'expo-camera'
 import { Audio } from 'expo-av'
 import { useIsFocused } from '@react-navigation/core'
@@ -7,7 +7,6 @@ import { useNavigation } from '@react-navigation/native'
 import * as ImagePicker from 'expo-image-picker'
 import * as MediaLibrary from 'expo-media-library'
 import { MaterialIcons, Entypo } from '@expo/vector-icons'
-import Bar from '../../components/Bar'
 import * as VideoThumbnails from 'expo-video-thumbnails'
 import { ar } from '../../style/addReels'
 import color from '../../style/color'
@@ -101,8 +100,6 @@ const AddReels = () => {
 
   return (
     <View style={ar.containr}>
-      <Bar color='light' />
-
       {
         isFocused &&
         <Camera

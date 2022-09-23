@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Image } from 'react-native'
+import { View } from 'react-native'
 
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 
@@ -7,7 +7,6 @@ import { Ionicons, SimpleLineIcons, AntDesign, FontAwesome } from '@expo/vector-
 
 import Match from '../screens/Match'
 import Reels from '../screens/reels/Reels'
-import Profile from '../screens/profile/Profile'
 
 import Bar from '../components/Bar'
 
