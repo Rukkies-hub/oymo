@@ -56,15 +56,17 @@ const Match = () => {
 
     onSnapshot(query(collection(db, 'users'), where('id', 'not-in', [...passeedUserIds, ...swipededUserIds])),
       snapshot => {
-        dispatch(setProfiles(
-          snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
-            .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
-            .filter(doc => doc?.id !== user?.uid)
-            .map(doc => ({
-              id: doc?.id,
-              ...doc?.data()
-            }))
-        ))
+        const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
+          .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
+          .filter(doc => doc?.id !== user?.uid)
+          .map(doc => ({
+            id: doc?.id,
+            ...doc?.data()
+          }))
+        
+        if (array.length >= 1) {
+          dispatch(setProfiles(array))
+        } else dispatch(setProfiles([]))
       })
   }
 
@@ -108,14 +110,15 @@ const Match = () => {
             loggedInProfile: profile,
             userSwiped
           })
+          getAllProfiles()
         } else {
           setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
           setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', user?.uid), profile)
+          getAllProfiles()
         }
       })
 
     setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
-    getAllProfiles()
   }
 
   const disabled = () => navigation.navigate('SetupModal')
