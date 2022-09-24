@@ -8,10 +8,12 @@ export const matchSlice = createSlice({
   },
   reducers: {
     setProfiles: (state, action) => {
+      state.profiles = []
       state.profiles.push(...action.payload)
     },
 
     setPendingSwipes: (state, action) => {
+      state.pendingSwipes = []
       state.pendingSwipes.push(...action.payload)
     }
   }
