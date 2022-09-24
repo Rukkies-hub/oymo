@@ -43,31 +43,33 @@ const Match = () => {
 
   const [stackSize, setStackSize] = useState(20)
 
+  const getAllProfiles = async () => {
+    const passes = await getDocs(collection(db, 'users', user?.uid, 'passes'))
+      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
+
+    const passeedUserIds = (await passes).length > 0 ? passes : ['test']
+
+    const swipes = await getDocs(collection(db, 'users', user?.uid, 'swipes'))
+      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
+
+    const swipededUserIds = (await swipes).length > 0 ? swipes : ['test']
+
+    onSnapshot(query(collection(db, 'users'), where('id', 'not-in', [...passeedUserIds, ...swipededUserIds])),
+      snapshot => {
+        dispatch(setProfiles(
+          snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
+            .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
+            .filter(doc => doc?.id !== user?.uid)
+            .map(doc => ({
+              id: doc?.id,
+              ...doc?.data()
+            }))
+        ))
+      })
+  }
+
   useEffect(() => {
-    (async () => {
-      const passes = await getDocs(collection(db, 'users', user?.uid, 'passes'))
-        .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
-
-      const passeedUserIds = (await passes).length > 0 ? passes : ['test']
-
-      const swipes = await getDocs(collection(db, 'users', user?.uid, 'swipes'))
-        .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
-
-      const swipededUserIds = (await swipes).length > 0 ? swipes : ['test']
-
-      onSnapshot(query(collection(db, 'users'), where('id', 'not-in', [...passeedUserIds, ...swipededUserIds])),
-        snapshot => {
-          dispatch(setProfiles(
-            snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
-              .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
-              .filter(doc => doc?.id !== user?.uid)
-              .map(doc => ({
-                id: doc?.id,
-                ...doc?.data()
-              }))
-          ))
-        })
-    })()
+    getAllProfiles()
   }, [db])
 
   const swipeLeft = async cardIndex => {
@@ -77,6 +79,8 @@ const Match = () => {
     const userSwiped = profiles[cardIndex]
 
     setDoc(doc(db, 'users', user?.uid, 'passes', userSwiped?.id), userSwiped)
+
+    getAllProfiles()
   }
 
   const swipeRight = async cardIndex => {
@@ -111,6 +115,7 @@ const Match = () => {
       })
 
     setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
+    getAllProfiles()
   }
 
   const disabled = () => navigation.navigate('SetupModal')

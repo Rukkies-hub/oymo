@@ -2,13 +2,16 @@ import { View, Text, ImageBackground, Image, TouchableOpacity, TouchableWithoutF
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { dw } from '../style/drawer'
-import { AntDesign, Feather, FontAwesome, SimpleLineIcons } from '@expo/vector-icons'
+import { AntDesign, Feather, FontAwesome, Ionicons, SimpleLineIcons } from '@expo/vector-icons'
 import color from '../style/color'
 import OymoFont from '../components/OymoFont'
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'
 import { logout, setProfile } from '../features/userSlice'
 import { signOut } from 'firebase/auth'
 import { auth } from '../hooks/firebase'
+import * as Linking from 'expo-linking'
+import { useEffect } from 'react'
+import { useState } from 'react'
 
 const CustomDrawerContent = ({ navigation }) => {
   const dispatch = useDispatch()
