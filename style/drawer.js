@@ -39,10 +39,6 @@ export const dw = StyleSheet.create({
   },
 
   logoutButton: {
-    flex: 1,
-    marginTop: 30,
-    marginVertical: 20,
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: color.red,

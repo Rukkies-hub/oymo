@@ -30,7 +30,7 @@ import OymoFont from '../components/OymoFont'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
 import { useDispatch, useSelector } from 'react-redux'
-import { setProfiles } from '../features/matchSlice'
+import { setPendingSwipes, setProfiles } from '../features/matchSlice'
 import { match } from '../style/match'
 
 const Match = () => {
@@ -42,6 +42,20 @@ const Match = () => {
   const swipeRef = useRef(null)
 
   const [stackSize, setStackSize] = useState(20)
+
+  const getPendingSwipes = async () => {
+    dispatch(setPendingSwipes([]))
+    const querySnapshot = await getDocs(collection(db, 'users', user?.uid, 'pendingSwipes'))
+
+    if (querySnapshot?.docs?.length >= 1)
+      dispatch(
+        setPendingSwipes(querySnapshot?.docs?.map(doc => ({
+          id: doc?.id,
+          ...doc?.data()
+        })))
+      )
+    else dispatch(setPendingSwipes([]))
+  }
 
   const getAllProfiles = async () => {
     const passes = await getDocs(collection(db, 'users', user?.uid, 'passes'))
@@ -63,15 +77,15 @@ const Match = () => {
             id: doc?.id,
             ...doc?.data()
           }))
-        
-        if (array.length >= 1) {
-          dispatch(setProfiles(array))
-        } else dispatch(setProfiles([]))
+
+        if (array.length >= 1) dispatch(setProfiles(array))
+        else dispatch(setProfiles([]))
       })
   }
 
   useEffect(() => {
     getAllProfiles()
+    getPendingSwipes()
   }, [db])
 
   const swipeLeft = async cardIndex => {
@@ -83,6 +97,7 @@ const Match = () => {
     setDoc(doc(db, 'users', user?.uid, 'passes', userSwiped?.id), userSwiped)
 
     getAllProfiles()
+    getPendingSwipes()
   }
 
   const swipeRight = async cardIndex => {
@@ -111,10 +126,12 @@ const Match = () => {
             userSwiped
           })
           getAllProfiles()
+          getPendingSwipes()
         } else {
           setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
           setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', user?.uid), profile)
           getAllProfiles()
+          getPendingSwipes()
         }
       })
 

@@ -46,9 +46,7 @@ const Splash = () => {
   useEffect(() => {
     (() => {
       if (user)
-        onSnapshot(query(collection(db, 'users', user?.uid, 'pendingSwipes'),
-          where('photoURL', '!=', null)
-        ),
+        onSnapshot(query(collection(db, 'users', user?.uid, 'pendingSwipes'), where('photoURL', '!=', null)),
           snapshot => {
             if (snapshot?.docs?.length >= 1)
               dispatch(

@@ -1,25 +1,70 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native'
-import { deleteDoc, doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, serverTimestamp, setDoc, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import generateId from '../../lib/generateId'
 import { useNavigation } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import Avatar from './Avatar'
 import Username from './Username'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { likes } from '../../style/likes'
 import OymoFont from '../../components/OymoFont'
 import color from '../../style/color'
+import { setPendingSwipes, setProfiles } from '../../features/matchSlice'
 
 const Likes = () => {
   const { user, profile } = useSelector(state => state.user)
   const { pendingSwipes, profiles } = useSelector(state => state.match)
   const navigation = useNavigation()
+  const dispatch = useDispatch()
+
+  const getPendingSwipes = async () => {
+    dispatch(setPendingSwipes([]))
+    const querySnapshot = await getDocs(collection(db, 'users', user?.uid, 'pendingSwipes'))
+
+    if (querySnapshot?.docs?.length >= 1)
+      dispatch(
+        setPendingSwipes(querySnapshot?.docs?.map(doc => ({
+          id: doc?.id,
+          ...doc?.data()
+        })))
+      )
+    else dispatch(setPendingSwipes([]))
+  }
+
+  const getAllProfiles = async () => {
+    const passes = await getDocs(collection(db, 'users', user?.uid, 'passes'))
+      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
+
+    const passeedUserIds = (await passes).length > 0 ? passes : ['test']
+
+    const swipes = await getDocs(collection(db, 'users', user?.uid, 'swipes'))
+      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
+
+    const swipededUserIds = (await swipes).length > 0 ? swipes : ['test']
+
+    onSnapshot(query(collection(db, 'users'), where('id', 'not-in', [...passeedUserIds, ...swipededUserIds])),
+      snapshot => {
+        const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
+          .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
+          .filter(doc => doc?.id !== user?.uid)
+          .map(doc => ({
+            id: doc?.id,
+            ...doc?.data()
+          }))
+
+        if (array.length >= 1) dispatch(setProfiles(array))
+        else dispatch(setProfiles([]))
+      })
+  }
 
   const swipeLeft = async like => {
-    setDoc(doc(db, 'users', user?.uid, 'passes', like.id), like)
+    await setDoc(doc(db, 'users', user?.uid, 'passes', like.id), like)
     await deleteDoc(doc(db, 'users', user?.uid, 'pendingSwipes', like.id))
+
+    getPendingSwipes()
+    getAllProfiles()
   }
 
   const swipeRight = async like => {
@@ -30,7 +75,7 @@ const Likes = () => {
 
     const userSwiped = profiles[cardIndex]
 
-    getDoc(doc(db, 'users', user?.uid, 'pendingSwipes', userSwiped?.id))
+    await getDoc(doc(db, 'users', user?.uid, 'pendingSwipes', userSwiped?.id))
       .then(documentSnapshot => {
         if (documentSnapshot.exists()) {
           setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
@@ -49,9 +94,11 @@ const Likes = () => {
             loggedInProfile: profile,
             userSwiped
           })
+          getAllProfiles()
         }
       })
 
+    getPendingSwipes()
     // setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
   }
 
@@ -82,7 +129,7 @@ const Likes = () => {
                       <OymoFont message={like?.city} lines={1} fontStyle={likes.infoText} fontFamily='montserrat_bold' />
                     </View>
                   </View>
-                  
+
                   <View style={likes.controlesView}>
                     <TouchableOpacity onPress={() => swipeLeft(like)} style={likes.nopeButton}>
                       <OymoFont message='Nope' fontStyle={{ color: color.red }} />
