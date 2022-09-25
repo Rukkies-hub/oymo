@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, Modal, ActivityIndicator, Platform
 
 import { Paystack } from 'react-native-paystack-webview'
 
-import { paystackPublic, testpPaystackPublic } from '@env'
+import { paystackPublic } from '@env'
 import color from '../../../style/color'
 
 import uuid from 'uuid-random'
@@ -22,12 +22,8 @@ Notifications.setNotificationHandler({
   })
 })
 
-let date = new Date()
-date.setMonth(date.getMonth() + 2)
-let newDate = new Date(date)
-
-const Payment = () => {
-  const {user, profile} = useSelector(state => state.user)
+const Payment = ({ amount }) => {
+  const { user, profile } = useSelector(state => state.user)
   const [modalVisible, setModalVisible] = useState(false)
   const [loading, setLoading] = useState(false)
   const [transaction, setTransaction] = useState(null)
@@ -64,7 +60,7 @@ const Payment = () => {
         paid: true,
         transaction: transaction?.transaction,
         trxref: transaction?.trxref,
-        expires: newDate
+        coins: 10000
       })
       setLoading(false)
       schedulePushNotification()
@@ -77,13 +73,11 @@ const Payment = () => {
         visible={modalVisible}
         animationType='slide'
         transparent={true}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible)
-        }}
+        onRequestClose={() => setModalVisible(!modalVisible)}
       >
         <Paystack
           paystackKey={paystackPublic}
-          amount={'2500.00'}
+          amount={`${amount}.00`}
           billingEmail={user?.email}
           activityIndicatorColor='green'
           channels={['card', 'bank', 'ussd']}
@@ -102,37 +96,19 @@ const Payment = () => {
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
         style={{
-          marginTop: 20,
-          backgroundColor: color.transparent,
-          borderWidth: 2,
-          borderColor: color.goldDark,
-          height: 50,
-          borderRadius: 12,
+          backgroundColor: color.black,
+          margin: 10,
+          height: 45,
           justifyContent: 'center',
           alignItems: 'center',
-          flexDirection: 'row'
+          borderRadius: 12
         }}
       >
         {
           !loading ?
-            <>
-              <Image
-                source={require('../../../assets/vip.png')}
-                style={{
-                  width: 30,
-                  height: 30,
-                  marginRight: 10
-                }}
-              />
-              <Text
-                style={{
-                  color: color.goldDark,
-                  fontFamily: 'text'
-                }}
-              >
-                Go Premium
-              </Text>
-            </> :
+            <Text style={{ color: color.white, fontFamily: 'text' }}>
+              Subscribe for $5.00
+            </Text> :
             <ActivityIndicator color={color.goldDark} size='small' />
         }
       </TouchableOpacity>
@@ -144,7 +120,7 @@ async function schedulePushNotification () {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: 'Oymo',
-      body: `Account upgraded successfully\n expires on ${new Date(date).toISOString()}`,
+      body: `Account upgraded successfully`,
       data: { data: 'goes here' },
     },
     trigger: { seconds: 1 },

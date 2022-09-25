@@ -73,6 +73,17 @@ const CustomDrawerContent = ({ navigation }) => {
         onPress={() => navigation.navigate('AddReelsNav')}
         icon={() => <FontAwesome name='plus-square-o' color={color.black} size={22} />}
       />
+      <TouchableOpacity
+        onPress={() => {
+          navigation.closeDrawer()
+          navigation.navigate('Upgrade')
+        }}
+        style={dw.upgradeButton}
+      >
+        <Image source={require('../assets/star.png')} style={dw.star} />
+        <OymoFont message='Oymo Premium' fontStyle={dw.upgradeButtonText} />
+      </TouchableOpacity>
+
       <TouchableOpacity onPress={logoutUser} style={dw.logoutButton}>
         <OymoFont message='Logout' fontStyle={dw.logoutButtonText} />
       </TouchableOpacity>

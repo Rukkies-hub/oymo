@@ -143,7 +143,7 @@ const Passion = () => {
           {
             passionsLoading ?
               <ActivityIndicator size='small' color={color.white} /> :
-              <OymoFont message='Update passion' fontStyle={ps.updateButtonText} />
+              <OymoFont message='Subscribe for $5.00' fontStyle={ps.updateButtonText} />
           }
         </TouchableOpacity>
       </View>

@@ -321,7 +321,15 @@ const EditProfile = () => {
 
             {profile && <LookingFor />}
 
-            {/* {profile && <Payment />} */}
+            {profile && 
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Upgrade')}
+                style={editProfile.goPro}
+              >
+                <Image source={require('../../assets/star.png')} style={editProfile.star} />
+                <OymoFont message='Oymo Premium' fontStyle={editProfile.upgradeButtonText} />
+              </TouchableOpacity>
+            }
 
             <TouchableOpacity
               onPress={() => profile ? updateUserProfile() : setupUser()}

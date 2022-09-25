@@ -226,6 +226,27 @@ export const editProfile = StyleSheet.create({
     fontFamily: 'text',
     marginLeft: 10,
     color: color.white
+  },
+
+  goPro: {
+    flex: 1,
+    height: 50,
+    backgroundColor: color.offWhite,
+    borderRadius: 12,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30
+  },
+
+  star: {
+    width: 30,
+    height: 30
+  },
+
+  upgradeButtonText: {
+    color: color.black,
+    marginLeft: 10
   }
 })
 

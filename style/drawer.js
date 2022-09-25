@@ -38,6 +38,27 @@ export const dw = StyleSheet.create({
     alignItems: 'center'
   },
 
+  upgradeButton: {
+    marginBottom: 20,
+    flexDirection: 'row',
+    ustifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: color.white,
+    borderRadius: 12,
+    height: 45,
+    marginHorizontal: 18
+  },
+
+  star: {
+    width: 25,
+    height: 25
+  },
+
+  upgradeButtonText: {
+    color: color.black,
+    marginLeft: 25
+  },
+
   logoutButton: {
     justifyContent: 'center',
     alignItems: 'center',

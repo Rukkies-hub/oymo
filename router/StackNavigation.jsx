@@ -29,6 +29,7 @@ import NewMatch from '../screens/modals/NewMatch'
 import SetupModal from '../screens/modals/SetupModal'
 import Passion from '../screens/editProfile/components/Passion'
 import Drawer from './Drawer'
+import Upgrade from '../screens/Upgrade'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -73,6 +74,17 @@ const StackNavigation = () => {
                   <Group screenOptions={{ presentation: 'transparentModal' }}>
                     <Screen name='NewMatch' component={NewMatch} />
                     <Screen name='SetupModal' component={SetupModal} />
+                    <Screen
+                      name='Upgrade'
+                      component={Upgrade}
+                      options={{
+                        gestureEnabled: false,
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
                     <Screen
                       name='Gender'
                       component={Gender}
