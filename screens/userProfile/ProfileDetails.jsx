@@ -12,15 +12,18 @@ import { BlurView } from 'expo-blur'
 import OymoFont from '../../components/OymoFont'
 
 import { profile as _profile } from '../../style/profile'
-import { useSelector } from 'react-redux'
-import { deleteDoc, doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
+import { useDispatch, useSelector } from 'react-redux'
+import { collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, serverTimestamp, setDoc, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import generateId from '../../lib/generateId'
+import { setPendingSwipes, setProfiles } from '../../features/matchSlice'
 
 const ProfileDetails = ({ profile, user }) => {
   const navigation = useNavigation()
   const { profiles } = useSelector(state => state.match)
   const { user: _user, profile: __profile } = useSelector(state => state.user)
+
+  const dispatch = useDispatch()
 
   const [aboutLimit, setAboutLimit] = useState(2)
 
@@ -36,6 +39,46 @@ const ProfileDetails = ({ profile, user }) => {
 
     if (userSwiped) setShowMatch(true)
   }, [user])
+
+  const getPendingSwipes = async () => {
+    dispatch(setPendingSwipes([]))
+    const querySnapshot = await getDocs(collection(db, 'users', _user?.uid, 'pendingSwipes'))
+
+    if (querySnapshot?.docs?.length >= 1)
+      dispatch(
+        setPendingSwipes(querySnapshot?.docs?.map(doc => ({
+          id: doc?.id,
+          ...doc?.data()
+        })))
+      )
+    else dispatch(setPendingSwipes([]))
+  }
+
+  const getAllProfiles = async () => {
+    const passes = await getDocs(collection(db, 'users', _user?.uid, 'passes'))
+      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
+
+    const passeedUserIds = (await passes).length > 0 ? passes : ['test']
+
+    const swipes = await getDocs(collection(db, 'users', _user?.uid, 'swipes'))
+      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
+
+    const swipededUserIds = (await swipes).length > 0 ? swipes : ['test']
+
+    onSnapshot(query(collection(db, 'users'), where('id', 'not-in', [...passeedUserIds, ...swipededUserIds])),
+      snapshot => {
+        const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
+          .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
+          .filter(doc => doc?.id !== _user?.uid)
+          .map(doc => ({
+            id: doc?.id,
+            ...doc?.data()
+          }))
+
+        if (array.length >= 1) dispatch(setProfiles(array))
+        else dispatch(setProfiles([]))
+      })
+  }
 
   const swipeRight = async () => {
     const needle = user?.id
@@ -65,6 +108,8 @@ const ProfileDetails = ({ profile, user }) => {
             loggedInProfile: __profile,
             userSwiped
           })
+          getAllProfiles()
+          getPendingSwipes()
         } else {
           setDoc(doc(db, 'users', _user?.uid, 'swipes', userSwiped?.id), userSwiped)
           setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', _user?.uid), __profile)
