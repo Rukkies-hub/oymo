@@ -9,7 +9,7 @@ import { auth, db } from '../hooks/firebase'
 import { doc, getDoc, onSnapshot, where } from 'firebase/firestore'
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore'
 import { setReels } from '../features/reelsSlice'
-import { setPendingSwipes } from '../features/matchSlice'
+import { setPendingSwipes, setProfiles } from '../features/matchSlice'
 import { useLayoutEffect } from 'react'
 
 const Splash = () => {
@@ -24,18 +24,59 @@ const Splash = () => {
       else
         dispatch(logout())
       getprofile(userAuth)
+      getPendingSwipes(userAuth)
+      getAllProfiles(userAuth)
     })
   }, [])
 
   const getprofile = async user => {
-    const profile = await (await getDoc(doc(db, 'users', user?.uid))).data()
+    const profile = await (await getDoc(doc(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid))).data()
     if (profile)
       dispatch(setProfile(profile))
   }
 
+  const getPendingSwipes = async user => {
+    const querySnapshot = await getDocs(query(collection(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid, 'pendingSwipes'), where('photoURL', '!=', null)))
+
+    if (querySnapshot?.docs?.length >= 1)
+      dispatch(
+        setPendingSwipes(querySnapshot?.docs?.map(doc => ({
+          id: doc?.id,
+          ...doc?.data()
+        })))
+      )
+    else dispatch(setPendingSwipes([]))
+  }
+
+  const getAllProfiles = async user => {
+    const passes = await getDocs(collection(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid, 'passes'))
+      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
+
+    const passeedUserIds = (await passes).length > 0 ? passes : ['test']
+
+    const swipes = await getDocs(collection(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid, 'swipes'))
+      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
+
+    const swipededUserIds = (await swipes).length > 0 ? swipes : ['test']
+
+    onSnapshot(query(collection(db, 'users'), where('id', 'not-in', [...passeedUserIds, ...swipededUserIds])),
+      snapshot => {
+        const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
+          .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
+          .filter(doc => doc?.id !== user?.uid == undefined ? user?.user?.uid : user?.uid)
+          .map(doc => ({
+            id: doc?.id,
+            ...doc?.data()
+          }))
+
+        if (array.length >= 1) dispatch(setProfiles(array))
+        else dispatch(setProfiles([]))
+      })
+  }
+
   useLayoutEffect(() => {
     if (user)
-      onSnapshot(doc(db, 'users', user?.uid),
+      onSnapshot(doc(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid),
         doc => {
           let profile = doc?.data()
           dispatch(setProfile(profile))
@@ -46,7 +87,7 @@ const Splash = () => {
   useEffect(() => {
     (() => {
       if (user)
-        onSnapshot(query(collection(db, 'users', user?.uid, 'pendingSwipes'), where('photoURL', '!=', null)),
+        onSnapshot(query(collection(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid, 'pendingSwipes'), where('photoURL', '!=', null)),
           snapshot => {
             if (snapshot?.docs?.length >= 1)
               dispatch(

@@ -47,10 +47,12 @@ const Header = ({
 
   const [notificationCount, setNotificationCount] = useState([])
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     (async () => {
       if (profile) {
-        onSnapshot(query(collection(db, 'users', user?.uid, 'notifications'), orderBy('timestamp', 'desc')),
+        onSnapshot(query(collection(db, 'users', id, 'notifications'), orderBy('timestamp', 'desc')),
           snapshot => {
             dispatch(
               setNotificatios(
@@ -69,7 +71,7 @@ const Header = ({
   useEffect(() => {
     (async () => {
       if (profile) {
-        onSnapshot(query(collection(db, 'users', user?.uid, 'notifications'), where('seen', '==', false)),
+        onSnapshot(query(collection(db, 'users', id, 'notifications'), where('seen', '==', false)),
           snapshot => {
             setNotificationCount(
               snapshot?.docs?.map(doc => ({
@@ -105,7 +107,7 @@ const Header = ({
 
           {
             showMatchAvatar &&
-            <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: getMatchedUserInfo(matchDetails?.users, user?.uid) })}>
+            <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: getMatchedUserInfo(matchDetails?.users, id) })}>
               <Image source={{ uri: matchAvatar }} style={header.showMatchAvatar} />
             </TouchableOpacity>
           }

@@ -33,6 +33,8 @@ const Payment = ({ amount }) => {
   const notificationListener = useRef()
   const responseListener = useRef()
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token))
 
@@ -56,7 +58,7 @@ const Payment = ({ amount }) => {
   const goPro = async () => {
     if (transaction?.message === 'Approved') {
       setLoading(true)
-      await updateDoc(doc(db, 'users', user?.uid), {
+      await updateDoc(doc(db, 'users', id), {
         paid: true,
         transaction: transaction?.transaction,
         trxref: transaction?.trxref,
@@ -107,7 +109,7 @@ const Payment = ({ amount }) => {
         {
           !loading ?
             <Text style={{ color: color.white, fontFamily: 'text' }}>
-              Subscribe for $5.00
+              Subscribe for $2.00
             </Text> :
             <ActivityIndicator color={color.goldDark} size='small' />
         }

@@ -56,6 +56,8 @@ const EditProfile = () => {
   const [about, setAbout] = useState(profile?.about)
   const [city, setCity] = useState(profile?.city)
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     const unsub = (() => {
       registerForPushNotificationsAsync().then(token => setExpoPushToken(token))
@@ -104,8 +106,8 @@ const EditProfile = () => {
   const setupUser = async () => {
     setUpdateLoading(true)
 
-    await setDoc(doc(db, 'users', user?.uid), {
-      id: user?.uid,
+    await setDoc(doc(db, 'users', id), {
+      id: id,
       username,
       city,
       phone,
@@ -119,7 +121,7 @@ const EditProfile = () => {
   const updateUserProfile = async () => {
     setUpdateLoading(true)
 
-    await updateDoc(doc(db, 'users', user?.uid), {
+    await updateDoc(doc(db, 'users', id), {
       username,
       displayName,
       job,

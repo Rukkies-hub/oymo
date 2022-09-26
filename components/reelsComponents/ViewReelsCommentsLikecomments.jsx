@@ -16,9 +16,11 @@ const ViewReelsCommentsLikecomments = ({ comment }) => {
 
   const [currentLikesState, setCurrentLikesState] = useState({ state: false, counter: comment?.likesCount })
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     (() => {
-      getLikesById(comment?.id, user?.uid)
+      getLikesById(comment?.id, id)
         .then(res => {
           setCurrentLikesState({
             ...currentLikesState,
@@ -29,19 +31,19 @@ const ViewReelsCommentsLikecomments = ({ comment }) => {
   }, [comment])
 
   const getLikesById = () => new Promise(async (resolve, reject) => {
-    getDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', user?.uid))
+    getDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', id))
       .then(res => resolve(res?.exists()))
   })
 
   const updateLike = () => new Promise(async (resolve, reject) => {
     if (currentLikesState.state) {
-      await deleteDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', user?.uid))
+      await deleteDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', id))
       await updateDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id), {
         likesCount: increment(-1)
       })
     } else {
-      await setDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', user?.uid), {
-        id: user?.uid,
+      await setDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', id), {
+        id: id,
         photoURL: profile?.photoURL,
         displayName: profile?.displayName,
         username: profile?.username,
@@ -51,7 +53,7 @@ const ViewReelsCommentsLikecomments = ({ comment }) => {
       })
     }
 
-    if (comment?.user?.id != user?.uid) {
+    if (comment?.user?.id != id) {
       await addDoc(collection(db, 'users', comment?.user?.id, 'notifications'), {
         action: 'reel',
         activity: 'comment likes',
@@ -60,7 +62,7 @@ const ViewReelsCommentsLikecomments = ({ comment }) => {
         id: comment?.reel?.id,
         seen: false,
         reel: comment?.reel,
-        user: { id: user?.uid },
+        user: { id: id },
         timestamp: serverTimestamp()
       }).then(() => {
         axios.post(notificationUri, {

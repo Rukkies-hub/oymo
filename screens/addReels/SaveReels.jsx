@@ -49,6 +49,8 @@ const SaveReels = () => {
   const notificationListener = useRef()
   const responseListener = useRef()
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   const storage = getStorage()
 
   useEffect(() => {
@@ -89,9 +91,9 @@ const SaveReels = () => {
         xhr.send(null)
       })
 
-      const sourceRef = ref(storage, `reels/${user?.uid}/video/${uuid()}`)
+      const sourceRef = ref(storage, `reels/${id}/video/${uuid()}`)
 
-      const thumbnailRef = ref(storage, `reels/${user?.uid}/thumbnail/${uuid()}`)
+      const thumbnailRef = ref(storage, `reels/${id}/thumbnail/${uuid()}`)
 
       uploadBytes(sourceRef, blob)
         .then(snapshot => {
@@ -103,7 +105,7 @@ const SaveReels = () => {
                     .then(thumbnailDownloadURL => {
                       navigation.navigate('Reels')
                       addDoc(collection(db, 'reels'), {
-                        user: { id: user?.uid },
+                        user: { id: id },
                         media: downloadURL,
                         mediaLink: snapshot?.ref?._location?.path,
                         thumbnail: thumbnailDownloadURL,

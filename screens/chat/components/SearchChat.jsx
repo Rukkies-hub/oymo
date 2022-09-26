@@ -13,11 +13,13 @@ const SearchChat = () => {
   const { search, matches } = useSelector(state => state.chat)
   const dispatch = useDispatch()
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   const searchFilter = text => {
     if (text) {
       const newData = matches.filter(item => {
-        const itemData = getMatchedUserInfo(item?.users, user?.uid)?.username ?
-          getMatchedUserInfo(item?.users, user?.uid)?.username?.toUpperCase() :
+        const itemData = getMatchedUserInfo(item?.users, id)?.username ?
+          getMatchedUserInfo(item?.users, id)?.username?.toUpperCase() :
           ''.toUpperCase()
 
         const textData = text.toUpperCase()

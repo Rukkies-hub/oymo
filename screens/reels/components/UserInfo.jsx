@@ -11,6 +11,8 @@ const UserInfo = ({ _user }) => {
   const { user, profile } = useSelector(state => state.user)
   const navigation = useNavigation()
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   const [userInfo, setUserInfo] = useState(null)
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const UserInfo = ({ _user }) => {
         profile ?
           <TouchableOpacity
             onPress={() =>
-              userInfo?.id == user?.uid ? navigation.navigate('Profile') :
+              userInfo?.id == id ? navigation.navigate('Profile') :
                 navigation.navigate('UserProfile', { user: userInfo })}
           >
             <OymoFont message={`@${userInfo?.username}`} fontStyle={reels.captionUsername} />

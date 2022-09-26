@@ -14,9 +14,11 @@ const LikeReelsComment = ({ comment, reelId }) => {
   const [currentLikesState, setCurrentLikesState] = useState({ state: false, counter: comment?.likesCount })
   const [disable, setDisable] = useState(false)
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     (() => {
-      getLikesById(comment?.id, user?.uid)
+      getLikesById(comment?.id, id)
         .then(res => {
           setCurrentLikesState({
             ...currentLikesState,
@@ -27,21 +29,21 @@ const LikeReelsComment = ({ comment, reelId }) => {
   }, [])
 
   const getLikesById = () => new Promise(async (resolve, reject) => {
-    getDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', user?.uid))
+    getDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', id))
       .then(res => resolve(res?.exists()))
   })
 
   const updateLike = () => new Promise(async (resolve, reject) => {
     if (currentLikesState.state) {
       setDisable(true)
-      await deleteDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', user?.uid))
+      await deleteDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', id))
       await updateDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id), {
         likesCount: increment(-1)
       })
       setDisable(false)
     } else {
       setDisable(true)
-      await setDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', user?.uid), {
+      await setDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', id), {
         id: profile?.id,
         photoURL: profile?.photoURL,
         displayName: profile?.displayName,
@@ -54,7 +56,7 @@ const LikeReelsComment = ({ comment, reelId }) => {
 
     setDisable(false)
 
-    if (comment?.user?.id != user?.uid) {
+    if (comment?.user?.id != id) {
       const reel = await (await getDoc(doc(db, 'reels', comment?.reel?.id))).data()
 
       await addDoc(collection(db, 'users', comment?.user?.id, 'notifications'), {
@@ -65,7 +67,7 @@ const LikeReelsComment = ({ comment, reelId }) => {
         id: reelId,
         seen: false,
         reel,
-        user: { id: user?.uid },
+        user: { id: id },
         timestamp: serverTimestamp()
       })
     }

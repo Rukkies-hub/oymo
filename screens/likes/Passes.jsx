@@ -17,9 +17,11 @@ const Passes = () => {
 
   const [passes, setPasses] = useState([])
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     (() => {
-      onSnapshot(query(collection(db, 'users', user?.uid, 'passes'), orderBy('timestamp', 'desc')),
+      onSnapshot(query(collection(db, 'users', id, 'passes'), orderBy('timestamp', 'desc')),
         snapshot => {
           setPasses(
             snapshot?.docs?.map(doc => ({
@@ -32,7 +34,7 @@ const Passes = () => {
   }, [])
 
   const undoPass = async pass =>
-    await deleteDoc(doc(db, 'users', user?.uid, 'passes', pass?.id))
+    await deleteDoc(doc(db, 'users', id, 'passes', pass?.id))
 
   const disabled = () => navigation.navigate('SetupModal')
 

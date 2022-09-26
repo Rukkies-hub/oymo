@@ -11,7 +11,7 @@ const Upgrade = ({ navigation }) => {
 
   useLayoutEffect(() => {
     const convirt = async () => {
-      const value = await Convert(5).from("USD").to("NGN")
+      const value = await Convert(2).from("USD").to("NGN")
       setAmount(JSON.stringify(Math.round(value)))
     }
 

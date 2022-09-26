@@ -19,9 +19,11 @@ const Likes = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   const getPendingSwipes = async () => {
     dispatch(setPendingSwipes([]))
-    const querySnapshot = await getDocs(collection(db, 'users', user?.uid, 'pendingSwipes'))
+    const querySnapshot = await getDocs(collection(db, 'users', id, 'pendingSwipes'))
 
     if (querySnapshot?.docs?.length >= 1)
       dispatch(
@@ -34,12 +36,12 @@ const Likes = () => {
   }
 
   const getAllProfiles = async () => {
-    const passes = await getDocs(collection(db, 'users', user?.uid, 'passes'))
+    const passes = await getDocs(collection(db, 'users', id, 'passes'))
       .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
 
     const passeedUserIds = (await passes).length > 0 ? passes : ['test']
 
-    const swipes = await getDocs(collection(db, 'users', user?.uid, 'swipes'))
+    const swipes = await getDocs(collection(db, 'users', id, 'swipes'))
       .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
 
     const swipededUserIds = (await swipes).length > 0 ? swipes : ['test']
@@ -48,7 +50,7 @@ const Likes = () => {
       snapshot => {
         const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
           .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
-          .filter(doc => doc?.id !== user?.uid)
+          .filter(doc => doc?.id !== id)
           .map(doc => ({
             id: doc?.id,
             ...doc?.data()
@@ -60,8 +62,8 @@ const Likes = () => {
   }
 
   const swipeLeft = async like => {
-    await setDoc(doc(db, 'users', user?.uid, 'passes', like.id), like)
-    await deleteDoc(doc(db, 'users', user?.uid, 'pendingSwipes', like.id))
+    await setDoc(doc(db, 'users', id, 'passes', like.id), like)
+    await deleteDoc(doc(db, 'users', id, 'pendingSwipes', like.id))
 
     getPendingSwipes()
     getAllProfiles()
@@ -75,20 +77,20 @@ const Likes = () => {
 
     const userSwiped = profiles[cardIndex]
 
-    await getDoc(doc(db, 'users', user?.uid, 'pendingSwipes', userSwiped?.id))
+    await getDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id))
       .then(documentSnapshot => {
         if (documentSnapshot.exists()) {
-          setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
+          setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
 
           // CREAT A MATCH
-          setDoc(doc(db, 'matches', generateId(user?.uid, userSwiped?.id)), {
+          setDoc(doc(db, 'matches', generateId(id, userSwiped?.id)), {
             users: {
-              [user?.uid]: profile,
+              [id]: profile,
               [userSwiped?.id]: userSwiped
             },
-            usersMatched: [user?.uid, userSwiped?.id],
+            usersMatched: [id, userSwiped?.id],
             timestamp: serverTimestamp()
-          }).then(async () => await deleteDoc(doc(db, 'users', user?.uid, 'pendingSwipes', userSwiped?.id)))
+          }).then(async () => await deleteDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id)))
 
           navigation.navigate('NewMatch', {
             loggedInProfile: profile,
@@ -99,7 +101,6 @@ const Likes = () => {
       })
 
     getPendingSwipes()
-    // setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
   }
 
   return (

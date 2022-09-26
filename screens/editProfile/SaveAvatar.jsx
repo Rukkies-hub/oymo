@@ -36,6 +36,8 @@ const SaveAvatar = () => {
 
   const [loading, setLoading] = useState(false)
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   // notification
   const [expoPushToken, setExpoPushToken] = useState('')
   const [notification, setNotification] = useState(false)
@@ -69,7 +71,7 @@ const SaveAvatar = () => {
       xhr.send(null)
     })
 
-    const link = `avatars/${user?.uid}/${uuid()}`
+    const link = `avatars/${id}/${uuid()}`
 
     const photoRef = ref(storage, link)
 
@@ -101,7 +103,7 @@ const SaveAvatar = () => {
           .then(snapshot => {
             getDownloadURL(snapshot?.ref)
               .then(downloadURL => {
-                updateDoc(doc(db, 'users', user?.uid), {
+                updateDoc(doc(db, 'users', id), {
                   photoURL: downloadURL,
                   photoLink: link
                 }).then(() => {

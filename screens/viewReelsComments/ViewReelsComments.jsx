@@ -35,6 +35,8 @@ const ViewReelsComments = () => {
   const [commentsCount, setCommentsCount] = useState('')
   const [sound, setSound] = React.useState()
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   navigation.addListener('blur', () => {
     dispatch(setShowExpand(true))
   })
@@ -81,14 +83,14 @@ const ViewReelsComments = () => {
       reelComment: comment,
       likesCount: 0,
       repliesCount: 0,
-      user: { id: user?.uid },
+      user: { id: id },
       timestamp: serverTimestamp()
     })
     dispatch(setReply(''))
     dispatch(setReelsCommentType('reply'))
     playSound()
 
-    if (comment?.reel?.user?.id != user?.uid) {
+    if (comment?.reel?.user?.id != id) {
       await addDoc(collection(db, 'users', comment?.reel?.user?.id, 'notifications'), {
         action: 'reel',
         activity: 'reply',
@@ -97,7 +99,7 @@ const ViewReelsComments = () => {
         id: comment?.reel?.id,
         seen: false,
         reel: comment?.reel,
-        user: { id: user?.uid },
+        user: { id: id },
         timestamp: serverTimestamp()
       })
 
@@ -129,14 +131,14 @@ const ViewReelsComments = () => {
       reelComment: comment,
       likesCount: 0,
       repliesCount: 0,
-      user: { id: user?.uid },
+      user: { id: id },
       timestamp: serverTimestamp()
     })
     dispatch(setReply(''))
     dispatch(setReelsCommentType('reply'))
     playSound()
 
-    if (comment?.reel?.user?.id != user?.uid) {
+    if (comment?.reel?.user?.id != id) {
       await addDoc(collection(db, 'users', comment?.reel?.user?.id, 'notifications'), {
         action: 'reel',
         activity: 'reply',
@@ -145,7 +147,7 @@ const ViewReelsComments = () => {
         id: comment?.reel?.id,
         seen: false,
         reel: comment?.reel,
-        user: { id: user?.uid },
+        user: { id: id },
         timestamp: serverTimestamp()
       })
 

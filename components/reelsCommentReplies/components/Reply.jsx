@@ -12,6 +12,8 @@ const Reply = ({ _user, reply }) => {
   const navigation = useNavigation()
   const [userInfo, setUserInfo] = useState(null)
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     (async () => {
       const userI = await (await getDoc(doc(db, 'users', _user))).data()
@@ -28,7 +30,7 @@ const Reply = ({ _user, reply }) => {
     >
       <TouchableOpacity
         onPress={() => {
-          _user != user?.uid ?
+          _user != id ?
             navigation.navigate('UserProfile', { user: userInfo }) :
             navigation.navigate('Profile')
         }}
