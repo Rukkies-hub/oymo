@@ -194,7 +194,7 @@ const Match = () => {
                     </View>
 
                     {
-                      card?.job != '' &&
+                      card?.job != undefined &&
                       <View style={match.detailesContainer}>
                         <MaterialCommunityIcons name='briefcase-variant-outline' size={17} color={color.white} />
                         <Text style={[match.detail, { fontFamily: 'lightText' }]}>
@@ -204,7 +204,7 @@ const Match = () => {
                     }
 
                     {
-                      card?.school != '' &&
+                      card?.school != undefined &&
                       <View style={match.detailesContainer}>
                         <MaterialCommunityIcons name='school-outline' size={17} color={color.white} />
                         <OymoFont message={` ${card?.school}`} fontStyle={match.detail} fontFamily='montserrat_light' />
@@ -212,7 +212,7 @@ const Match = () => {
                     }
 
                     {
-                      card?.city != '' &&
+                      card?.city != undefined &&
                       <View style={match.detailesContainer}>
                         <MaterialCommunityIcons name='home-outline' size={17} color={color.white} />
                         <OymoFont message={` ${card?.city}`} fontStyle={match.detail} fontFamily='montserrat_light' />

@@ -1,17 +1,14 @@
-import { View, Text, ImageBackground, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, ImageBackground, Image, TouchableOpacity, TouchableWithoutFeedback, Pressable } from 'react-native'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { dw } from '../style/drawer'
-import { AntDesign, Feather, FontAwesome, Ionicons, SimpleLineIcons } from '@expo/vector-icons'
+import { AntDesign, Feather, FontAwesome, SimpleLineIcons } from '@expo/vector-icons'
 import color from '../style/color'
 import OymoFont from '../components/OymoFont'
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'
 import { logout, setProfile } from '../features/userSlice'
 import { signOut } from 'firebase/auth'
 import { auth } from '../hooks/firebase'
-import * as Linking from 'expo-linking'
-import { useEffect } from 'react'
-import { useState } from 'react'
 
 const CustomDrawerContent = ({ navigation }) => {
   const dispatch = useDispatch()
@@ -39,9 +36,15 @@ const CustomDrawerContent = ({ navigation }) => {
         }
         {
           profile &&
-          <TouchableWithoutFeedback onPress={() => navigation.navigate('Profile')}>
-            <OymoFont message={profile.username} lines={1} fontStyle={{ color: color.white, fontSize: 20, marginTop: 15 }} />
-          </TouchableWithoutFeedback>
+          <>
+            <Pressable onPress={() => navigation.navigate('Profile')}>
+              <OymoFont message={profile?.username} lines={1} fontStyle={{ color: color.white, fontSize: 20, marginTop: 15 }} />
+            </Pressable>
+            <Pressable onPress={() => navigation.navigate('Profile')} style={dw.pointsButton}>
+              <Image source={require('../assets/points.png')} style={dw.pointsImage} />
+              <OymoFont message={`${profile?.coins} Points`} lines={1} fontStyle={{ color: color.white, fontSize: 16 }} />
+            </Pressable>
+          </>
         }
       </ImageBackground>
 
@@ -52,27 +55,64 @@ const CustomDrawerContent = ({ navigation }) => {
       />
       <DrawerItem
         label={() => <OymoFont message='Notifications' />}
-        onPress={() => navigation.navigate('Notifications')}
+        onPress={() => {
+          navigation.closeDrawer()
+          navigation.navigate('Notifications')
+        }}
         icon={() => <SimpleLineIcons name='bell' size={20} color={color.dark} />}
       />
       {
         profile &&
         <DrawerItem
           label={() => <OymoFont message='Profile' />}
-          onPress={() => navigation.navigate('Profile')}
+          onPress={() => {
+            navigation.closeDrawer()
+            navigation.navigate('Profile')
+          }}
           icon={() => <FontAwesome name='user-o' size={20} color={color.dark} />}
         />
       }
       <DrawerItem
         label={() => <OymoFont message='Edit profile' />}
-        onPress={() => navigation.navigate('EditProfile')}
-        icon={() => <Feather name="edit" size={20} color="black" />}
+        onPress={() => {
+          navigation.closeDrawer()
+          navigation.navigate('EditProfile')
+        }}
+        icon={() => <Feather name="edit" size={20} color={color.black} />}
       />
       <DrawerItem
         label={() => <OymoFont message='New Post' />}
-        onPress={() => navigation.navigate('AddReelsNav')}
+        onPress={() => {
+          navigation.closeDrawer()
+          navigation.navigate('AddReelsNav')
+        }}
         icon={() => <FontAwesome name='plus-square-o' color={color.black} size={22} />}
       />
+
+      <View style={{ width: '100%', height: 1, backgroundColor: color.borderColor, marginVertical: 10 }} />
+
+      <TouchableOpacity
+        style={dw.upgradeButton}
+        onPress={() => {
+          navigation.closeDrawer()
+          navigation.navigate('Events')
+        }}
+      >
+        <Image source={require('../assets/event.png')} style={dw.star} />
+        <OymoFont message='Events' fontStyle={dw.upgradeButtonText} />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={dw.upgradeButton}
+        onPress={() => {
+          navigation.closeDrawer()
+          navigation.navigate('Rooms')
+        }}
+      >
+        <Image source={require('../assets/room.png')} style={dw.star} />
+        <OymoFont message='Rooms' fontStyle={dw.upgradeButtonText} />
+      </TouchableOpacity>
+
       <TouchableOpacity
         onPress={() => {
           navigation.closeDrawer()
@@ -84,8 +124,9 @@ const CustomDrawerContent = ({ navigation }) => {
         <OymoFont message='Oymo Premium' fontStyle={dw.upgradeButtonText} />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={logoutUser} style={dw.logoutButton}>
-        <OymoFont message='Logout' fontStyle={dw.logoutButtonText} />
+      <TouchableOpacity onPress={logoutUser} style={dw.upgradeButton}>
+        <Image source={require('../assets/power.png')} style={dw.star} />
+        <OymoFont message='Logout' fontStyle={dw.upgradeButtonText} />
       </TouchableOpacity>
     </DrawerContentScrollView>
   )

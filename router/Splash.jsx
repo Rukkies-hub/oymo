@@ -25,7 +25,6 @@ const Splash = () => {
         dispatch(logout())
       getprofile(userAuth)
       getPendingSwipes(userAuth)
-      getAllProfiles(userAuth)
     })
   }, [])
 
@@ -46,32 +45,6 @@ const Splash = () => {
         })))
       )
     else dispatch(setPendingSwipes([]))
-  }
-
-  const getAllProfiles = async user => {
-    const passes = await getDocs(collection(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid, 'passes'))
-      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
-
-    const passeedUserIds = (await passes).length > 0 ? passes : ['test']
-
-    const swipes = await getDocs(collection(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid, 'swipes'))
-      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
-
-    const swipededUserIds = (await swipes).length > 0 ? swipes : ['test']
-
-    onSnapshot(query(collection(db, 'users'), where('id', 'not-in', [...passeedUserIds, ...swipededUserIds])),
-      snapshot => {
-        const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
-          .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
-          .filter(doc => doc?.id !== user?.uid == undefined ? user?.user?.uid : user?.uid)
-          .map(doc => ({
-            id: doc?.id,
-            ...doc?.data()
-          }))
-
-        if (array.length >= 1) dispatch(setProfiles(array))
-        else dispatch(setProfiles([]))
-      })
   }
 
   useLayoutEffect(() => {

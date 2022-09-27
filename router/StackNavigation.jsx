@@ -30,6 +30,9 @@ import SetupModal from '../screens/modals/SetupModal'
 import Passion from '../screens/editProfile/components/Passion'
 import Drawer from './Drawer'
 import Upgrade from '../screens/Upgrade'
+import Events from '../screens/events/Events'
+import Rooms from '../screens/rooms/Rooms'
+import Craate from '../screens/events/screens/Craate'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -69,6 +72,8 @@ const StackNavigation = () => {
                     <Screen name='AddReels' component={AddReels} />
                     <Screen name='SaveReels' component={SaveReels} />
                     <Screen name='Notifications' component={Notifications} />
+                    <Screen name='Events' component={Events} />
+                    <Screen name='Rooms' component={Rooms} />
                   </Group>
 
                   <Group screenOptions={{ presentation: 'transparentModal' }}>
@@ -101,6 +106,16 @@ const StackNavigation = () => {
                       component={MessageOptions}
                       options={{
                         gestureEnabled: false,
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
+                    <Screen
+                      name='Craate'
+                      component={Craate}
+                      options={{
                         ...TransitionPresets.FadeFromBottomAndroid,
                         cardStyle: {
                           backgroundColor: color.transparent

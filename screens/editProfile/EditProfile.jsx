@@ -112,6 +112,7 @@ const EditProfile = () => {
       city,
       phone,
       displayName,
+      coins: 5000,
       timestamp: serverTimestamp()
     })
     schedulePushNotification('Update successful', 'Your profile has been updated successfully')

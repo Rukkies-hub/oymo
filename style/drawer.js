@@ -39,7 +39,7 @@ export const dw = StyleSheet.create({
   },
 
   upgradeButton: {
-    marginBottom: 20,
+    marginBottom: 10,
     flexDirection: 'row',
     ustifyContent: 'center',
     alignItems: 'center',
@@ -54,22 +54,24 @@ export const dw = StyleSheet.create({
     height: 25
   },
 
+  pointsButton: {
+    flexDirection: 'row',
+    marginTop: 10
+  },
+
+  pointsImage: {
+    width: 20,
+    height: 20,
+    marginRight: 10
+  },
+
+  points: {
+    width: 20,
+    height: 20
+  },
+
   upgradeButtonText: {
     color: color.black,
     marginLeft: 25
-  },
-
-  logoutButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: color.red,
-    borderRadius: 12,
-    height: 45,
-    marginHorizontal: 18
-  },
-
-  logoutButtonText: {
-    color: color.white,
-    marginLeft: 10
-  },
+  }
 })

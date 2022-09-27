@@ -59,10 +59,7 @@ const Payment = ({ amount }) => {
     if (transaction?.message === 'Approved') {
       setLoading(true)
       await updateDoc(doc(db, 'users', id), {
-        paid: true,
-        transaction: transaction?.transaction,
-        trxref: transaction?.trxref,
-        coins: 10000
+        coins: 5000
       })
       setLoading(false)
       schedulePushNotification()

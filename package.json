@@ -12,6 +12,7 @@
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
     "@motify/components": "^0.18.0",
+    "@react-native-community/datetimepicker": "6.1.2",
     "@react-native-community/slider": "4.2.1",
     "@react-native-google-signin/google-signin": "^8.0.0",
     "@react-navigation/bottom-tabs": "^6.3.1",
@@ -72,6 +73,7 @@
     "react-native-double-tap": "^1.0.1",
     "react-native-double-tap-without-opacity": "^2.0.1",
     "react-native-gesture-handler": "~2.2.1",
+    "react-native-modal-datetime-picker": "^14.0.0",
     "react-native-pager-view": "5.4.15",
     "react-native-paper": "^4.12.2",
     "react-native-paystack-webview": "^4.0.3",
