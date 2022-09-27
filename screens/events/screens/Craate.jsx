@@ -80,21 +80,8 @@ const Craate = ({ navigation }) => {
           }
 
           <BlurView style={create.eventInfoContainer} intensity={50} tint='light'>
-            <TextInput
-              value={title}
-              placeholderTextColor={color.white}
-              onChangeText={setTitle}
-              placeholder='Title'
-              style={create.title}
-            />
-            <TextInput
-              value={location}
-              numberOfLines={1}
-              onChangeText={setLocation}
-              placeholderTextColor={color.white}
-              placeholder='Locaation'
-              style={create.location}
-            />
+            <OymoFont message={title} fontStyle={create.title} />
+            <OymoFont message={location} fontStyle={create.location} />
           </BlurView>
         </View>
       </ImageBackground>
@@ -148,6 +135,13 @@ const Craate = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
             </View>
+            <TextInput
+              value={location}
+              numberOfLines={1}
+              onChangeText={setLocation}
+              placeholder='Locaation'
+              style={create.input}
+            />
             <TextInput
               value={description}
               onChangeText={setDescription}
