@@ -22,7 +22,7 @@ const ChatRow = ({ matchDetails }) => {
 
   useLayoutEffect(() => {
     (() => {
-      setMatchedUserInfo(getMatchedUserInfo(matchDetails?.users, user?.uid))
+      setMatchedUserInfo(getMatchedUserInfo(matchDetails?.users, ))
     })()
   }, [matchDetails])
 
@@ -50,7 +50,7 @@ const ChatRow = ({ matchDetails }) => {
   useLayoutEffect(() => {
     (async () => {
       onSnapshot(query(collection(db, 'matches', matchDetails?.id, 'messages'),
-        where('userId', '!=', user?.uid),
+        where('userId', '!=', ),
         where('seen', '==', false)
       ),
         snapshot => {

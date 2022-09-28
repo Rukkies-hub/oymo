@@ -50,6 +50,8 @@ const ReelsComment = () => {
   const [height, setHeight] = useState(40)
   const [sound, setSound] = React.useState()
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   Keyboard.addListener('keyboardDidHide', () => dispatch(setReelsCommentType('comment')))
 
   const playSound = async () => {
@@ -76,7 +78,7 @@ const ReelsComment = () => {
       reel: item,
       commentsCount: 0,
       likesCount: 0,
-      user: { id: user?.uid },
+      user: { id: id },
       timestamp: serverTimestamp()
     })
     setComment('')
@@ -88,7 +90,7 @@ const ReelsComment = () => {
       commentsCount: increment(1)
     })
 
-    if (item?.user?.id != user?.uid) {
+    if (item?.user?.id != id) {
       await addDoc(collection(db, 'users', item?.user?.id, 'notifications'), {
         action: 'reel',
         activity: 'comments',
@@ -97,7 +99,7 @@ const ReelsComment = () => {
         id: item?.id,
         seen: false,
         reel: item,
-        user: { id: user?.uid },
+        user: { id: id },
         timestamp: serverTimestamp()
       })
 
@@ -122,7 +124,7 @@ const ReelsComment = () => {
       reelComment: comment,
       likesCount: 0,
       repliesCount: 0,
-      user: { id: user?.uid },
+      user: { id: id },
       timestamp: serverTimestamp()
     })
 
@@ -131,7 +133,7 @@ const ReelsComment = () => {
 
     playSound()
 
-    if (comment?.reel?.user?.id != user?.uid) {
+    if (comment?.reel?.user?.id != id) {
       await addDoc(collection(db, 'users', comment?.reel?.user?.id, 'notifications'), {
         action: 'reel',
         activity: 'reply',
@@ -140,7 +142,7 @@ const ReelsComment = () => {
         id: comment?.reel?.id,
         seen: false,
         reel: comment?.reel,
-        user: { id: user?.uid },
+        user: { id: id },
         timestamp: serverTimestamp()
       })
 
@@ -161,7 +163,7 @@ const ReelsComment = () => {
       commentsCount: increment(1)
     })
 
-    if (comment?.user?.id != user?.uid)
+    if (comment?.user?.id != id)
       await addDoc(collection(db, 'users', comment?.user?.id, 'notifications'), {
         action: 'reel',
         activity: 'comment likes',
@@ -170,7 +172,7 @@ const ReelsComment = () => {
         id: comment?.reel?.id,
         seen: false,
         reel: comment?.reel,
-        user: { id: user?.uid },
+        user: { id: id },
         timestamp: serverTimestamp()
       }).then(() => {
         axios.post(notificationUri, {
@@ -197,7 +199,7 @@ const ReelsComment = () => {
       reelReply: comment,
       likesCount: 0,
       repliesCount: 0,
-      user: { id: user?.uid },
+      user: { id: id },
       timestamp: serverTimestamp()
     })
 

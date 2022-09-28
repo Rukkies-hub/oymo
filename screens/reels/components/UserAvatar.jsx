@@ -14,6 +14,8 @@ const UserAvatar = ({ _user }) => {
 
   const [userInfo, setUserInfo] = useState(null)
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     (async () => {
       const userI = await (await getDoc(doc(db, 'users', _user))).data()
@@ -26,7 +28,7 @@ const UserAvatar = ({ _user }) => {
       {
         profile ?
           <TouchableOpacity
-            onPress={() => userInfo?.id == user?.uid ? navigation.navigate('Profile') : navigation.navigate('UserProfile', { user: userInfo })}
+            onPress={() => userInfo?.id == id ? navigation.navigate('Profile') : navigation.navigate('UserProfile', { user: userInfo })}
             style={[reels.userAvatarContainer, { borderWidth: userInfo?.photoURL ? 4 : 2 }]}
           >
             {

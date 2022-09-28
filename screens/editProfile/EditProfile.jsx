@@ -56,6 +56,8 @@ const EditProfile = () => {
   const [about, setAbout] = useState(profile?.about)
   const [city, setCity] = useState(profile?.city)
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     const unsub = (() => {
       registerForPushNotificationsAsync().then(token => setExpoPushToken(token))
@@ -104,12 +106,13 @@ const EditProfile = () => {
   const setupUser = async () => {
     setUpdateLoading(true)
 
-    await setDoc(doc(db, 'users', user?.uid), {
-      id: user?.uid,
+    await setDoc(doc(db, 'users', id), {
+      id: id,
       username,
       city,
       phone,
       displayName,
+      coins: 5000,
       timestamp: serverTimestamp()
     })
     schedulePushNotification('Update successful', 'Your profile has been updated successfully')
@@ -119,7 +122,7 @@ const EditProfile = () => {
   const updateUserProfile = async () => {
     setUpdateLoading(true)
 
-    await updateDoc(doc(db, 'users', user?.uid), {
+    await updateDoc(doc(db, 'users', id), {
       username,
       displayName,
       job,
@@ -321,7 +324,15 @@ const EditProfile = () => {
 
             {profile && <LookingFor />}
 
-            {/* {profile && <Payment />} */}
+            {profile && 
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Upgrade')}
+                style={editProfile.goPro}
+              >
+                <Image source={require('../../assets/star.png')} style={editProfile.star} />
+                <OymoFont message='Oymo Premium' fontStyle={editProfile.upgradeButtonText} />
+              </TouchableOpacity>
+            }
 
             <TouchableOpacity
               onPress={() => profile ? updateUserProfile() : setupUser()}

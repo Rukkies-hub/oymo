@@ -67,6 +67,8 @@ const Message = () => {
   const [showMedia, setShowMedia] = useState(false)
   const [showRecord, setShowRecord] = useState(true)
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useLayoutEffect(() =>
     (() => {
       onSnapshot(query(collection(db, 'matches', matchDetails?.id, 'messages'), orderBy('timestamp', 'desc')),
@@ -111,7 +113,7 @@ const Message = () => {
 
   const updateSeen = async () => {
     const snapshot = await getDocs(query(collection(db, 'matches', matchDetails?.id, 'messages'),
-      where('userId', '!=', user?.uid),
+      where('userId', '!=', id),
       where('seen', '==', false)
     ))
     snapshot.forEach(async allDoc => {
@@ -163,9 +165,9 @@ const Message = () => {
     if (input != '') {
       addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
         timestamp: serverTimestamp(),
-        userId: user?.uid,
+        userId: id,
         username: profile?.username,
-        photoURL: matchDetails?.users[user?.uid]?.photoURL,
+        photoURL: matchDetails?.users[id]?.photoURL,
         message: input,
         reply: messageReply ? messageReply : null,
         seen: false
@@ -224,7 +226,7 @@ const Message = () => {
       xhr.send(null)
     })
 
-    const sourceRef = ref(storage, `messages/${user?.uid}/audio/${uuid()}`)
+    const sourceRef = ref(storage, `messages/${id}/audio/${uuid()}`)
 
     setRecordingLoading(true)
 
@@ -233,9 +235,9 @@ const Message = () => {
         getDownloadURL(snapshot?.ref)
           .then(downloadURL => {
             addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
-              userId: user?.uid,
+              userId: id,
               username: profile?.username,
-              photoURL: matchDetails?.users[user?.uid]?.photoURL,
+              photoURL: matchDetails?.users[id]?.photoURL,
               voiceNote: downloadURL,
               mediaLink: snapshot?.ref?._location?.path,
               duration: getDurationFormated(status?.durationMillis),
@@ -256,7 +258,7 @@ const Message = () => {
 
   return (
     <View style={msg.container}>
-      <MessageHeader matchDetails={matchDetails} user={getMatchedUserInfo(matchDetails?.users, user?.uid)} />
+      <MessageHeader matchDetails={matchDetails} user={getMatchedUserInfo(matchDetails?.users, id)} />
 
       <ImageBackground source={require('../../assets/chatBG.png')} style={msg.messageBackground}>
         <BlurView intensity={110} tint='light' style={msg.messageBackground}>
@@ -265,7 +267,7 @@ const Message = () => {
               !messages?.length ?
                 <View style={msg.emptyMessageView}>
                   <View style={{ position: 'relative' }}>
-                    <Avatar user={getMatchedUserInfo(matchDetails?.users, user?.uid)?.id} />
+                    <Avatar user={getMatchedUserInfo(matchDetails?.users, id)?.id} />
                     <View style={msg.emptyMessageViewAvatarMiniView}>
                       <Image source={{ uri: profile?.photoURL }} style={msg.emptyMessageViewAvatarMini} />
                     </View>
@@ -273,7 +275,7 @@ const Message = () => {
 
                   <View style={{ flexDirection: 'row' }}>
                     <OymoFont message='You matched with' fontStyle={msg.emptyMessageViewText1} />
-                    <OymoFont message={` ${getMatchedUserInfo(matchDetails?.users, user?.uid)?.username}`} fontFamily='montserrat_bold' fontStyle={msg.emptyMessageViewText1} />
+                    <OymoFont message={` ${getMatchedUserInfo(matchDetails?.users, id)?.username}`} fontFamily='montserrat_bold' fontStyle={msg.emptyMessageViewText1} />
                   </View>
                 </View> :
                 <FlatList
@@ -283,7 +285,7 @@ const Message = () => {
                   showsVerticalScrollIndicator={false}
                   keyExtractor={item => item?.id}
                   renderItem={({ item: message }) => (
-                    message?.userId === user?.uid ?
+                    message?.userId === id ?
                       <SenderMessage key={message?.id} messages={message} matchDetails={matchDetails} /> :
                       <RecieverMessage key={message?.id} messages={message} matchDetails={matchDetails} />
                   )}

@@ -13,6 +13,8 @@ const ChatList = () => {
   const { matches, matchesFilter } = useSelector(state => state.chat)
   const dispatch = useDispatch()
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     return () => {
       fetchMatches()
@@ -25,7 +27,7 @@ const ChatList = () => {
 
   const fetchMatches = () => {
     const unsub = onSnapshot(query(collection(db, 'matches'),
-      where('usersMatched', 'array-contains', user?.uid),
+      where('usersMatched', 'array-contains', id),
       orderBy('timestamp', 'desc')
     ),
       snapshot => {

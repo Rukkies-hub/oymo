@@ -84,6 +84,8 @@ const Passion = () => {
   const navigation = useNavigation()
   const { profile, user } = useSelector(state => state.user)
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   const [passionsLoading, setPassionLoading] = useState(false)
   const [passions, setPassions] = useState(profile?.passions == undefined ? [] : profile?.passions)
 
@@ -91,7 +93,7 @@ const Passion = () => {
     if (passions?.length >= 3) {
       setPassionLoading(true)
 
-      await updateDoc(doc(db, 'users', user?.uid), { passions })
+      await updateDoc(doc(db, 'users', id), { passions })
       setPassionLoading(false)
       navigation.goBack()
     }
@@ -143,7 +145,7 @@ const Passion = () => {
           {
             passionsLoading ?
               <ActivityIndicator size='small' color={color.white} /> :
-              <OymoFont message='Update passion' fontStyle={ps.updateButtonText} />
+              <OymoFont message='Subscribe for $5.00' fontStyle={ps.updateButtonText} />
           }
         </TouchableOpacity>
       </View>

@@ -43,9 +43,11 @@ const Match = () => {
 
   const [stackSize, setStackSize] = useState(20)
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   const getPendingSwipes = async () => {
     dispatch(setPendingSwipes([]))
-    const querySnapshot = await getDocs(collection(db, 'users', user?.uid, 'pendingSwipes'))
+    const querySnapshot = await getDocs(collection(db, 'users', id, 'pendingSwipes'))
 
     if (querySnapshot?.docs?.length >= 1)
       dispatch(
@@ -58,12 +60,12 @@ const Match = () => {
   }
 
   const getAllProfiles = async () => {
-    const passes = await getDocs(collection(db, 'users', user?.uid, 'passes'))
+    const passes = await getDocs(collection(db, 'users', id, 'passes'))
       .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
 
     const passeedUserIds = (await passes).length > 0 ? passes : ['test']
 
-    const swipes = await getDocs(collection(db, 'users', user?.uid, 'swipes'))
+    const swipes = await getDocs(collection(db, 'users', id, 'swipes'))
       .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
 
     const swipededUserIds = (await swipes).length > 0 ? swipes : ['test']
@@ -72,7 +74,7 @@ const Match = () => {
       snapshot => {
         const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
           .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
-          .filter(doc => doc?.id !== user?.uid)
+          .filter(doc => doc?.id !== id)
           .map(doc => ({
             id: doc?.id,
             ...doc?.data()
@@ -94,7 +96,7 @@ const Match = () => {
 
     const userSwiped = profiles[cardIndex]
 
-    setDoc(doc(db, 'users', user?.uid, 'passes', userSwiped?.id), userSwiped)
+    setDoc(doc(db, 'users', id, 'passes', userSwiped?.id), userSwiped)
 
     getAllProfiles()
     getPendingSwipes()
@@ -106,20 +108,20 @@ const Match = () => {
 
     const userSwiped = profiles[cardIndex]
 
-    getDoc(doc(db, 'users', userSwiped?.id, 'swipes', user?.uid))
+    getDoc(doc(db, 'users', userSwiped?.id, 'swipes', id))
       .then(documentSnapshot => {
         if (documentSnapshot?.exists()) {
-          setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
+          setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
 
           // CREAT A MATCH
-          setDoc(doc(db, 'matches', generateId(user?.uid, userSwiped?.id)), {
+          setDoc(doc(db, 'matches', generateId(id, userSwiped?.id)), {
             users: {
-              [user?.uid]: profile,
+              [id]: profile,
               [userSwiped?.id]: userSwiped
             },
-            usersMatched: [user?.uid, userSwiped?.id],
+            usersMatched: [id, userSwiped?.id],
             timestamp: serverTimestamp()
-          }).then(async () => await deleteDoc(doc(db, 'users', user?.uid, 'pendingSwipes', userSwiped?.id)))
+          }).then(async () => await deleteDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id)))
 
           navigation.navigate('NewMatch', {
             loggedInProfile: profile,
@@ -128,14 +130,14 @@ const Match = () => {
           getAllProfiles()
           getPendingSwipes()
         } else {
-          setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
-          setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', user?.uid), profile)
+          setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
+          setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', id), profile)
           getAllProfiles()
           getPendingSwipes()
         }
       })
 
-    setDoc(doc(db, 'users', user?.uid, 'swipes', userSwiped?.id), userSwiped)
+    setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
   }
 
   const disabled = () => navigation.navigate('SetupModal')
@@ -192,7 +194,7 @@ const Match = () => {
                     </View>
 
                     {
-                      card?.job != '' &&
+                      card?.job != undefined &&
                       <View style={match.detailesContainer}>
                         <MaterialCommunityIcons name='briefcase-variant-outline' size={17} color={color.white} />
                         <Text style={[match.detail, { fontFamily: 'lightText' }]}>
@@ -202,18 +204,18 @@ const Match = () => {
                     }
 
                     {
-                      card?.school != '' &&
+                      card?.school != undefined &&
                       <View style={match.detailesContainer}>
                         <MaterialCommunityIcons name='school-outline' size={17} color={color.white} />
-                        <OymoFont message={` ${card.school}`} fontStyle={match.detail} fontFamily='montserrat_light' />
+                        <OymoFont message={` ${card?.school}`} fontStyle={match.detail} fontFamily='montserrat_light' />
                       </View>
                     }
 
                     {
-                      card?.city != '' &&
+                      card?.city != undefined &&
                       <View style={match.detailesContainer}>
                         <MaterialCommunityIcons name='home-outline' size={17} color={color.white} />
-                        <OymoFont message={` ${card.city}`} fontStyle={match.detail} fontFamily='montserrat_light' />
+                        <OymoFont message={` ${card?.city}`} fontStyle={match.detail} fontFamily='montserrat_light' />
                       </View>
                     }
 

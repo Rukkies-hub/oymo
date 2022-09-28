@@ -30,4 +30,5 @@ export default {
   faintRed: '#ff404033',
   faintBlack: '#00000033',
   faintWhite: '#ffffff33',
+  whatsappDark: '#202C33'
 }

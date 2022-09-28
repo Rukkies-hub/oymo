@@ -47,6 +47,8 @@ const PreviewMessageImage = () => {
   const [status, setStatus] = useState({})
   const [disableButton, setDisableButton] = useState(false)
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     (() => {
       Keyboard.addListener('keyboardDidHide', () => Keyboard.dismiss)
@@ -74,9 +76,9 @@ const PreviewMessageImage = () => {
           getDownloadURL(snapshot?.ref)
             .then(downloadURL => {
               addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
-                userId: user?.uid,
+                userId: id,
                 username: profile?.username,
-                photoURL: matchDetails?.users[user?.uid].photoURL,
+                photoURL: matchDetails?.users[id].photoURL,
                 mediaLink: snapshot?.ref?._location?.path,
                 mediaType: media?.type,
                 media: downloadURL,
@@ -132,9 +134,9 @@ const PreviewMessageImage = () => {
                   getDownloadURL(thumbnailSnapshot?.ref)
                     .then(thumbnailDownloadURL => {
                       addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
-                        userId: user?.uid,
+                        userId: id,
                         username: profile?.username,
-                        photoURL: matchDetails?.users[user?.uid].photoURL,
+                        photoURL: matchDetails?.users[id].photoURL,
                         mediaLink: snapshot?.ref?._location?.path,
                         mediaType: media?.type,
                         media: downloadURL,

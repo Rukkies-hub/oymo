@@ -11,17 +11,19 @@ const LookingFor = () => {
 
   const [lookingFor, setLookingFor] = useState(profile?.lookingFor)
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   const lookingForMen = async () => {
     setLookingFor('male')
     try {
-      await updateDoc(doc(db, 'users', user?.uid), { lookingFor: 'male' })
+      await updateDoc(doc(db, 'users', id), { lookingFor: 'male' })
     } catch (error) { return }
   }
 
   const lookingForWomen = async () => {
     setLookingFor('female')
     try {
-      await updateDoc(doc(db, 'users', user?.uid), { lookingFor: 'female' })
+      await updateDoc(doc(db, 'users', id), { lookingFor: 'female' })
     } catch (error) { return }
   }
 

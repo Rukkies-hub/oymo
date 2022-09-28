@@ -11,9 +11,11 @@ const LikeReelsReply = ({ reply }) => {
   const { user, profile } = useSelector(state => state.user)
   const [currentLikesState, setCurrentLikesState] = useState({ state: false, counter: reply?.likesCount })
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     (() => {
-      getLikesById(reply.id, user?.uid)
+      getLikesById(reply.id, id)
         .then(res => {
           setCurrentLikesState({
             ...currentLikesState,
@@ -24,18 +26,18 @@ const LikeReelsReply = ({ reply }) => {
   }, [])
 
   const getLikesById = () => new Promise(async (resolve, reject) => {
-    getDoc(doc(db, 'reels', reply?.reel?.id, 'comments', reply?.comment, 'replies', reply?.id, 'likes', user?.uid))
+    getDoc(doc(db, 'reels', reply?.reel?.id, 'comments', reply?.comment, 'replies', reply?.id, 'likes', id))
       .then(res => resolve(res?.exists()))
   })
 
   const updateLike = () => new Promise(async (resolve, reject) => {
     if (currentLikesState.state) {
-      await deleteDoc(doc(db, 'reels', reply?.reel?.id, 'comments', reply?.comment, 'replies', reply?.id, 'likes', user?.uid))
+      await deleteDoc(doc(db, 'reels', reply?.reel?.id, 'comments', reply?.comment, 'replies', reply?.id, 'likes', id))
       await updateDoc(doc(db, 'reels', reply?.reel?.id, 'comments', reply?.comment, 'replies', reply?.id), {
         likesCount: increment(-1)
       })
     } else {
-      await setDoc(doc(db, 'reels', reply?.reel?.id, 'comments', reply?.comment, 'replies', reply?.id, 'likes', user?.uid), {
+      await setDoc(doc(db, 'reels', reply?.reel?.id, 'comments', reply?.comment, 'replies', reply?.id, 'likes', id), {
         id: userProfile?.id,
         comment: reply?.comment,
         reply: reply?.id,

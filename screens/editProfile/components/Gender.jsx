@@ -35,6 +35,8 @@ const Gender = () => {
   const notificationListener = useRef()
   const responseListener = useRef()
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token))
 
@@ -52,7 +54,7 @@ const Gender = () => {
 
   const maleGender = async () => {
     setMaleLoading(true)
-    await updateDoc(doc(db, 'users', user?.uid), { gender: 'male' })
+    await updateDoc(doc(db, 'users', id), { gender: 'male' })
     setMaleLoading(false)
     schedulePushNotification()
     navigation.goBack()
@@ -60,7 +62,7 @@ const Gender = () => {
 
   const femaleGender = async () => {
     setFemaleLoading(true)
-    await updateDoc(doc(db, 'users', user?.uid), { gender: 'female' })
+    await updateDoc(doc(db, 'users', id), { gender: 'female' })
     setFemaleLoading(false)
     schedulePushNotification()
     navigation.goBack()

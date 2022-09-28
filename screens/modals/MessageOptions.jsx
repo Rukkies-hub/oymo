@@ -20,6 +20,8 @@ const MessageOptions = () => {
 
   const storage = getStorage()
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   const deleteMessage = async () => {
     if (messages?.mediaLink) {
       const mediaRef = ref(storage, messages?.mediaLink)
@@ -52,7 +54,7 @@ const MessageOptions = () => {
         </TouchableOpacity>
 
         {
-          messages?.userId == user?.uid &&
+          messages?.userId == id &&
           <TouchableOpacity onPress={deleteMessage} activeOpacity={0.5} style={mo.deleteButton}>
             <OymoFont message='Delete message' fontStyle={{ color: color.red }} />
           </TouchableOpacity>

@@ -18,9 +18,11 @@ const LikeReels = ({ reel, navigation }) => {
   const [currentLikesState, setCurrentLikesState] = useState({ state: false, counter: reel?.likesCount })
   const [disable, setDisable] = useState(false)
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   useEffect(() =>
     (() => {
-      getLikesById(reel?.id, user?.uid)
+      getLikesById(reel?.id, id)
         .then(res => {
           setCurrentLikesState({
             ...currentLikesState,
@@ -33,7 +35,7 @@ const LikeReels = ({ reel, navigation }) => {
   const updateLike = () => new Promise(async (resolve, reject) => {
     if (currentLikesState.state) {
       setDisable(true)
-      await deleteDoc(doc(db, 'reels', reel?.id, 'likes', user?.uid))
+      await deleteDoc(doc(db, 'reels', reel?.id, 'likes', id))
       await updateDoc(doc(db, 'reels', reel?.id), {
         likesCount: increment(-1)
       })
@@ -43,8 +45,8 @@ const LikeReels = ({ reel, navigation }) => {
       setDisable(false)
     } else {
       setDisable(true)
-      await setDoc(doc(db, 'reels', reel?.id, 'likes', user?.uid), {
-        id: user?.uid,
+      await setDoc(doc(db, 'reels', reel?.id, 'likes', id), {
+        id: id,
         photoURL: profile?.photoURL,
         displayName: profile?.displayName,
         username: profile?.username,
@@ -56,7 +58,7 @@ const LikeReels = ({ reel, navigation }) => {
         likesCount: increment(1)
       })
       setDisable(false)
-      if (reel?.user?.id != user?.uid)
+      if (reel?.user?.id != id)
         await addDoc(collection(db, 'users', reel?.user?.id, 'notifications'), {
           action: 'reel',
           activity: 'likes',
@@ -65,7 +67,7 @@ const LikeReels = ({ reel, navigation }) => {
           id: reel?.id,
           seen: false,
           reel,
-          user: { id: user?.uid },
+          user: { id: id },
           timestamp: serverTimestamp()
         }).then(() => {
           axios.post(`https://app.nativenotify.com/api/indie/notification`, {
@@ -80,7 +82,7 @@ const LikeReels = ({ reel, navigation }) => {
   })
 
   const getLikesById = () => new Promise(async (resolve, reject) => {
-    getDoc(doc(db, 'reels', reel?.id, 'likes', user?.uid))
+    getDoc(doc(db, 'reels', reel?.id, 'likes', id))
       .then(res => resolve(res?.exists()))
   })
 
