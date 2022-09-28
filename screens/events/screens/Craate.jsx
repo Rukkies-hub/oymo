@@ -2,11 +2,10 @@ import { View, Text, ImageBackground, TouchableOpacity, Image, ScrollView, TextI
 import React, { useEffect } from 'react'
 import { create } from '../../../style/events'
 import { useState } from 'react'
-import { profile } from '../../../style/profile'
 import { BlurView } from 'expo-blur'
 import color from '../../../style/color'
 import OymoFont from '../../../components/OymoFont'
-import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons'
+import { FontAwesome } from '@expo/vector-icons'
 
 import DateTimePickerModal from "react-native-modal-datetime-picker"
 
@@ -171,8 +170,8 @@ const Craate = ({ navigation }) => {
           }
 
           <BlurView style={create.eventInfoContainer} intensity={50} tint='light'>
-            <OymoFont message={title || 'Title'} fontStyle={create.title} />
-            <OymoFont message={location || 'Location'} fontStyle={create.location} />
+            <OymoFont message={title || 'Title'} lines={1} fontStyle={create.title} />
+            <OymoFont message={location || 'Location'} lines={1} fontStyle={create.location} />
           </BlurView>
         </View>
       </ImageBackground>

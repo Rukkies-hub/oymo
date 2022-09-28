@@ -33,6 +33,7 @@ import Upgrade from '../screens/Upgrade'
 import Events from '../screens/events/Events'
 import Rooms from '../screens/rooms/Rooms'
 import Craate from '../screens/events/screens/Craate'
+import Event from '../screens/event/Event'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -74,6 +75,7 @@ const StackNavigation = () => {
                     <Screen name='Notifications' component={Notifications} />
                     <Screen name='Events' component={Events} />
                     <Screen name='Rooms' component={Rooms} />
+                    <Screen name='Event' component={Event} />
                   </Group>
 
                   <Group screenOptions={{ presentation: 'transparentModal' }}>

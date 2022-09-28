@@ -20,6 +20,36 @@ export const events = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 100
+  },
+
+  cardList: {
+    flex: 1,
+    marginHorizontal: 10,
+    marginTop: 10
+  },
+
+  card: {
+    flex: 1,
+    height: 150,
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 10
+  },
+
+  gradient: {
+    flex: 1,
+    padding: 10,
+    justifyContent: 'flex-end'
+  },
+
+  title: {
+    color: color.white,
+    fontSize: 25
+  },
+
+  description: {
+    color: color.white,
+    fontSize: 16
   }
 })
 
