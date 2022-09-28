@@ -17,7 +17,7 @@ import SelectDropdown from 'react-native-select-dropdown'
 import uuid from 'uuid-random'
 import { useSelector } from 'react-redux'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
-import { doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
+import { doc, increment, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../../hooks/firebase'
 
 const events = [
@@ -134,6 +134,10 @@ const Craate = ({ navigation }) => {
               type,
               description,
               timestamp: serverTimestamp()
+            })
+
+            await updateDoc(doc(db, 'users', id), {
+              coins: increment(-100)
             })
             setLoading(false)
             setImage(null)
