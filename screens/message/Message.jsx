@@ -163,7 +163,7 @@ const Message = () => {
 
   const sendMessage = async () => {
     if (input != '') {
-      addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
+      await addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
         timestamp: serverTimestamp(),
         userId: id,
         username: profile?.username,
@@ -357,12 +357,14 @@ const Message = () => {
                 </TouchableOpacity>
               }
 
-              <View style={[
-                iv.inputView,
-                {
-                  borderTopLeftRadius: messageReply ? 0 : 12,
-                  borderTopRightRadius: messageReply ? 0 : 12,
-                }]}
+              <View
+                style={[
+                  iv.inputView,
+                  {
+                    borderTopLeftRadius: messageReply ? 0 : 12,
+                    borderTopRightRadius: messageReply ? 0 : 12,
+                  }]
+                }
               >
                 {
                   mediaVidiblity &&

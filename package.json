@@ -75,6 +75,7 @@
     "react-native-double-tap": "^1.0.1",
     "react-native-double-tap-without-opacity": "^2.0.1",
     "react-native-gesture-handler": "~2.2.1",
+    "react-native-maps": "0.30.2",
     "react-native-modal-datetime-picker": "^14.0.0",
     "react-native-pager-view": "5.4.15",
     "react-native-paper": "^4.12.2",
