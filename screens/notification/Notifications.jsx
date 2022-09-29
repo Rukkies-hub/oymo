@@ -2,7 +2,7 @@ import React from 'react'
 import { View, SafeAreaView, TouchableOpacity } from 'react-native'
 import Header from '../../components/Header'
 import color from '../../style/color'
-import { AntDesign, Fontisto, Feather, Ionicons } from '@expo/vector-icons'
+import { AntDesign, Fontisto, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import { useNavigation } from '@react-navigation/native'
@@ -28,11 +28,13 @@ const Notifications = () => {
         if (notification?.activity == 'likes' || notification?.activity == 'comment likes') navigation.navigate('ViewReel', { reel: notification?.reel })
         else if (notification?.activity == 'comment' || notification?.activity == 'comments') navigation.navigate('ReelsComment', { item: notification?.reel })
         else if (notification?.activity == 'reply') navigation.navigate('ReelsComment', { item: notification?.reel })
+        else if (notification?.activity == 'joined') navigation.navigate('Event', { event: notification?.event })
       })
     } else {
       if (notification?.activity == 'likes' || notification?.activity == 'comment likes') navigation.navigate('ViewReel', { reel: notification?.reel })
       else if (notification?.activity == 'comment' || notification?.activity == 'comments') navigation.navigate('ReelsComment', { item: notification?.reel })
       else if (notification?.activity == 'reply') navigation.navigate('ReelsComment', { item: notification?.reel })
+      else if (notification?.activity == 'joined') navigation.navigate('Event', { event: notification?.event })
     }
   }
 
@@ -120,18 +122,34 @@ const Notifications = () => {
             >
               <View style={notify.avatarView}>
                 <UserAvatar user={notification?.user?.id} />
-                <View style={[notify.notificationTypeView, { backgroundColor: notification?.activity == 'likes' || notification?.activity == 'comment likes' ? color.red : color.green }]}>
+                <View
+                  style={[
+                    notify.notificationTypeView,
+                    {
+                      backgroundColor:
+                        notification?.activity == 'likes' ||
+                          notification?.activity == 'comment likes' ? color.red :
+                          notification?.activity == 'joined' ? color.blue : color.green
+                    }
+                  ]}
+                >
                   {
                     notification?.activity == 'likes' || notification?.activity == 'comment likes' ?
                       <AntDesign name='heart' size={10} color={color.white} /> :
-                      <Fontisto name='comment' size={10} color={color.white} />
+                      notification?.activity == 'joined' ?
+                        <MaterialIcons name="event" size={10} color={color.white} /> :
+                        <Fontisto name='comment' size={10} color={color.white} />
                   }
                 </View>
               </View>
               <View style={{ flex: 1 }}>
                 <View style={{ flexDirection: 'row' }}>
                   <UserInfo user={notification?.user?.id} />
-                  <OymoFont message={notification?.activity == 'likes' ? 'likes your post' : 'commented on your post'} fontStyle={notify.activityTxt} fontFamily='montserrat_light' />
+                  <OymoFont
+                    message={notification?.activity == 'likes' ? 'likes your post' : notification?.activity == 'joined' ? 'Joined your event' : 'commented on your post'}
+                    fontStyle={notify.activityTxt}
+                    fontFamily='montserrat_light'
+                  />
                 </View>
                 <OymoFont message={notification?.timestamp?.toDate().toDateString()} fontStyle={notify.date} />
               </View>

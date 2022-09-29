@@ -24,20 +24,19 @@ const AllEvents = ({ navigation }) => {
   const getEvents = async () => {
     const querySnapshot = await getDocs(query(collection(db, "events"), orderBy('timestamp', 'desc')))
 
-    if (querySnapshot?.docs?.length >= 1) {
+    if (querySnapshot?.docs?.length >= 1)
       setAllEvents(
         querySnapshot?.docs?.map(doc => ({
           id: doc?.id,
           ...doc?.data()
         }))
       )
-      setRefreshing(false)
-    }
+    setRefreshing(false)
   }
 
   useEffect(() => {
     getEvents()
-  }, [])
+  }, [db])
 
   return (
     <View style={events.container}>
@@ -48,10 +47,7 @@ const AllEvents = ({ navigation }) => {
         style={events.cardList}
         keyExtractor={item => item?.id}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         renderItem={({ item }) => <Card event={item} />}
       />

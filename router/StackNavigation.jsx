@@ -34,6 +34,7 @@ import Events from '../screens/events/Events'
 import Rooms from '../screens/rooms/Rooms'
 import Craate from '../screens/events/screens/Craate'
 import Event from '../screens/event/Event'
+import ViewAtendees from '../screens/event/screens/ViewAtendees'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -117,6 +118,16 @@ const StackNavigation = () => {
                     <Screen
                       name='Craate'
                       component={Craate}
+                      options={{
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
+                    <Screen
+                      name='ViewAtendees'
+                      component={ViewAtendees}
                       options={{
                         ...TransitionPresets.FadeFromBottomAndroid,
                         cardStyle: {

@@ -39,7 +39,8 @@ const Header = ({
   matchDetails,
   showNotification,
   backgroundColor,
-  showMessageOptions
+  showMessageOptions,
+  textColor
 }) => {
   const navigation = useNavigation()
   const { user, profile } = useSelector(state => state.user)
@@ -96,7 +97,7 @@ const Header = ({
               onLongPress={() => navigation.navigate('Match')}
               style={header.backButton}
             >
-              <Entypo name='chevron-left' size={24} color={color.black} />
+              <Entypo name='chevron-left' size={24} color={textColor || color.black} />
             </TouchableOpacity>
           }
 
