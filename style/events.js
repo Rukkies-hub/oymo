@@ -127,6 +127,10 @@ export const create = StyleSheet.create({
     marginTop: 10
   },
 
+  dateView2: {
+    flexDirection: 'row'
+  },
+
   dateInputView: {
     padding: 10,
     flex: 1

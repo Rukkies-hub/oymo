@@ -46,6 +46,8 @@ const Craate = ({ navigation }) => {
   const [time, setTime] = useState('')
   const [duration, setDuration] = useState('')
   const [type, setType] = useState('')
+  const [limit, setLimit] = useState(null)
+  const [gender, setGender] = useState('')
   const [loading, setLoading] = useState(false)
 
   const storage = getStorage()
@@ -101,7 +103,7 @@ const Craate = ({ navigation }) => {
 
   const saveEvent = async () => {
     if (profile?.coins <= 0 && image) return
-    if (image && title == '' && location == '' && description == '' && type == '' && date == '' && time == '' && duration == '') return
+    if (!image && title == '' && location == '' && description == '' && type == '' && date == '' && time == '' && duration == '' && !limit && gender == '') return
 
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
@@ -132,12 +134,16 @@ const Craate = ({ navigation }) => {
               location,
               type,
               description,
+              gender,
+              spaceLeft: 0,
+              limit: parseInt(limit),
               timestamp: serverTimestamp()
             })
 
             await updateDoc(doc(db, 'users', id), {
               coins: increment(-100)
             })
+
             setLoading(false)
             setImage(null)
             setTitle('')
@@ -147,6 +153,8 @@ const Craate = ({ navigation }) => {
             setLocation('')
             setType('')
             setDescription('')
+            setGender('')
+            setLimit(null)
             navigation.goBack()
           })
       })
@@ -238,6 +246,25 @@ const Craate = ({ navigation }) => {
                 </TouchableOpacity>
               </View>
             </View>
+
+            <View style={create.dateView2}>
+              <TextInput
+                value={limit}
+                numberOfLines={1}
+                onChangeText={setLimit}
+                placeholderTextColor={color.dark}
+                placeholder='Limit'
+                style={create.input}
+              />
+              <TextInput
+                value={gender}
+                numberOfLines={1}
+                onChangeText={setGender}
+                placeholderTextColor={color.dark}
+                placeholder='Gender'
+                style={create.input}
+              />
+            </View>
             <TextInput
               value={location}
               numberOfLines={1}
@@ -293,7 +320,7 @@ const Craate = ({ navigation }) => {
               onChangeText={setDescription}
               placeholderTextColor={color.dark}
               placeholder='Event description'
-              style={create.input}
+              style={[create.input, {marginBottom: 10}]}
             />
             <DateTimePickerModal
               mode='date'
