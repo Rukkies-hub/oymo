@@ -11,8 +11,9 @@ import SenderMessage from './components/SenderMessage'
 import RecieverMessage from './components/recieverMessage/RecieverMessage'
 import color from '../../style/color'
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
-import { addDoc, collection, doc, increment, serverTimestamp, updateDoc } from 'firebase/firestore'
+import { addDoc, collection, doc, increment, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
+import { useLayoutEffect } from 'react'
 
 const Room = () => {
   const { room } = useRoute().params
@@ -25,6 +26,19 @@ const Room = () => {
   const [height, setHeight] = useState(50)
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
+  useLayoutEffect(() =>
+    (() => {
+      onSnapshot(query(collection(db, 'rooms', room?.id, 'messages'), orderBy('timestamp', 'desc')),
+        snapshot =>
+          setMessages(snapshot?.docs?.map(doc => ({
+            id: doc?.id,
+            ...doc?.data()
+          }))
+          )
+      )
+    })()
+    , [room, db])
 
   const sendMessage = async () => {
     if (profile?.coins < 1) return
