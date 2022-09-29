@@ -95,7 +95,7 @@ const Craate = ({ navigation }) => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       quality: 1,
-      aspect: [9, 16]
+      aspect: [1, 1]
     })
 
     if (!result?.cancelled && result?.type == 'image') setImage(result.uri)
@@ -135,7 +135,7 @@ const Craate = ({ navigation }) => {
               type,
               description,
               gender,
-              spaceLeft: 0,
+              going: 0,
               limit: parseInt(limit),
               timestamp: serverTimestamp()
             })

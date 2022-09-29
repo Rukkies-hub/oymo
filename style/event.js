@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native'
 import color from './color'
 
-const { width } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window')
 
 export const _event = StyleSheet.create({
   container: {
@@ -9,12 +9,14 @@ export const _event = StyleSheet.create({
     backgroundColor: color.white
   },
 
-  bg: {
-    flex: 1
+  gradient: {
+    flex: 1,
+    maxHeight: height - 200 / 2
   },
 
-  gradient: {
-    flex: 1
+  main: {
+    flex: 1,
+    backgroundColor: color.deepBlueSea
   },
 
   mainView: {
@@ -25,8 +27,11 @@ export const _event = StyleSheet.create({
 
   title: {
     color: color.white,
-    fontSize: 45,
-    marginBottom: 40
+    fontSize: 45
+  },
+
+  gender: {
+    color: `${color.offWhite}89`
   },
 
   dateView: {
@@ -41,7 +46,7 @@ export const _event = StyleSheet.create({
   },
 
   day: {
-    color: color.offWhite
+    color: `${color.offWhite}89`
   },
 
   location: {

@@ -3,7 +3,7 @@ import { View } from 'react-native'
 
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 
-import { Ionicons, SimpleLineIcons, AntDesign, FontAwesome } from '@expo/vector-icons'
+import { Ionicons, SimpleLineIcons, AntDesign, FontAwesome, Feather } from '@expo/vector-icons'
 
 import Match from '../screens/Match'
 import Reels from '../screens/reels/Reels'

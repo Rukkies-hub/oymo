@@ -47,10 +47,7 @@ const AllEvents = ({ navigation }) => {
         style={events.cardList}
         keyExtractor={item => item?.id}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         renderItem={({ item }) => <Card event={item} />}
       />
