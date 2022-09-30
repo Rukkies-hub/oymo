@@ -1,4 +1,4 @@
-import { View, Text, ImageBackground, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, ImageBackground, ScrollView, TouchableWithoutFeedback, FlatList, RefreshControl, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { _rooms } from '../../style/rooms'
 import { collection, query, where, getDocs } from "firebase/firestore"
@@ -8,22 +8,36 @@ import { LinearGradient } from 'expo-linear-gradient'
 import color from '../../style/color'
 import OymoFont from '../../components/OymoFont'
 import { useNavigation } from '@react-navigation/native'
+import { useCallback } from 'react'
+
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const Rooms = () => {
-  const [rooms, setRooms] = useState([])
   const navigation = useNavigation()
 
-  useEffect(() => {
-    const getRooms = async () => {
-      const querySnapshot = await getDocs(collection(db, 'rooms'))
+  const [rooms, setRooms] = useState([])
+  const [refreshing, setRefreshing] = useState(false)
 
-      setRooms(
-        querySnapshot?.docs?.map(doc => ({
-          id: doc?.id,
-          ...doc?.data()
-        }))
-      )
-    }
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => getRooms())
+  }, [])
+
+  const getRooms = async () => {
+    const querySnapshot = await getDocs(collection(db, 'rooms'))
+
+    setRooms(
+      querySnapshot?.docs?.map(doc => ({
+        id: doc?.id,
+        ...doc?.data()
+      }))
+    )
+    setRefreshing(false)
+  }
+
+  useEffect(() => {
     getRooms()
   }, [])
 
@@ -37,21 +51,29 @@ const Rooms = () => {
       />
       {
         rooms?.length >= 1 &&
-        <ScrollView contentContainerStyle={_rooms.scrollView}>
-          {
-            rooms.map((room, id) => {
-              return (
-                <TouchableOpacity key={id} onPress={() => navigation.navigate('Room', { room })}>
-                  <ImageBackground source={{ uri: room?.image }} style={_rooms.bg}>
-                    <LinearGradient colors={['transparent', color.lightText]} style={_rooms.gradient}>
-                      <OymoFont message={room?.name} lines={1} fontFamily='montserrat_bold' fontStyle={_rooms.title} />
-                    </LinearGradient>
-                  </ImageBackground>
-                </TouchableOpacity>
-              )
-            })
+        <FlatList
+          data={rooms}
+          keyExtractor={item => item?.id}
+          style={_rooms.scrollView}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
           }
-        </ScrollView>
+          renderItem={({ item: room }) => {
+            return (
+              <Pressable onPress={() => navigation.navigate('Room', { room })}>
+                <ImageBackground source={{ uri: room?.image }} style={_rooms.bg}>
+                  <LinearGradient colors={['transparent', color.lightText]} style={_rooms.gradient}>
+                    <OymoFont message={room?.name} lines={1} fontFamily='montserrat_bold' fontStyle={_rooms.title} />
+                  </LinearGradient>
+                </ImageBackground>
+              </Pressable>
+            )
+          }}
+        />
       }
     </View>
   )

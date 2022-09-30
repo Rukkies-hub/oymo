@@ -1,16 +1,16 @@
-import { Image, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../../../hooks/firebase'
-import { rm } from '../../../../style/messag'
 import { useSelector } from 'react-redux'
-import { useNavigation } from '@react-navigation/native'
+import OymoFont from '../../../../components/OymoFont'
+import color from '../../../../style/color'
 
-const Avatar = ({ user }) => {
+const UserInfo = ({ user }) => {
   const { profile } = useSelector(state => state.user)
-  const [userInfo, setUserInfo] = useState(null)
-
   const navigation = useNavigation()
+  const [userInfo, setUserInfo] = useState(null)
 
   useEffect(() => {
     (async () => {
@@ -27,9 +27,17 @@ const Avatar = ({ user }) => {
           navigation.navigate('Profile')
       }}
     >
-      <Image source={{ uri: userInfo?.photoURL }} style={rm.avatar} />
+      <OymoFont
+        message={`@${userInfo?.username}`}
+        lines={1}
+        fontStyle={{
+          color: color.dark,
+          fontSize: 10
+        }}
+        fontFamily='montserrat_bold'
+      />
     </TouchableOpacity>
   )
 }
 
-export default Avatar
+export default UserInfo

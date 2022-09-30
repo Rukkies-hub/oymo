@@ -11,11 +11,11 @@ export const _rooms = StyleSheet.create({
 
   scrollView: {
     flex: 1,
-    margin: 10
+    padding: 10
   },
 
   bg: {
-    width,
+    width: '100%',
     height: 150,
     marginBottom: 10,
     borderRadius: 12,

@@ -5,6 +5,7 @@ import Avatar from './Avatar'
 import { rm } from '../../../../style/room'
 import OymoFont from '../../../../components/OymoFont'
 import color from '../../../../style/color'
+import UserInfo from './UserInfo'
 
 if (
   Platform.OS === 'android' &&
@@ -42,6 +43,7 @@ const RecieverMessage = ({ messages }) => {
             messages?.message &&
             <View>
               <View style={[rm.chatView, { backgroundColor: messages?.message ? color.offWhite : color.transparent }]}>
+                <UserInfo user={messages?.userId} />
                 <OymoFont message={messages?.message} fontStyle={rm.replyMessageText} />
               </View>
               {
