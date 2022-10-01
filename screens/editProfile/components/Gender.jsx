@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { View, Text, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native'
+import { View, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native'
 import color from '../../../style/color'
 import { useFonts } from 'expo-font'
 import { Foundation } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { doc, updateDoc } from 'firebase/firestore'
 import { db } from '../../../hooks/firebase'
-
-const { width } = Dimensions.get('window')
 
 import * as Device from 'expo-device'
 import * as Notifications from 'expo-notifications'
@@ -82,7 +80,7 @@ const Gender = () => {
       <View style={gender.sheet}>
         <OymoFont message='Warning!!!' fontFamily='montserrat_bold' fontStyle={gender.warning} />
         <OymoFont
-          message='You only have one chance to change this information'
+          message='You only have one chance to set this information'
           fontFamily='montserrat_bold'
           fontStyle={gender.caption}
         />

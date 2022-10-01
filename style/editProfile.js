@@ -84,10 +84,6 @@ export const editProfile = StyleSheet.create({
     marginBottom: 10
   },
 
-  genderButtonContainer: {
-    minHeight: 45
-  },
-
   genderButton: {
     backgroundColor: color.red,
     height: 50,

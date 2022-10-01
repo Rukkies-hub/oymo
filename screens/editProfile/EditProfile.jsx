@@ -281,6 +281,17 @@ const EditProfile = () => {
             }
 
             {
+              (profile && profile?.dob == undefined) &&
+              <TouchableOpacity onPress={() => navigation.navigate('DOB')} style={{ marginBottom: 20 }}>
+                <OymoFont message='Date of birth' fontStyle={editProfile.passionsText} fontFamily='montserrat_bold' />
+
+                <TouchableOpacity onPress={() => navigation.navigate('DOB')} style={[editProfile.genderButton, { marginTop: 10 }]}>
+                  <OymoFont message='Set your birth date' fontStyle={editProfile.genderText} fontFamily='montserrat_bold' />
+                </TouchableOpacity>
+              </TouchableOpacity>
+            }
+
+            {
               profile &&
               <>
                 {
@@ -308,17 +319,10 @@ const EditProfile = () => {
             }
 
             {
-              profile &&
-              <>
-                {
-                  !profile.gender &&
-                  <View style={editProfile.genderButtonContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Gender')} style={editProfile.genderButton}>
-                      <OymoFont message='Set your gender' fontStyle={editProfile.genderText} fontFamily='montserrat_bold' />
-                    </TouchableOpacity>
-                  </View>
-                }
-              </>
+              (profile && !profile.gender) &&
+              <TouchableOpacity onPress={() => navigation.navigate('Gender')} style={editProfile.genderButton}>
+                <OymoFont message='Set your gender' fontStyle={editProfile.genderText} fontFamily='montserrat_bold' />
+              </TouchableOpacity>
             }
 
             {profile && <LookingFor />}
