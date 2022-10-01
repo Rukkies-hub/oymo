@@ -37,8 +37,12 @@ const CustomDrawerContent = ({ navigation }) => {
         {
           profile &&
           <>
-            <Pressable onPress={() => navigation.navigate('Profile')}>
-              <OymoFont message={profile?.username} lines={1} fontStyle={{ color: color.white, fontSize: 20, marginTop: 15 }} />
+            <Pressable onPress={() => navigation.navigate('Profile')} style={{ flexDirection: 'row', marginTop: 15 }}>
+              <OymoFont message={profile?.username} lines={1} fontStyle={{ color: color.white, fontSize: 20, marginRight: 10 }} />
+              {
+                profile?.age != undefined &&
+                <OymoFont message={profile?.age} lines={1} fontStyle={{ color: color.white, fontSize: 20 }} />
+              }
             </Pressable>
             <Pressable onPress={() => navigation.navigate('Profile')} style={dw.pointsButton}>
               <Image source={require('../assets/points.png')} style={dw.pointsImage} />

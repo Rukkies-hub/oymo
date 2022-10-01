@@ -200,6 +200,10 @@ const Match = () => {
                     <View style={match.userDetail}>
                       <TouchableOpacity onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.usernameButton}>
                         <OymoFont fontStyle={match.username} fontFamily='montserrat_bold' message={card?.username} />
+                        {
+                          card?.age != undefined &&
+                          <OymoFont fontStyle={match.age} message={card?.age} />
+                        }
                       </TouchableOpacity>
 
                       <TouchableOpacity onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.moreInfoButton}>
@@ -237,7 +241,7 @@ const Match = () => {
                       (card?.coords != undefined && profile?.coords) &&
                       <View style={match.detailesContainer}>
                         <MaterialCommunityIcons name="map-marker-radius-outline" size={17} color={color.white} />
-                          <OymoFont message={`${distance(card?.coords?.latitude, card?.coords?.longitude, profile?.coords?.latitude, profile?.coords?.longitude).toFixed(2) } kilometers away`} fontStyle={match.detail} fontFamily='montserrat_light' />
+                        <OymoFont message={`${distance(card?.coords?.latitude, card?.coords?.longitude, profile?.coords?.latitude, profile?.coords?.longitude).toFixed(2)} kilometers away`} fontStyle={match.detail} fontFamily='montserrat_light' />
                       </View>
                     }
 
