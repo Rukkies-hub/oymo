@@ -1,21 +1,24 @@
 import { View, Text, Image, ActivityIndicator } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import color from '../style/color'
 import OymoFont from '../components/OymoFont'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout, setProfile, setUser } from '../features/userSlice'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth, db } from '../hooks/firebase'
-import { doc, getDoc, onSnapshot, where } from 'firebase/firestore'
+import { doc, getDoc, onSnapshot, updateDoc, where } from 'firebase/firestore'
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore'
 import { setReels } from '../features/reelsSlice'
 import { setPendingSwipes, setProfiles } from '../features/matchSlice'
 import { useLayoutEffect } from 'react'
+import * as Location from 'expo-location'
 
 const Splash = () => {
   const { user } = useSelector(state => state.user)
   const { reelsLimit } = useSelector(state => state.user)
   const dispatch = useDispatch()
+
+  const [errorMsg, setErrorMsg] = useState(null)
 
   useEffect(() => {
     onAuthStateChanged(auth, userAuth => {
@@ -87,6 +90,27 @@ const Splash = () => {
         }))
       ))
     })()
+  }, [user])
+
+  useLayoutEffect(() => {
+    if (user) {
+      const setMyLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync()
+        if (status !== 'granted') {
+          setErrorMsg('Permission to access location was denied')
+          return
+        }
+
+        let { coords } = await Location.getCurrentPositionAsync({})
+        const address = await Location.reverseGeocodeAsync(coords)
+
+        await updateDoc(doc(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid), {
+          coords,
+          address: address[0]
+        })
+      }
+      setMyLocation()
+    }
   }, [user])
 
   return (
