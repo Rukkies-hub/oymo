@@ -29,10 +29,15 @@ const UserLocation = ({ _user }) => {
         <>
           {
             userInfo.about != undefined &&
-            <Text numberOfLines={1}>
-              Lives in
-              <OymoFont message={` ${userInfo?.city}`} lines={1} fontStyle={cl.userLocation} fontFamily='montserrat_bold' />
-            </Text>
+            <>
+              {
+                userInfo?.address?.city != undefined &&
+                <Text numberOfLines={1}>
+                  Lives in
+                  <OymoFont message={` ${userInfo?.address?.city}`} lines={1} fontStyle={cl.userLocation} fontFamily='montserrat_bold' />
+                </Text>
+              }
+            </>
           }
         </>
       }

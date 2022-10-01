@@ -14,7 +14,6 @@ const Upgrade = ({ navigation }) => {
       const value = await Convert(2).from("USD").to("NGN")
       setAmount(JSON.stringify(Math.round(value)))
     }
-
     convirt()
   }, [])
 

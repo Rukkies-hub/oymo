@@ -1,4 +1,4 @@
-import { View, Text, ImageBackground, TouchableOpacity, Image, ScrollView, TextInput, Button, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, Dimensions, ActivityIndicator } from 'react-native'
+import { View, Text, ImageBackground, TouchableOpacity, Image, ScrollView, TextInput, Button, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard, Dimensions, ActivityIndicator, Pressable } from 'react-native'
 import React, { useEffect } from 'react'
 import { create } from '../../../style/events'
 import { useState } from 'react'
@@ -265,6 +265,9 @@ const Craate = ({ navigation }) => {
                 style={create.input}
               />
             </View>
+            {/* <Pressable style={create.input} onPress={() => navigation.navigate('Map')}>
+              <OymoFont message={location || 'Location'} />
+            </Pressable> */}
             <TextInput
               value={location}
               numberOfLines={1}
@@ -320,7 +323,7 @@ const Craate = ({ navigation }) => {
               onChangeText={setDescription}
               placeholderTextColor={color.dark}
               placeholder='Event description'
-              style={[create.input, {marginBottom: 10}]}
+              style={[create.input, { marginBottom: 10 }]}
             />
             <DateTimePickerModal
               mode='date'

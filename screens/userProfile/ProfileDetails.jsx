@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState } from 'react'
 import { View, Text, ImageBackground, Image, TouchableOpacity } from 'react-native'
 
 import { LinearGradient } from 'expo-linear-gradient'
-import { FontAwesome, Feather, Fontisto, SimpleLineIcons, AntDesign } from '@expo/vector-icons'
+import { FontAwesome, Feather, Fontisto, SimpleLineIcons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
 import color from '../../style/color'
 import { useNavigation } from '@react-navigation/native'
 
@@ -17,6 +17,7 @@ import { collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, serverT
 import { db } from '../../hooks/firebase'
 import generateId from '../../lib/generateId'
 import { setPendingSwipes, setProfiles } from '../../features/matchSlice'
+import { match } from '../../style/match'
 
 const ProfileDetails = ({ profile, user }) => {
   const navigation = useNavigation()
@@ -119,6 +120,20 @@ const ProfileDetails = ({ profile, user }) => {
       })
   }
 
+  function distance (lat1, lon1, lat2, lon2, unit) {
+    var radlat1 = Math.PI * lat1 / 180
+    var radlat2 = Math.PI * lat2 / 180
+    var theta = lon1 - lon2
+    var radtheta = Math.PI * theta / 180
+    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    dist = Math.acos(dist)
+    dist = dist * 180 / Math.PI
+    dist = dist * 60 * 1.1515
+    if (unit == "K") { dist = dist * 1.609344 }
+    if (unit == "N") { dist = dist * 0.8684 }
+    return dist
+  }
+
   return (
     <ImageBackground source={!profile?.photoURL ? require('../../assets/background2.jpg') : { uri: profile?.photoURL }} blurRadius={50}>
       <LinearGradient colors={[color.transparent, color.white]}>
@@ -211,14 +226,17 @@ const ProfileDetails = ({ profile, user }) => {
           </View>
         }
 
-        <View style={_profile.infoListContainer}>
-          <Feather name='home' size={14} color={color.dark} />
+        {
+          _profile?.address != undefined &&
+          <View style={_profile.infoListContainer}>
+            <Feather name='home' size={14} color={color.dark} />
 
-          <View style={_profile.infoList}>
-            <OymoFont message='Lives in' fontStyle={_profile.title} />
-            <OymoFont message={profile?.city} fontStyle={_profile.info} fontFamily='montserrat_bold' />
+            <View style={_profile.infoList}>
+              <OymoFont message='Lives in' fontStyle={_profile.title} />
+              <OymoFont message={`${_profile?.address?.city}, ${_profile?.address?.country}`} fontStyle={_profile.info} fontFamily='montserrat_bold' />
+            </View>
           </View>
-        </View>
+        }
 
         <View style={_profile.infoListContainer}>
           <Fontisto name='date' size={14} color={color.dark} />
@@ -231,12 +249,20 @@ const ProfileDetails = ({ profile, user }) => {
 
         {
           profile?.job != undefined &&
-          <View style={[_profile.infoListContainer, { marginBottom: 20 }]}>
+          <View style={_profile.infoListContainer}>
             <Feather name='briefcase' size={14} color={color.dark} />
 
             <Text style={[_profile.info, { fontFamily: 'text' }]}>
               {profile?.job} {profile?.company != '' && 'at'} {profile?.company}
             </Text>
+          </View>
+        }
+
+        {
+          (profile?.coords != undefined && __profile?.coords) &&
+          <View style={[_profile.infoListContainer, { marginBottom: 20 }]}>
+            <MaterialCommunityIcons name="map-marker-radius-outline" size={17} color={color.dark} />
+            <OymoFont message={`${distance(profile?.coords?.latitude, profile?.coords?.longitude, __profile?.coords?.latitude, __profile?.coords?.longitude).toFixed(2)} kilometers away`} fontStyle={_profile.info} />
           </View>
         }
       </LinearGradient>

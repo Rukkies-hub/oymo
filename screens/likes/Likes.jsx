@@ -122,14 +122,17 @@ const Likes = () => {
                     <Username user={like?.id} />
                   </TouchableOpacity>
 
-                  <View style={likes.infoContainer}>
-                    <Feather name='home' size={12} color={color.dark} />
+                  {
+                    like?.address?.city != undefined &&
+                    <View style={likes.infoContainer}>
+                      <Feather name='home' size={12} color={color.dark} />
 
-                    <View style={likes.infoView}>
-                      <OymoFont message='Lives in' fontStyle={likes.infoText} />
-                      <OymoFont message={like?.city} lines={1} fontStyle={likes.infoText} fontFamily='montserrat_bold' />
+                      <View style={likes.infoView}>
+                        <OymoFont message='Lives in' fontStyle={likes.infoText} />
+                        <OymoFont message={like?.address?.city} lines={1} fontStyle={likes.infoText} fontFamily='montserrat_bold' />
+                      </View>
                     </View>
-                  </View>
+                  }
 
                   <View style={likes.controlesView}>
                     <TouchableOpacity onPress={() => swipeLeft(like)} style={likes.nopeButton}>

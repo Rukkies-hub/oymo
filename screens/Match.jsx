@@ -27,7 +27,7 @@ import generateId from '../lib/generateId'
 
 import OymoFont from '../components/OymoFont'
 
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
 import { useDispatch, useSelector } from 'react-redux'
 import { setPendingSwipes, setProfiles } from '../features/matchSlice'
@@ -142,6 +142,20 @@ const Match = () => {
 
   const disabled = () => navigation.navigate('SetupModal')
 
+  function distance (lat1, lon1, lat2, lon2, unit) {
+    var radlat1 = Math.PI * lat1 / 180
+    var radlat2 = Math.PI * lat2 / 180
+    var theta = lon1 - lon2
+    var radtheta = Math.PI * theta / 180
+    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    dist = Math.acos(dist)
+    dist = dist * 180 / Math.PI
+    dist = dist * 60 * 1.1515
+    if (unit == "K") { dist = dist * 1.609344 }
+    if (unit == "N") { dist = dist * 0.8684 }
+    return dist
+  }
+
   const [loaded] = useFonts({
     lightText: require('../assets/fonts/Montserrat_Alternates/MontserratAlternates-Light.ttf')
   })
@@ -212,10 +226,18 @@ const Match = () => {
                     }
 
                     {
-                      card?.city != undefined &&
+                      card?.address != undefined &&
                       <View style={match.detailesContainer}>
                         <MaterialCommunityIcons name='home-outline' size={17} color={color.white} />
-                        <OymoFont message={` ${card?.city}`} fontStyle={match.detail} fontFamily='montserrat_light' />
+                        <OymoFont message={`${card?.address?.city}, ${card?.address?.country}`} fontStyle={match.detail} fontFamily='montserrat_light' />
+                      </View>
+                    }
+
+                    {
+                      (card?.coords != undefined && profile?.coords) &&
+                      <View style={match.detailesContainer}>
+                        <MaterialCommunityIcons name="map-marker-radius-outline" size={17} color={color.white} />
+                          <OymoFont message={`${distance(card?.coords?.latitude, card?.coords?.longitude, profile?.coords?.latitude, profile?.coords?.longitude).toFixed(2) } kilometers away`} fontStyle={match.detail} fontFamily='montserrat_light' />
                       </View>
                     }
 
