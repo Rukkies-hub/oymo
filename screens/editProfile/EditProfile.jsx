@@ -281,7 +281,7 @@ const EditProfile = () => {
             }
 
             {
-              (profile && profile?.dob == undefined) &&
+              (profile && profile?.age == undefined) &&
               <TouchableOpacity onPress={() => navigation.navigate('DOB')} style={{ marginBottom: 20 }}>
                 <OymoFont message='Date of birth' fontStyle={editProfile.passionsText} fontFamily='montserrat_bold' />
 
