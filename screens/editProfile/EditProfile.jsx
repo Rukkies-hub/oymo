@@ -54,7 +54,7 @@ const EditProfile = () => {
   const [company, setCompany] = useState(profile?.company)
   const [school, setSchool] = useState(profile?.school)
   const [about, setAbout] = useState(profile?.about)
-  const [city, setCity] = useState(profile?.city)
+  const [city, setCity] = useState(profile?.address?.city)
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
 
@@ -80,10 +80,10 @@ const EditProfile = () => {
     (() => {
       if (profile) setDisabled(false)
       else
-        if (username != undefined && phone != undefined && city != undefined)
+        if (username != undefined && phone != undefined)
           setDisabled(false)
     })()
-  }, [username, city, phone])
+  }, [username, phone])
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidHide', () => {
@@ -109,7 +109,6 @@ const EditProfile = () => {
     await setDoc(doc(db, 'users', id), {
       id: id,
       username,
-      city,
       phone,
       displayName,
       coins: 5000,
@@ -128,7 +127,6 @@ const EditProfile = () => {
       job,
       company,
       school,
-      city,
       about,
       phone
     })
@@ -258,6 +256,7 @@ const EditProfile = () => {
 
             <TextInput
               value={city}
+              editable={false}
               onChangeText={setCity}
               placeholder='I live in (City)'
               placeholderTextColor={color.dark}
@@ -324,7 +323,7 @@ const EditProfile = () => {
 
             {profile && <LookingFor />}
 
-            {profile && 
+            {profile &&
               <TouchableOpacity
                 onPress={() => navigation.navigate('Upgrade')}
                 style={editProfile.goPro}

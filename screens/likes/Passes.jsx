@@ -56,14 +56,17 @@ const Passes = () => {
                   <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: pass })}>
                     <Username user={pass?.id} />
                   </TouchableOpacity>
-                  <View style={likes.infoContainer}>
-                    <Feather name='home' size={12} color={color.dark} />
+                  {
+                    pass?.address?.city != undefined &&
+                    <View style={likes.infoContainer}>
+                      <Feather name='home' size={12} color={color.dark} />
 
-                    <View style={likes.infoView}>
-                      <OymoFont message='Lives in' fontStyle={likes.infoText} />
-                      <OymoFont message={pass?.city} fontStyle={likes.infoText} fontFamily='montserrat_bold' />
+                      <View style={likes.infoView}>
+                        <OymoFont message='Lives in' fontStyle={likes.infoText} />
+                        <OymoFont message={pass?.address?.city} fontStyle={likes.infoText} fontFamily='montserrat_bold' />
+                      </View>
                     </View>
-                  </View>
+                  }
                   <View style={likes.controlesView}>
                     <TouchableOpacity onPress={() => profile ? undoPass(pass) : disabled()} style={likes.matchButon}>
                       <Feather name='trash-2' size={20} color={color.white} />

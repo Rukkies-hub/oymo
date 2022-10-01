@@ -108,14 +108,17 @@ const ProfileDetails = ({ profile, user }) => {
           </View>
         }
 
-        <View style={_profile.infoListContainer}>
-          <Feather name='home' size={14} color={color.dark} />
+        {
+          profile?.address &&
+          <View style={_profile.infoListContainer}>
+            <Feather name='home' size={14} color={color.dark} />
 
-          <View style={_profile.infoList}>
-            <OymoFont message='Lives in' fontStyle={_profile.title} />
-            <OymoFont message={profile?.city} fontStyle={_profile.info} fontFamily='montserrat_bold' />
+            <View style={_profile.infoList}>
+              <OymoFont message='Lives in' fontStyle={_profile.title} />
+              <OymoFont message={`${profile?.address?.city}, ${profile?.address?.country}`} fontStyle={_profile.info} fontFamily='montserrat_bold' />
+            </View>
           </View>
-        </View>
+        }
 
         <View style={_profile.infoListContainer}>
           <Fontisto name='date' size={14} color={color.dark} />
