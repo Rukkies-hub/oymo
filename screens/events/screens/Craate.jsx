@@ -102,7 +102,7 @@ const Craate = ({ navigation }) => {
   }
 
   const saveEvent = async () => {
-    if (profile?.coins <= 0 && image) return
+    if (profile?.coins < 100 && image) return
     if (!image && title == '' && location == '' && description == '' && type == '' && date == '' && time == '' && duration == '' && !limit && gender == '') return
 
     const blob = await new Promise((resolve, reject) => {
@@ -140,9 +140,7 @@ const Craate = ({ navigation }) => {
               timestamp: serverTimestamp()
             })
 
-            await updateDoc(doc(db, 'users', id), {
-              coins: increment(-100)
-            })
+            await updateDoc(doc(db, 'users', id), { coins: increment(-100) })
 
             setLoading(false)
             setImage(null)
