@@ -93,6 +93,28 @@ const Reels = () => {
       >
         <ReelsSingle item={item} ref={ReelSingleRef => (mediaRefs.current[item?.id] = ReelSingleRef)} />
 
+        {
+          profile &&
+          <View style={reels.controlersContainer}>
+            <UserAvatar reel={item} _user={item?.user?.id} />
+
+            <View style={reels.controleButtonContainer}>
+              <LikeReels reel={item} />
+
+              <TouchableOpacity
+                onPress={() => {
+                  profile ? dispatch(setReelsProps(item)) : null
+                  profile ? navigation.navigate('ReelsComment', { item }) : disabled()
+                }}
+                style={reels.commentsButton}
+              >
+                <FontAwesome name='comment' size={24} color={color.white} />
+                <OymoFont message={item?.commentsCount ? item?.commentsCount : '0'} fontStyle={reels.commentsCount} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        }
+
         <LinearGradient colors={['transparent', color.labelColor]} style={reels.gradientContainer}>
           <View style={reels.captionContainer}>
             <UserInfo _user={item?.user?.id} />
@@ -106,28 +128,6 @@ const Reels = () => {
               />
             }
           </View>
-
-          {
-            profile &&
-            <View style={reels.controlersContainer}>
-              <UserAvatar reel={item} _user={item?.user?.id} />
-
-              <View style={reels.controleButtonContainer}>
-                <LikeReels reel={item} />
-
-                <TouchableOpacity
-                  onPress={() => {
-                    profile ? dispatch(setReelsProps(item)) : null
-                    profile ? navigation.navigate('ReelsComment', { item }) : disabled()
-                  }}
-                  style={reels.commentsButton}
-                >
-                  <FontAwesome name='comment' size={24} color={color.white} />
-                  <OymoFont message={item?.commentsCount ? item?.commentsCount : '0'} fontStyle={reels.commentsCount} />
-                </TouchableOpacity>
-              </View>
-            </View>
-          }
         </LinearGradient>
       </ImageBackground>
     )

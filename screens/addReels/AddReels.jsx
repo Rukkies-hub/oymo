@@ -95,7 +95,9 @@ const AddReels = () => {
   }
 
   if (!hasCameraPermission || !hasAudioPermission || !hasGalleryPermission) {
-    return <View />
+    return <View style={[ar.containr, { justifyContent: 'center', alignItems: 'center' }]}>
+      <OymoFont message='No camera permision' />
+    </View>
   }
 
   return (

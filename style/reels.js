@@ -29,7 +29,7 @@ export const reels = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width,
-    height: height / 3,
+    minHeight: 100,
     zIndex: 1
   },
 
@@ -61,7 +61,7 @@ export const reels = StyleSheet.create({
     marginVertical: 30,
     position: 'absolute',
     right: 0,
-    bottom: 0,
+    bottom: height / 10,
     margin: 20
   },
 
