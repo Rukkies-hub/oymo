@@ -38,24 +38,16 @@ export const dob = StyleSheet.create({
 
   mainDate: {
     marginTop: 5,
-    color: color.dark,
-    marginBottom: 20
+    fontSize: 20,
+    color: color.dark
   },
 
   calender: {
-    height: 200,
+    marginBottom: 10,
     padding: 10,
-    flexDirection: 'row'
-  },
-
-  tray: {
-    flex: 1,
-    width: 60
-  },
-
-  text: {
-    color: color.dark,
-    fontSize: 20
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
 
   upload: {

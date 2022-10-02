@@ -23,19 +23,18 @@ const UserInfo = ({ _user }) => {
   }, [])
 
   return (
-    <>
-      {
-        profile ?
-          <TouchableOpacity
-            onPress={() =>
-              userInfo?.id == id ? navigation.navigate('Profile') :
-                navigation.navigate('UserProfile', { user: userInfo })}
-          >
-            <OymoFont message={`@${userInfo?.username}`} fontStyle={reels.captionUsername} />
-          </TouchableOpacity> :
-          <OymoFont message={`@${userInfo?.username}`} fontStyle={reels.captionUsername} />
+    <TouchableOpacity
+      onPress={() =>
+        userInfo?.id == id ? navigation.navigate('Profile') :
+          navigation.navigate('UserProfile', { user: userInfo })
       }
-    </>
+      style={{
+        flexDirection: 'row'
+      }}
+    >
+      {userInfo?.displayName != undefined && <OymoFont message={userInfo?.displayName} fontStyle={reels.displayName} fontFamily='montserrat_bold' />}
+      {userInfo?.username != undefined && <OymoFont message={`@${userInfo?.username}`} fontStyle={reels.captionUsername} fontFamily='montserrat_light' />}
+    </TouchableOpacity>
   )
 }
 

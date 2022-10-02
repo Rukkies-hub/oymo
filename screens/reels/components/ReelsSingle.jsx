@@ -40,9 +40,9 @@ export const ReelsSingle = forwardRef(({ item }, parentRef) => {
 
     try {
       await ref?.current?.playAsync()
-    } catch (e) {}
+    } catch (e) { }
   }
-  
+
   const stop = async () => {
     if (ref?.current == null) return
 
@@ -69,12 +69,12 @@ export const ReelsSingle = forwardRef(({ item }, parentRef) => {
       style={{
         flex: 1,
         width,
-        backgroundColor: color.transparent
+        backgroundColor: color.black
       }}
     >
       <Video
         ref={ref}
-        style={{ flex: 1, backgroundColor: color.transparent }}
+        style={{ flex: 1, backgroundColor: color.black }}
         resizeMode='contain'
         isLooping
         usePoster

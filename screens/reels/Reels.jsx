@@ -23,7 +23,7 @@ import LikeReels from '../../components/reelsComponents/LikeReels'
 import UserInfo from './components/UserInfo'
 import OymoFont from '../../components/OymoFont'
 import UserAvatar from './components/UserAvatar'
-import { setReelsProps } from '../../features/reelsSlice'
+import { setReels, setReelsLimit, setReelsProps } from '../../features/reelsSlice'
 
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout))
@@ -31,7 +31,7 @@ const wait = timeout => {
 
 const Reels = () => {
   const { user, profile } = useSelector(state => state.user)
-  const { reelsList } = useSelector(state => state.reels)
+  const { reelsList, reelsLimit } = useSelector(state => state.reels)
   const mediaRefs = useRef([])
 
   const dispatch = useDispatch()
@@ -53,6 +53,21 @@ const Reels = () => {
       }
     })
   })
+
+  const getReels = async () => {
+    const queryReels = await getDocs(query(collection(db, 'reels'), limit(reelsLimit), orderBy('timestamp', 'desc')))
+
+    dispatch(
+      setReels(
+        queryReels?.docs?.map(doc => ({
+          id: doc?.id,
+          ...doc?.data()
+        }))
+      )
+    )
+  }
+
+
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true)
@@ -79,7 +94,6 @@ const Reels = () => {
         <ReelsSingle item={item} ref={ReelSingleRef => (mediaRefs.current[item?.id] = ReelSingleRef)} />
 
         <LinearGradient colors={['transparent', color.labelColor]} style={reels.gradientContainer}>
-          {/* CAPTION */}
           <View style={reels.captionContainer}>
             <UserInfo _user={item?.user?.id} />
 
@@ -93,11 +107,10 @@ const Reels = () => {
             }
           </View>
 
-          {/* CONTROLS */}
           {
             profile &&
             <View style={reels.controlersContainer}>
-              <UserAvatar _user={item?.user?.id} />
+              <UserAvatar reel={item} _user={item?.user?.id} />
 
               <View style={reels.controleButtonContainer}>
                 <LikeReels reel={item} />
@@ -147,20 +160,20 @@ const Reels = () => {
           scrollEnabled={true}
           style={{ flex: 1 }}
           onEndReachedThreshold={0.1}
-        // refreshControl={
-        //   <RefreshControl
-        //     refreshing={refreshing}
-        //     onRefresh={() => {
-        //       setReelsLimit(10)
-        //       onRefresh()
-        //     }}
-        //   />
-        // }
-        // onEndReached={() => {
-        //   if (reels?.length <= 10) return
-        //   setReelsLimit(reelsLimit + 3)
-        //   getReels()
-        // }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => {
+                dispatch(setReelsLimit(10))
+                onRefresh()
+              }}
+            />
+          }
+          onEndReached={() => {
+            if (reelsList?.length <= 10) return
+            dispatch(setReelsLimit(reelsLimit + 3))
+            getReels()
+          }}
         />
       </View>
     </View>

@@ -43,7 +43,7 @@ const BottomNavigation = () => {
           name='Reels'
           component={Reels}
           options={{
-            tabBarIcon: () => <Ionicons name='videocam-outline' size={20} color={color.black} />
+            tabBarIcon: () => <FontAwesome name="film" size={20} color={color.black} />
           }}
         />
 
