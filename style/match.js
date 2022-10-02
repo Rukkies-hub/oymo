@@ -83,6 +83,13 @@ export const match = StyleSheet.create({
     textTransform: 'capitalize'
   },
 
+  age: {
+    fontSize: 30,
+    color: color.white,
+    marginBottom: 10,
+    marginLeft: 10
+  },
+
   moreInfoButton: {
     width: 40,
     height: 40,

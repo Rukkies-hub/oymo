@@ -28,6 +28,8 @@ const Splash = () => {
         dispatch(logout())
       getprofile(userAuth)
       getPendingSwipes(userAuth)
+      setMyLocation(userAuth)
+      setAge(userAuth)
     })
   }, [])
 
@@ -92,26 +94,47 @@ const Splash = () => {
     })()
   }, [user])
 
-  useLayoutEffect(() => {
-    if (user) {
-      const setMyLocation = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync()
-        if (status !== 'granted') {
-          setErrorMsg('Permission to access location was denied')
-          return
-        }
-
-        let { coords } = await Location.getCurrentPositionAsync({})
-        const address = await Location.reverseGeocodeAsync(coords)
-
-        await updateDoc(doc(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid), {
-          coords,
-          address: address[0]
-        })
-      }
-      setMyLocation()
+  const setMyLocation = async user => {
+    if (!user) return
+    let { status } = await Location.requestForegroundPermissionsAsync()
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied')
+      return
     }
-  }, [user])
+
+    let { coords } = await Location.getCurrentPositionAsync({})
+    const address = await Location.reverseGeocodeAsync(coords)
+
+    const profile = await (await getDoc(doc(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid))).data()
+
+    if (!profile) return
+
+    await updateDoc(doc(db, 'users', profile?.id), {
+      coords,
+      address: address[0]
+    })
+  }
+
+  const setAge = async user => {
+
+    function getAge (dateString) {
+      var today = new Date();
+      var birthDate = new Date(dateString);
+      var age = today.getFullYear() - birthDate.getFullYear();
+      var m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    const profile = await (await getDoc(doc(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid))).data()
+
+    if (profile) return
+    await updateDoc(doc(db, 'users', profile?.id), {
+      age: getAge(profile?.dob)
+    })
+  }
 
   return (
     <View
