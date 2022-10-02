@@ -22,7 +22,6 @@ const { Navigator, Screen } = createMaterialBottomTabNavigator()
 
 const BottomNavigation = () => {
   const { profile } = useSelector(state => state.user)
-  const { pendingSwipes } = useSelector(state => state.match)
 
   return (
     <View style={nav.container}>
@@ -65,13 +64,13 @@ const BottomNavigation = () => {
         />
 
         {
-          pendingSwipes?.length > 0 ?
+          (profile?.pendingSwipes != undefined && profile?.pendingSwipes > 0) ?
             <Screen
               name='Likes'
               component={LikesNavigation}
               options={{
                 tabBarIcon: () => <SimpleLineIcons name='like' size={20} color={color.black} />,
-                tabBarBadge: pendingSwipes?.length,
+                tabBarBadge: profile?.pendingSwipes,
                 title: 'Likes'
               }}
             /> :

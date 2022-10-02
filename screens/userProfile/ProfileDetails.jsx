@@ -13,7 +13,7 @@ import OymoFont from '../../components/OymoFont'
 
 import { profile as _profile } from '../../style/profile'
 import { useDispatch, useSelector } from 'react-redux'
-import { collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, serverTimestamp, setDoc, where } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDoc, getDocs, increment, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import generateId from '../../lib/generateId'
 import { setPendingSwipes, setProfiles } from '../../features/matchSlice'
@@ -91,10 +91,13 @@ const ProfileDetails = ({ profile, user }) => {
 
     const userSwiped = profiles[cardIndex]
 
+    if (__profile?.coins < 20) return
+
     getDoc(doc(db, 'users', userSwiped?.id, 'swipes', id))
-      .then(documentSnapshot => {
+      .then(async documentSnapshot => {
         if (documentSnapshot?.exists()) {
           setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
+          await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
 
           // CREAT A MATCH
           setDoc(doc(db, 'matches', generateId(id, userSwiped?.id)), {
@@ -104,7 +107,11 @@ const ProfileDetails = ({ profile, user }) => {
             },
             usersMatched: [id, userSwiped?.id],
             timestamp: serverTimestamp()
-          }).then(async () => await deleteDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id)))
+          }).then(async () => {
+            await deleteDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id))
+            await updateDoc(doc(db, 'users', id), { pendingSwipes: increment(-1) })
+            await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+          })
 
           navigation.navigate('NewMatch', {
             loggedInProfile: __profile,
@@ -115,6 +122,8 @@ const ProfileDetails = ({ profile, user }) => {
         } else {
           setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
           setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', id), __profile)
+          await updateDoc(doc(db, 'users', userSwiped?.id), { pendingSwipes: increment(1) })
+          await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
           setShowMatch(false)
         }
       })
