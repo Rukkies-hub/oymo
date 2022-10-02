@@ -142,12 +142,11 @@ const Likes = () => {
                   }
 
                   <View style={likes.controlesView}>
-                    <TouchableOpacity onPress={() => swipeLeft(like)} style={likes.nopeButton}>
-                      <OymoFont message='Nope' fontStyle={{ color: color.red }} />
-                    </TouchableOpacity>
-
                     <TouchableOpacity onPress={() => swipeRight(like)} style={likes.matchButon}>
                       <OymoFont message='Match' fontStyle={{ color: color.white }} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => swipeLeft(like)} style={likes.nopeButton}>
+                      <OymoFont message='Nope' fontStyle={{ color: color.red }} />
                     </TouchableOpacity>
                   </View>
                 </View>

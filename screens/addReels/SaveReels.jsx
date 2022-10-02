@@ -15,7 +15,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, doc, increment, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import uuid from 'uuid-random'
 import Bar from '../../components/Bar'
@@ -71,6 +71,8 @@ const SaveReels = () => {
   }, [])
 
   const saveReel = async () => {
+    if (profile?.coin < 100) return
+
     if (mediaType === 'video') {
       setLoading(true)
       const blob = await new Promise((resolve, reject) => {
@@ -118,6 +120,7 @@ const SaveReels = () => {
                         setLoading(false)
                         setDescription('')
                         schedulePushNotification()
+                        updateDoc(doc(db, 'users', id), { coins: increment(-100) })
                       })
                     })
                 })

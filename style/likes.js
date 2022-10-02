@@ -107,8 +107,7 @@ export const likes = StyleSheet.create({
     borderRadius: 8,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10
+    alignItems: 'center'
   },
 
   matchButon: {
@@ -117,7 +116,8 @@ export const likes = StyleSheet.create({
     height: 35,
     borderRadius: 8,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginRight: 10
   },
 
   loading: {
