@@ -6,11 +6,7 @@ const { width, height } = Dimensions.get('window')
 export const reels = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.white
-  },
-
-  listContainer: {
-    flex: 1,
+    backgroundColor: color.white,
     overflow: 'hidden'
   },
 

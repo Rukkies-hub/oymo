@@ -71,7 +71,7 @@ export const ReelsSingle = forwardRef(({ item }, parentRef) => {
       onPress={() => videoStatus?.isPlaying ? ref?.current?.pauseAsync() : ref?.current?.playAsync()}
       onPressIn={() => {
         dispatch(setActiveReelUser(item))
-        videoStatus?.isPlaying ? ref?.current?.pauseAsync() : ref?.current?.playAsync()
+        // videoStatus?.isPlaying ? ref?.current?.pauseAsync() : ref?.current?.playAsync()
       }}
       style={{
         flex: 1,

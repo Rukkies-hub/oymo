@@ -1,21 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { View, Text, SafeAreaView, FlatList, Dimensions, TouchableOpacity, Image, ImageBackground, RefreshControl } from 'react-native'
+import React, { useState, useRef, useCallback } from 'react'
+import { View, FlatList, TouchableOpacity, ImageBackground, RefreshControl } from 'react-native'
 
-import { arrayRemove, arrayUnion, collection, doc, getDocs, limit, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore'
+import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 
 import color from '../../style/color'
 import ReelsSingle from './components/ReelsSingle'
 
-const { width, height } = Dimensions.get('window')
-
-import { AntDesign, FontAwesome } from '@expo/vector-icons'
-
-import { useFonts } from 'expo-font'
+import { FontAwesome } from '@expo/vector-icons'
 
 import { LinearGradient } from 'expo-linear-gradient'
 
-import { useIsFocused, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { reels } from '../../style/reels'
 
@@ -23,11 +19,12 @@ import LikeReels from '../../components/reelsComponents/LikeReels'
 import UserInfo from './components/UserInfo'
 import OymoFont from '../../components/OymoFont'
 import UserAvatar from './components/UserAvatar'
-import { setActiveReelUser, setReels, setReelsLimit, setReelsProps } from '../../features/reelsSlice'
+import { setReels, setReelsLimit, setReelsProps } from '../../features/reelsSlice'
+import { useLayoutEffect } from 'react'
 
-const wait = timeout => {
-  return new Promise(resolve => setTimeout(resolve, timeout))
-}
+const wait = timeout =>
+  new Promise(resolve => setTimeout(resolve, timeout))
+
 
 const ReelsScreen = () => {
   const { user, profile } = useSelector(state => state.user)
@@ -39,7 +36,6 @@ const ReelsScreen = () => {
   const [refreshing, setRefreshing] = useState(false)
 
   const navigation = useNavigation()
-  const focus = useIsFocused()
 
   const onViewableItemsChanged = useRef(({ changed }) => {
     changed?.forEach(element => {
@@ -67,9 +63,13 @@ const ReelsScreen = () => {
     )
   }
 
+  useLayoutEffect(() => {
+    getReels()
+  }, [user])
 
 
-  const onRefresh = React.useCallback(() => {
+
+  const onRefresh = useCallback(() => {
     setRefreshing(true)
     wait(2000).then(() => {
       getReels()
@@ -133,49 +133,40 @@ const ReelsScreen = () => {
     )
   }
 
-  const [loaded] = useFonts({
-    text: require('../../assets/fonts/Montserrat_Alternates/MontserratAlternates-Medium.ttf'),
-    boldText: require('../../assets/fonts/Montserrat_Alternates/MontserratAlternates-Bold.ttf')
-  })
-
-  if (!loaded) return null
-
   return (
     <View style={reels.container}>
-      <View style={reels.listContainer}>
-        <FlatList
-          data={reelsList}
-          windowSize={2}
-          initialNumToRender={0}
-          maxToRenderPerBatch={1}
-          removeClippedSubviews
-          viewabilityConfig={{ itemVisiblePercentThreshold: 95 }}
-          renderItem={renderItem}
-          pagingEnabled
-          keyExtractor={item => item?.id}
-          decelerationRate={'normal'}
-          onViewableItemsChanged={onViewableItemsChanged?.current}
-          showsVerticalScrollIndicator={false}
-          vertical={true}
-          scrollEnabled={true}
-          style={{ flex: 1 }}
-          onEndReachedThreshold={0.1}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={() => {
-                dispatch(setReelsLimit(10))
-                onRefresh()
-              }}
-            />
-          }
-          onEndReached={() => {
-            if (reelsList?.length <= 10) return
-            dispatch(setReelsLimit(reelsLimit + 3))
-            getReels()
-          }}
-        />
-      </View>
+      <FlatList
+        data={reelsList}
+        windowSize={2}
+        initialNumToRender={0}
+        maxToRenderPerBatch={1}
+        removeClippedSubviews
+        viewabilityConfig={{ itemVisiblePercentThreshold: 95 }}
+        renderItem={renderItem}
+        pagingEnabled
+        keyExtractor={item => item?.id}
+        decelerationRate={'normal'}
+        onViewableItemsChanged={onViewableItemsChanged?.current}
+        showsVerticalScrollIndicator={false}
+        vertical={true}
+        scrollEnabled={true}
+        style={{ flex: 1 }}
+        onEndReachedThreshold={0.1}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              dispatch(setReelsLimit(10))
+              onRefresh()
+            }}
+          />
+        }
+        onEndReached={() => {
+          if (reelsList?.length <= 10) return
+          dispatch(setReelsLimit(reelsLimit + 3))
+          getReels()
+        }}
+      />
     </View>
   )
 }
