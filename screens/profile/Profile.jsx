@@ -7,7 +7,6 @@ import { useIsFocused, useNavigation } from '@react-navigation/native'
 
 import * as NavigationBar from 'expo-navigation-bar'
 import { useSelector } from 'react-redux'
-import { useFonts } from 'expo-font'
 import ProfileDetails from './ProfileDetailes'
 import Reels from './Reels'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
@@ -28,12 +27,6 @@ const Profile = () => {
   navigation.addListener('blur', () => {
     NavigationBar.setVisibilityAsync('visible')
   })
-
-  const [loaded] = useFonts({
-    text: require('../../assets/fonts/Montserrat_Alternates/MontserratAlternates-Medium.ttf')
-  })
-
-  if (!loaded) return null
 
   return (
     <View style={profile.container}>
