@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react'
-import { View, Text, Pressable, Image, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, Pressable, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
 
 import color from '../../style/color'
 
@@ -9,9 +9,11 @@ import { db } from '../../hooks/firebase'
 import OymoFont from '../../components/OymoFont'
 
 import { pReels } from '../../style/profileReels'
+import { useSelector } from 'react-redux'
 
-const Reels = ({ profile, user }) => {
+const Reels = () => {
   const navigation = useNavigation()
+  const { user, profile } = useSelector(state => state.user)
 
   const [reels, setReels] = useState([])
   const [reelsLimit, setLimit] = useState(50)
@@ -49,7 +51,7 @@ const Reels = ({ profile, user }) => {
             <ActivityIndicator size='large' color={color.black} />
           </View> :
           <FlatList
-            data={reels}
+            data={reels.slice(0, 50)}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
             style={pReels.container}
@@ -89,6 +91,7 @@ const Reels = ({ profile, user }) => {
               </Pressable>
             )}
           />
+
       }
     </>
   )

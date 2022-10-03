@@ -35,7 +35,7 @@ export const reels = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width,
-    height: height / 3,
+    minHeight: 100,
     zIndex: 1
   },
 
@@ -61,8 +61,10 @@ export const reels = StyleSheet.create({
     marginVertical: 30,
     position: 'absolute',
     right: 0,
-    bottom: 0,
-    margin: 20
+    bottom: height / 5,
+    margin: 20,
+    backgroundColor: color.faintBlack,
+    borderRadius: 50
   },
 
   avatarButton: {
@@ -85,8 +87,7 @@ export const reels = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 70
+    marginTop: 20
   },
 
   commentButton: {

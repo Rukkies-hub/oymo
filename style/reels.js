@@ -61,8 +61,10 @@ export const reels = StyleSheet.create({
     marginVertical: 30,
     position: 'absolute',
     right: 0,
-    bottom: height / 10,
-    margin: 20
+    bottom: height / 5,
+    margin: 20,
+    backgroundColor: color.faintBlack,
+    borderRadius: 50
   },
 
   userAvatarContainer: {
@@ -86,7 +88,6 @@ export const reels = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
-    marginBottom: 70
   },
 
   commentsButton: {

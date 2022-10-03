@@ -115,7 +115,7 @@ const Reels = () => {
           </View>
         }
 
-        <LinearGradient colors={['transparent', color.labelColor]} style={reels.gradientContainer}>
+        <LinearGradient colors={['transparent', color.lightText]} style={reels.gradientContainer}>
           <View style={reels.captionContainer}>
             <UserInfo _user={item?.user?.id} />
 
