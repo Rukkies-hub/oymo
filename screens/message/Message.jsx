@@ -45,6 +45,8 @@ import RecieverMessage from './components/recieverMessage/RecieverMessage'
 import color from '../../style/color'
 import { AntDesign, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
 
+import { admin } from '@env'
+
 const Message = () => {
   const { matchDetails } = useRoute().params
   const dispatch = useDispatch()
@@ -181,6 +183,7 @@ const Message = () => {
         timestamp: serverTimestamp()
       })
       await updateDoc(doc(db, 'users', id), { coins: increment(-1) })
+      await updateDoc(doc(db, 'admin', admin), { messages: increment(1) })
     }
   }
 
@@ -239,7 +242,7 @@ const Message = () => {
       .then(snapshot => {
         getDownloadURL(snapshot?.ref)
           .then(async downloadURL => {
-            addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
+            await addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
               userId: id,
               username: profile?.username,
               photoURL: matchDetails?.users[id]?.photoURL,
@@ -251,6 +254,7 @@ const Message = () => {
             })
             setRecordingLoading(false)
             await updateDoc(doc(db, 'users', id), { coins: increment(-100) })
+            await updateDoc(doc(db, 'admin', admin), { messages: increment(1) })
           })
       })
   }

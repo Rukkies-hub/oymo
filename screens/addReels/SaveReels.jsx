@@ -27,6 +27,7 @@ import color from '../../style/color'
 import { useSelector } from 'react-redux'
 import { sr } from '../../style/saveReel'
 import OymoFont from '../../components/OymoFont'
+import { admin } from '@env'
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -104,9 +105,9 @@ const SaveReels = () => {
               uploadBytes(thumbnailRef, thumbnailBlob)
                 .then(thumbnailSnapshot => {
                   getDownloadURL(thumbnailSnapshot.ref)
-                    .then(thumbnailDownloadURL => {
+                    .then(async thumbnailDownloadURL => {
                       navigation.navigate('Reels')
-                      addDoc(collection(db, 'reels'), {
+                      await addDoc(collection(db, 'reels'), {
                         user: { id: id },
                         media: downloadURL,
                         mediaLink: snapshot?.ref?._location?.path,
@@ -116,12 +117,12 @@ const SaveReels = () => {
                         likesCount: 0,
                         commentsCount: 0,
                         timestamp: serverTimestamp()
-                      }).finally(() => {
-                        setLoading(false)
-                        setDescription('')
-                        schedulePushNotification()
-                        updateDoc(doc(db, 'users', id), { coins: increment(-100) })
                       })
+                      setLoading(false)
+                      setDescription('')
+                      schedulePushNotification()
+                      await updateDoc(doc(db, 'users', id), { coins: increment(-100) })
+                      await updateDoc(doc(db, 'admin', admin), { reels: increment(1) })
                     })
                 })
             })

@@ -33,6 +33,8 @@ import { useSelector } from 'react-redux'
 import { pm } from '../../style/previewMessageImage'
 import color from '../../style/color'
 
+import { admin } from '@env'
+
 const PreviewMessageImage = () => {
   const { profile, user } = useSelector(state => state.user)
   const { matchDetails, media } = useRoute().params
@@ -89,13 +91,15 @@ const PreviewMessageImage = () => {
                 timestamp: serverTimestamp(),
               })
 
-              await updateDoc(doc(db, 'matches', matchDetails?.id), { timestamp: serverTimestamp() })
-              await updateDoc(doc(db, 'users', id), { coins: increment(-100) })
 
+              setInput('')
               setSendLoading(false)
               setDisableButton(false)
-              setInput('')
               navigation.navigate('Message', { matchDetails })
+              await updateDoc(doc(db, 'users', id), { coins: increment(-100) })
+              await updateDoc(doc(db, 'admin', admin), { messages: increment(1) })
+              await updateDoc(doc(db, 'admin', admin), { imageMessages: increment(1) })
+              await updateDoc(doc(db, 'matches', matchDetails?.id), { timestamp: serverTimestamp() })
             })
         })
     }
@@ -154,12 +158,14 @@ const PreviewMessageImage = () => {
                         timestamp: serverTimestamp(),
                       })
 
-                      await updateDoc(doc(db, 'matches', matchDetails?.id), { timestamp: serverTimestamp() })
-                      await updateDoc(doc(db, 'users', id), { coins: increment(-100) })
+                      setInput('')
                       setSendLoading(false)
                       setDisableButton(false)
-                      setInput('')
                       navigation.navigate('Message', { matchDetails })
+                      await updateDoc(doc(db, 'users', id), { coins: increment(-100) })
+                      await updateDoc(doc(db, 'admin', admin), { messages: increment(1) })
+                      await updateDoc(doc(db, 'admin', admin), { videoMessages: increment(1) })
+                      await updateDoc(doc(db, 'matches', matchDetails?.id), { timestamp: serverTimestamp() })
                     })
                 })
             })

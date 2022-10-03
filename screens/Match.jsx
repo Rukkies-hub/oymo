@@ -35,6 +35,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setPendingSwipes, setProfiles } from '../features/matchSlice'
 import { match } from '../style/match'
 
+import { admin } from '@env'
+
 const Match = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
@@ -102,6 +104,7 @@ const Match = () => {
 
     setDoc(doc(db, 'users', id, 'passes', userSwiped?.id), userSwiped)
     await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
+    await updateDoc(doc(db, 'admin', admin), { passes: increment(1) })
 
     getAllProfiles()
     getPendingSwipes()
@@ -133,6 +136,8 @@ const Match = () => {
             await deleteDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id))
             await updateDoc(doc(db, 'users', id), { pendingSwipes: increment(-1) })
             await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+            await updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
+            await updateDoc(doc(db, 'admin', admin), { matches: increment(1) })
           })
 
           navigation.navigate('NewMatch', {
@@ -146,12 +151,14 @@ const Match = () => {
           await setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', id), profile)
           await updateDoc(doc(db, 'users', userSwiped?.id), { pendingSwipes: increment(1) })
           await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+          await updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
           getAllProfiles()
           getPendingSwipes()
         }
       })
 
     setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
+    await updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
   }
 
   const disabled = () => navigation.navigate('SetupModal')

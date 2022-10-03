@@ -14,7 +14,7 @@ import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
 import { addDoc, collection, doc, increment, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import { useLayoutEffect } from 'react'
-
+import { admin } from '@env'
 const Room = () => {
   const { room } = useRoute().params
   const navigation = useNavigation()
@@ -50,6 +50,7 @@ const Room = () => {
       })
       setInput('')
       await updateDoc(doc(db, 'users', id), { coins: increment(-1) })
+      await updateDoc(doc(db, 'admin', admin), { roomMessages: increment(1) })
     }
   }
 

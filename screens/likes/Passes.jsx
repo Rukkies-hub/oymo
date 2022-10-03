@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, TouchableOpacity, SafeAreaView, FlatList, Text, ActivityIndicator } from 'react-native'
-import { collection, deleteDoc, doc, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { collection, deleteDoc, doc, increment, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import { useNavigation } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
@@ -10,6 +10,8 @@ import { useSelector } from 'react-redux'
 import { likes } from '../../style/likes'
 import OymoFont from '../../components/OymoFont'
 import color from '../../style/color'
+
+import { admin } from '@env'
 
 const Passes = () => {
   const { user, profile } = useSelector(state => state.user)
@@ -33,8 +35,10 @@ const Passes = () => {
     })()
   }, [])
 
-  const undoPass = async pass =>
+  const undoPass = async pass => {
     await deleteDoc(doc(db, 'users', id, 'passes', pass?.id))
+    await updateDoc(doc(db, 'admin', admin), { undos: increment(1) })
+  }
 
   const disabled = () => navigation.navigate('SetupModal')
 

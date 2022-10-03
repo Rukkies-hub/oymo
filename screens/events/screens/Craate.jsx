@@ -19,6 +19,8 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import { doc, increment, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../../hooks/firebase'
 
+import { admin } from '@env'
+
 const events = [
   'Sleep over',
   'clubbing',
@@ -154,6 +156,8 @@ const Craate = ({ navigation }) => {
             setGender('')
             setLimit(null)
             navigation.goBack()
+
+            await updateDoc(doc(db, 'admin', admin), { events: increment(1) })
           })
       })
   }

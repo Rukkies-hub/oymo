@@ -17,7 +17,8 @@ import { collection, deleteDoc, doc, getDoc, getDocs, increment, onSnapshot, que
 import { db } from '../../hooks/firebase'
 import generateId from '../../lib/generateId'
 import { setPendingSwipes, setProfiles } from '../../features/matchSlice'
-import { match } from '../../style/match'
+
+import { admin } from '@env'
 
 const ProfileDetails = ({ profile, user }) => {
   const navigation = useNavigation()
@@ -111,6 +112,8 @@ const ProfileDetails = ({ profile, user }) => {
             await deleteDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id))
             await updateDoc(doc(db, 'users', id), { pendingSwipes: increment(-1) })
             await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+            await updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
+            await updateDoc(doc(db, 'admin', admin), { matches: increment(1) })
           })
 
           navigation.navigate('NewMatch', {
@@ -124,6 +127,7 @@ const ProfileDetails = ({ profile, user }) => {
           setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', id), __profile)
           await updateDoc(doc(db, 'users', userSwiped?.id), { pendingSwipes: increment(1) })
           await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+          await updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
           setShowMatch(false)
         }
       })

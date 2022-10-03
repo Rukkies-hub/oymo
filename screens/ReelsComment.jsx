@@ -33,7 +33,7 @@ import { ci, rc } from '../style/reelsComment'
 import OymoFont from '../components/OymoFont'
 import ReelsComments from '../components/reelsComponents/ReelsComments'
 
-import { notificationUri } from '@env'
+import { notificationUri, admin } from '@env'
 
 import { Audio } from 'expo-av'
 
@@ -89,6 +89,8 @@ const ReelsComment = () => {
 
     await updateDoc(doc(db, 'reels', item?.id), { commentsCount: increment(1) })
     await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
+    await updateDoc(doc(db, 'admin', admin), { comments: increment(1) })
+    
 
     if (item?.user?.id != id) {
       await addDoc(collection(db, 'users', item?.user?.id, 'notifications'), {
@@ -137,6 +139,7 @@ const ReelsComment = () => {
     playSound()
 
     await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
+    await updateDoc(doc(db, 'admin', admin), { comments: increment(1) })
 
     if (comment?.reel?.user?.id != id) {
       await addDoc(collection(db, 'users', comment?.reel?.user?.id, 'notifications'), {
@@ -228,6 +231,7 @@ const ReelsComment = () => {
 
     await updateDoc(doc(db, 'reels', item?.id), { commentsCount: increment(1) })
     await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
+    await updateDoc(doc(db, 'admin', admin), { comments: increment(1) })
   }
 
   const [loaded] = useFonts({

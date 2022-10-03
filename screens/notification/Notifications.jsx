@@ -3,7 +3,7 @@ import { View, SafeAreaView, TouchableOpacity } from 'react-native'
 import Header from '../../components/Header'
 import color from '../../style/color'
 import { AntDesign, Fontisto, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
-import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDocs, increment, query, updateDoc, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import { useNavigation } from '@react-navigation/native'
 import { SwipeListView } from 'react-native-swipe-list-view'
@@ -15,7 +15,7 @@ import OymoFont from '../../components/OymoFont'
 
 const Notifications = () => {
   const navigation = useNavigation()
-  const { user } = useSelector(state => state.user)
+  const { user, profile } = useSelector(state => state.user)
   const { notifications } = useSelector(state => state.notification)
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
@@ -24,47 +24,84 @@ const Notifications = () => {
     if (!notification?.seen) {
       await updateDoc(doc(db, 'users', id, 'notifications', notification?.notification), {
         seen: true
-      }).then(() => {
-        if (notification?.activity == 'likes' || notification?.activity == 'comment likes') navigation.navigate('ViewReel', { reel: notification?.reel })
-        else if (notification?.activity == 'comment' || notification?.activity == 'comments') navigation.navigate('ReelsComment', { item: notification?.reel })
-        else if (notification?.activity == 'reply') navigation.navigate('ReelsComment', { item: notification?.reel })
-        else if (notification?.activity == 'joined') navigation.navigate('Event', { event: notification?.event })
+      }).then(async () => {
+        if (notification?.activity == 'likes' || notification?.activity == 'comment likes') {
+          navigation.navigate('ViewReel', { reel: notification?.reel })
+          await updateDoc(doc(db, 'users', id), { notificationCount: increment(-1) })
+        }
+        else if (notification?.activity == 'comment' || notification?.activity == 'comments') {
+          navigation.navigate('ReelsComment', { item: notification?.reel })
+          await updateDoc(doc(db, 'users', id), { notificationCount: increment(-1) })
+        }
+        else if (notification?.activity == 'reply') {
+          navigation.navigate('ReelsComment', { item: notification?.reel })
+          await updateDoc(doc(db, 'users', id), { notificationCount: increment(-1) })
+        }
+        else if (notification?.activity == 'joined') {
+          navigation.navigate('Event', { event: notification?.event })
+          await updateDoc(doc(db, 'users', id), { notificationCount: increment(-1) })
+        }
       })
     } else {
-      if (notification?.activity == 'likes' || notification?.activity == 'comment likes') navigation.navigate('ViewReel', { reel: notification?.reel })
-      else if (notification?.activity == 'comment' || notification?.activity == 'comments') navigation.navigate('ReelsComment', { item: notification?.reel })
-      else if (notification?.activity == 'reply') navigation.navigate('ReelsComment', { item: notification?.reel })
-      else if (notification?.activity == 'joined') navigation.navigate('Event', { event: notification?.event })
+      if (notification?.activity == 'likes' || notification?.activity == 'comment likes') {
+        navigation.navigate('ViewReel', { reel: notification?.reel })
+        await updateDoc(doc(db, 'users', id), { notificationCount: increment(-1) })
+      }
+      else if (notification?.activity == 'comment' || notification?.activity == 'comments') {
+        navigation.navigate('ReelsComment', { item: notification?.reel })
+        await updateDoc(doc(db, 'users', id), { notificationCount: increment(-1) })
+      }
+      else if (notification?.activity == 'reply') {
+        navigation.navigate('ReelsComment', { item: notification?.reel })
+        await updateDoc(doc(db, 'users', id), { notificationCount: increment(-1) })
+      }
+      else if (notification?.activity == 'joined') {
+        navigation.navigate('Event', { event: notification?.event })
+        await updateDoc(doc(db, 'users', id), { notificationCount: increment(-1) })
+      }
     }
   }
 
   const markAllAsRead = async () => {
+    if (profile?.coins < 1) return
     const snapshot = await getDocs(query(collection(db, 'users', id, 'notifications'), where('seen', '==', false)))
     snapshot?.forEach(async allDoc => {
-      await updateDoc(doc(db, 'users', id, 'notifications', allDoc?.id), {
-        seen: true
-      })
+      await updateDoc(doc(db, 'users', id, 'notifications', allDoc?.id), { seen: true })
     })
+    await updateDoc(doc(db, 'users', id), { notificationCount: 0 })
+    await updateDoc(doc(db, 'users', id), { coins: increment(-1) })
   }
 
   const clearAll = async () => {
+    if (profile?.coins < 1) return
     const snapshot = await getDocs(collection(db, 'users', id, 'notifications'))
     snapshot?.forEach(async allDoc => {
-      await deleteDoc(doc(db, 'users', id, 'notifications', allDoc?.id), {
-        seen: true
-      })
+      await deleteDoc(doc(db, 'users', id, 'notifications', allDoc?.id), { seen: true })
     })
+    await updateDoc(doc(db, 'users', id), { notificationCount: 0 })
+    await updateDoc(doc(db, 'users', id), { coins: increment(-1) })
   }
 
-  const deleteNotification = async item =>
+  const deleteNotification = async item => {
+    if (profile?.coins < 1) return
     await deleteDoc(doc(db, 'users', id, 'notifications', item?.id))
+    await updateDoc(doc(db, 'users', id), { notificationCount: increment(-1) })
+    await updateDoc(doc(db, 'users', id), { coins: increment(-1) })
+  }
 
 
   const markAsRead = async item => {
-    if (item?.seen)
+    if (profile?.coins < 1) return
+    if (item?.seen) {
       await updateDoc(doc(db, 'users', id, 'notifications', item?.id), { seen: false })
-    else
+      await updateDoc(doc(db, 'users', id), { notificationCount: increment(1) })
+      await updateDoc(doc(db, 'users', id), { coins: increment(-1) })
+    }
+    else {
       await updateDoc(doc(db, 'users', id, 'notifications', item?.id), { seen: true })
+      await updateDoc(doc(db, 'users', id), { notificationCount: increment(-1) })
+      await updateDoc(doc(db, 'users', id), { coins: increment(-1) })
+    }
   }
 
   const onRowDidOpen = rowKey => {

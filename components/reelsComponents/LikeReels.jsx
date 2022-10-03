@@ -12,6 +12,8 @@ import { useSelector } from 'react-redux'
 import { reels } from '../../style/reels'
 import OymoFont from '../OymoFont'
 
+import { admin } from '@env'
+
 const LikeReels = ({ reel, navigation }) => {
   const { user, profile } = useSelector(state => state.user)
 
@@ -41,6 +43,7 @@ const LikeReels = ({ reel, navigation }) => {
       await updateDoc(doc(db, 'reels', reel?.id), { likesCount: increment(-1) })
       await updateDoc(doc(db, 'users', reel?.user?.id), { likesCount: increment(-1) })
       await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+      await updateDoc(doc(db, 'admin', admin), { likes: increment(-1) })
       setDisable(false)
     } else {
       setDisable(true)
@@ -57,6 +60,7 @@ const LikeReels = ({ reel, navigation }) => {
         likesCount: increment(1)
       })
       await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+      await updateDoc(doc(db, 'admin', admin), { likes: increment(1) })
       setDisable(false)
       if (reel?.user?.id != id)
         await addDoc(collection(db, 'users', reel?.user?.id, 'notifications'), {
