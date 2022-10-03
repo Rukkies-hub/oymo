@@ -47,15 +47,13 @@ const UserProfile = () => {
 
   return (
     <View style={profile.container}>
-      <>
-        {
-          _profile && user &&
-          <>
-            <ProfileDetails profile={_profile} user={user} />
-            <Reels profile={_profile} user={user} />
-          </>
-        }
-      </>
+      {
+        _profile && user &&
+        <>
+          <ProfileDetails profile={_profile} user={user} />
+          <Reels profile={_profile} user={user} />
+        </>
+      }
     </View>
   )
 }

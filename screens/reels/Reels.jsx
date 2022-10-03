@@ -9,7 +9,7 @@ const Reels = () => {
   return (
     <Navigator
       screenOptions={{
-        lazy: true,
+        // lazy: true,
         tabBarStyle: {
           height: 0,
           elevation: 0
