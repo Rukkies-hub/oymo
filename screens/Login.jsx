@@ -27,8 +27,11 @@ import * as WebBrowser from 'expo-web-browser'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../features/userSlice'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 
 WebBrowser.maybeCompleteAuthSession()
+
+import * as NavigationBar from 'expo-navigation-bar'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -39,6 +42,19 @@ const Login = () => {
   const [authType, setAuthType] = useState('login')
   const [authLoading, setAuthLoading] = useState(false)
   const [showError, setShowError] = useState(false)
+
+  const navigation = useNavigation()
+
+  const isFocused = useIsFocused()
+
+  if (isFocused) {
+    NavigationBar.setVisibilityAsync('hidden')
+    NavigationBar.setBehaviorAsync('overlay-swipe')
+  }
+
+  navigation.addListener('blur', () => {
+    NavigationBar.setVisibilityAsync('visible')
+  })
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidHide', () => {

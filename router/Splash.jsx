@@ -34,12 +34,15 @@ const Splash = () => {
   }, [])
 
   const getprofile = async user => {
+    if (!user || user == undefined) return
     const profile = await (await getDoc(doc(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid))).data()
     if (profile)
       dispatch(setProfile(profile))
   }
 
   const getPendingSwipes = async user => {
+    if (!user || user == undefined) return
+
     const querySnapshot = await getDocs(query(collection(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid, 'pendingSwipes'), where('photoURL', '!=', null)))
 
     if (querySnapshot?.docs?.length >= 1)
@@ -116,7 +119,7 @@ const Splash = () => {
   }
 
   const setAge = async user => {
-
+    if (!user || user == undefined) return
     function getAge (dateString) {
       var today = new Date();
       var birthDate = new Date(dateString);
