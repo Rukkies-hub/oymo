@@ -44,56 +44,93 @@ const Reels = () => {
   }
 
   return (
-    <>
+    <View>
       {
         reels?.length < 1 ?
           <View style={pReels.indicatorContainer}>
             <ActivityIndicator size='large' color={color.black} />
           </View> :
-          <FlatList
-            data={reels.slice(0, 50)}
-            keyExtractor={item => item.id}
-            showsVerticalScrollIndicator={false}
-            style={pReels.container}
-            onEndReached={() => {
-              setLimit(reelsLimit + 4)
-              getReels()
-            }}
-            ListFooterComponent={() => <View style={pReels.listFooterComponent} />}
-            renderItem={({ item: reel }) => (
-              <Pressable
-                onPress={() => navigation.navigate('ViewReel', { reel })}
-                onLongPress={() => navigation.navigate('ReelsOption', { reel })}
-                delayLongPress={500}
-                style={pReels.reelsList}
-              >
-                <Image source={{ uri: reel?.thumbnail }} style={pReels.reelsThumb} />
+          <>
+            {
+              reels?.map((reel, index) => {
+                return (
+                  <Pressable
+                    key={index}
+                    onPress={() => navigation.navigate('ViewReel', { reel })}
+                    onLongPress={() => navigation.navigate('ReelsOption', { reel })}
+                    delayLongPress={500}
+                    style={pReels.reelsList}
+                  >
+                    <Image source={{ uri: reel?.thumbnail }} style={pReels.reelsThumb} />
 
-                <View style={{ flex: 1 }}>
-                  <OymoFont message={reel?.description} lines={1} fontStyle={pReels.desctiption} />
-                  <OymoFont message={`Video - ${profile?.username}`} lines={1} fontStyle={pReels.username} />
+                    <View style={{ flex: 1 }}>
+                      <OymoFont message={reel?.description} lines={1} fontStyle={pReels.desctiption} />
+                      <OymoFont message={`Video - ${profile?.username}`} lines={1} fontStyle={pReels.username} />
 
-                  <View style={pReels.statsContainer}>
-                    <View style={pReels.statsContainerRow}>
-                      <OymoFont message={reel?.likesCount} lines={1} fontStyle={pReels.reelsCount} />
-                      <Text style={pReels.reelsCountText}>
-                        {reel?.likesCount == 1 ? 'Like' : 'Likes'}
-                      </Text>
+                      <View style={pReels.statsContainer}>
+                        <View style={pReels.statsContainerRow}>
+                          <OymoFont message={reel?.likesCount} lines={1} fontStyle={pReels.reelsCount} />
+                          <Text style={pReels.reelsCountText}>
+                            {reel?.likesCount == 1 ? 'Like' : 'Likes'}
+                          </Text>
+                        </View>
+                        <View style={pReels.statsContainerRow}>
+                          <OymoFont message={reel?.commentsCount} lines={1} fontStyle={pReels.reelsCount} />
+                          <Text style={pReels.reelsCountText}>
+                            {reel?.commentsCount == 1 ? 'Comment' : 'Comments'}
+                          </Text>
+                        </View>
+                      </View>
                     </View>
-                    <View style={pReels.statsContainerRow}>
-                      <OymoFont message={reel?.commentsCount} lines={1} fontStyle={pReels.reelsCount} />
-                      <Text style={pReels.reelsCountText}>
-                        {reel?.commentsCount == 1 ? 'Comment' : 'Comments'}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </Pressable>
-            )}
-          />
+                  </Pressable>
+                )
+              })
+            }
+          </>
+        // <FlatList
+        //   data={reels}
+        //   keyExtractor={item => item.id}
+        //   showsVerticalScrollIndicator={false}
+        //   style={pReels.container}
+        //   onEndReached={() => {
+        //     setLimit(reelsLimit + 4)
+        //     getReels()
+        //   }}
+        //   ListFooterComponent={() => <View style={pReels.listFooterComponent} />}
+        //   renderItem={({ item: reel }) => (
+        //     <Pressable
+        //       onPress={() => navigation.navigate('ViewReel', { reel })}
+        //       onLongPress={() => navigation.navigate('ReelsOption', { reel })}
+        //       delayLongPress={500}
+        //       style={pReels.reelsList}
+        //     >
+        //       <Image source={{ uri: reel?.thumbnail }} style={pReels.reelsThumb} />
+
+        //       <View style={{ flex: 1 }}>
+        //         <OymoFont message={reel?.description} lines={1} fontStyle={pReels.desctiption} />
+        //         <OymoFont message={`Video - ${profile?.username}`} lines={1} fontStyle={pReels.username} />
+
+        //         <View style={pReels.statsContainer}>
+        //           <View style={pReels.statsContainerRow}>
+        //             <OymoFont message={reel?.likesCount} lines={1} fontStyle={pReels.reelsCount} />
+        //             <Text style={pReels.reelsCountText}>
+        //               {reel?.likesCount == 1 ? 'Like' : 'Likes'}
+        //             </Text>
+        //           </View>
+        //           <View style={pReels.statsContainerRow}>
+        //             <OymoFont message={reel?.commentsCount} lines={1} fontStyle={pReels.reelsCount} />
+        //             <Text style={pReels.reelsCountText}>
+        //               {reel?.commentsCount == 1 ? 'Comment' : 'Comments'}
+        //             </Text>
+        //           </View>
+        //         </View>
+        //       </View>
+        //     </Pressable>
+        //   )}
+        // />
 
       }
-    </>
+    </View>
   )
 }
 

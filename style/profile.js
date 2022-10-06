@@ -13,6 +13,21 @@ export const profile = StyleSheet.create({
     paddingHorizontal: 10
   },
 
+  navigationView: {
+    flex: 1,
+    height: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+
+  navigationViewButtons: {
+    flex: 1,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
   avatar: {
     width: 80,
     height: 80,
