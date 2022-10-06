@@ -20,7 +20,7 @@ import AutoHeightImage from 'react-native-auto-height-image'
 
 import { FontAwesome5 } from '@expo/vector-icons'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore'
+import { addDoc, collection, doc, increment, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 
@@ -32,6 +32,8 @@ import Bar from '../../components/Bar'
 import { useSelector } from 'react-redux'
 import { pm } from '../../style/previewMessageImage'
 import color from '../../style/color'
+
+import { admin } from '@env'
 
 const PreviewMessageImage = () => {
   const { profile, user } = useSelector(state => state.user)
@@ -57,6 +59,8 @@ const PreviewMessageImage = () => {
 
   const sendMessage = async () => {
     if (media?.type == 'image') {
+      if (profile?.coins < 100) return
+
       const blob = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest()
         xhr.onload = () => resolve(xhr.response)
@@ -74,8 +78,8 @@ const PreviewMessageImage = () => {
       uploadBytes(mediaRef, blob)
         .then(snapshot => {
           getDownloadURL(snapshot?.ref)
-            .then(downloadURL => {
-              addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
+            .then(async downloadURL => {
+              await addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
                 userId: id,
                 username: profile?.username,
                 photoURL: matchDetails?.users[id].photoURL,
@@ -85,22 +89,25 @@ const PreviewMessageImage = () => {
                 caption: input,
                 seen: false,
                 timestamp: serverTimestamp(),
-              }).then(async () => {
-                await updateDoc(doc(db, 'matches', matchDetails?.id), {
-                  timestamp: serverTimestamp()
-                })
-              }).finally(() => {
-                setSendLoading(false)
-                setDisableButton(false)
-                setInput('')
-                navigation.navigate('Message', { matchDetails })
               })
+
+
+              setInput('')
+              setSendLoading(false)
+              setDisableButton(false)
+              navigation.navigate('Message', { matchDetails })
+              await updateDoc(doc(db, 'users', id), { coins: increment(-100) })
+              await updateDoc(doc(db, 'admin', admin), { messages: increment(1) })
+              await updateDoc(doc(db, 'admin', admin), { imageMessages: increment(1) })
+              await updateDoc(doc(db, 'matches', matchDetails?.id), { timestamp: serverTimestamp() })
             })
         })
     }
 
 
     if (media?.type == 'video' && media?.thumbnail) {
+      if (profile?.coins < 100) return
+
       const blob = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest()
         xhr.onload = () => resolve(xhr.response)
@@ -132,8 +139,8 @@ const PreviewMessageImage = () => {
               uploadBytes(thumbnailRef, thumbnailBlob)
                 .then(thumbnailSnapshot => {
                   getDownloadURL(thumbnailSnapshot?.ref)
-                    .then(thumbnailDownloadURL => {
-                      addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
+                    .then(async thumbnailDownloadURL => {
+                      await addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
                         userId: id,
                         username: profile?.username,
                         photoURL: matchDetails?.users[id].photoURL,
@@ -149,16 +156,16 @@ const PreviewMessageImage = () => {
                         },
                         seen: false,
                         timestamp: serverTimestamp(),
-                      }).then(async () => {
-                        await updateDoc(doc(db, 'matches', matchDetails?.id), {
-                          timestamp: serverTimestamp()
-                        })
-                      }).finally(() => {
-                        setSendLoading(false)
-                        setDisableButton(false)
-                        setInput('')
-                        navigation.navigate('Message', { matchDetails })
                       })
+
+                      setInput('')
+                      setSendLoading(false)
+                      setDisableButton(false)
+                      navigation.navigate('Message', { matchDetails })
+                      await updateDoc(doc(db, 'users', id), { coins: increment(-100) })
+                      await updateDoc(doc(db, 'admin', admin), { messages: increment(1) })
+                      await updateDoc(doc(db, 'admin', admin), { videoMessages: increment(1) })
+                      await updateDoc(doc(db, 'matches', matchDetails?.id), { timestamp: serverTimestamp() })
                     })
                 })
             })
@@ -192,7 +199,7 @@ const PreviewMessageImage = () => {
               ref={video}
               source={{ uri: media?.uri }}
               style={{ flex: 1 }}
-                resizeMode='contain'
+              resizeMode='contain'
               isLooping={true}
               onPlaybackStatusUpdate={status => setStatus(() => status)}
             />

@@ -5,6 +5,8 @@ import { TouchableOpacity, Dimensions } from 'react-native'
 import { Video } from 'expo-av'
 import { useNavigation } from '@react-navigation/native'
 import color from '../../../style/color'
+import { useDispatch } from 'react-redux'
+import { setActiveReelUser } from '../../../features/reelsSlice'
 
 const { width } = Dimensions.get('window')
 
@@ -12,6 +14,7 @@ export const ReelsSingle = forwardRef(({ item }, parentRef) => {
   const ref = useRef(null)
 
   const navigation = useNavigation()
+  const dispatch = useDispatch()
 
   const [videoStatus, setVideoStatus] = useState({})
 
@@ -40,9 +43,9 @@ export const ReelsSingle = forwardRef(({ item }, parentRef) => {
 
     try {
       await ref?.current?.playAsync()
-    } catch (e) {}
+    } catch (e) { }
   }
-  
+
   const stop = async () => {
     if (ref?.current == null) return
 
@@ -66,15 +69,19 @@ export const ReelsSingle = forwardRef(({ item }, parentRef) => {
     <TouchableOpacity
       activeOpacity={1}
       onPress={() => videoStatus?.isPlaying ? ref?.current?.pauseAsync() : ref?.current?.playAsync()}
+      onPressIn={() => {
+        dispatch(setActiveReelUser(item))
+        // videoStatus?.isPlaying ? ref?.current?.pauseAsync() : ref?.current?.playAsync()
+      }}
       style={{
         flex: 1,
         width,
-        backgroundColor: color.transparent
+        backgroundColor: color.black
       }}
     >
       <Video
         ref={ref}
-        style={{ flex: 1, backgroundColor: color.transparent }}
+        style={{ flex: 1, backgroundColor: color.black }}
         resizeMode='contain'
         isLooping
         usePoster
@@ -86,7 +93,9 @@ export const ReelsSingle = forwardRef(({ item }, parentRef) => {
         }}
         shouldPlay={false}
         source={{ uri: item?.media }}
-        onPlaybackStatusUpdate={status => setVideoStatus(() => status)}
+        onPlaybackStatusUpdate={status => {
+          setVideoStatus(() => status)
+        }}
       />
     </TouchableOpacity>
   )

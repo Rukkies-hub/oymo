@@ -11,7 +11,8 @@ export const userSlice = createSlice({
     commentAutoFocus: false,
     showExpand: true,
     postCommentType: 'comment',
-    reply: ''
+    reply: '',
+    activeReelUser: null
   },
   reducers: {
     setReels: (state, action) => {
@@ -45,6 +46,14 @@ export const userSlice = createSlice({
 
     setReply: (state, action) => {
       state.reply = action.payload
+    },
+
+    setReelsLimit: (state, action) => {
+      state.reelsLimit = action.payload
+    },
+
+    setActiveReelUser: (state, action) => {
+      state.activeReelUser = action.payload
     }
   }
 })
@@ -58,7 +67,9 @@ export const {
   setCommentAutoFocus,
   setShowExpand,
   setPostCommentType,
-  setReply
+  setReply,
+  setReelsLimit,
+  setActiveReelUser
 } = userSlice.actions
 
 export default userSlice.reducer

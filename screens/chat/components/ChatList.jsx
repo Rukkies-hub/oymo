@@ -1,5 +1,5 @@
-import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore'
-import React, { useEffect, useLayoutEffect } from 'react'
+import { collection, getDocs, onSnapshot, orderBy, query, where } from 'firebase/firestore'
+import React, { useEffect } from 'react'
 import { View, FlatList, ActivityIndicator } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { setMatches, setMatchesFilter } from '../../../features/chatSlice'
@@ -9,19 +9,13 @@ import color from '../../../style/color'
 import ChatRow from './chatRow/ChatRow'
 
 const ChatList = () => {
-  const { user, profile } = useSelector(state => state.user)
+  const { user } = useSelector(state => state.user)
   const { matches, matchesFilter } = useSelector(state => state.chat)
   const dispatch = useDispatch()
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
 
-  useEffect(() => {
-    return () => {
-      fetchMatches()
-    }
-  }, [])
-
-  useLayoutEffect(() =>
+  useEffect(() =>
     fetchMatches()
     , [user, db])
 
@@ -31,6 +25,8 @@ const ChatList = () => {
       orderBy('timestamp', 'desc')
     ),
       snapshot => {
+        if (snapshot?.docs?.length < 1) return
+        
         dispatch(setMatches(
           snapshot?.docs?.map(doc => ({
             id: doc?.id,

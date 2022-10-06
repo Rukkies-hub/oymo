@@ -80,29 +80,29 @@ const ViewReel = () => {
         }
       </TouchableOpacity>
 
-      <LinearGradient colors={['transparent', color.labelColor]} style={reels.gradietContainer}>
+      <View style={reels.contolesView}>
+        <UserAvatar user={reel?.user?.id} />
+
+        <View style={reels.contoles}>
+          <LikeReels reel={reel} />
+
+          <TouchableOpacity
+            onPress={() => {
+              profile ? dispatch(setReelsProps(reel)) : null
+              profile ? navigation.navigate('ReelsComment', { item: reel }) : disabled()
+            }}
+            style={reels.commentButton}
+          >
+            <FontAwesome name='comment' size={24} color={color.white} />
+            <OymoFont message={reel?.commentsCount ? reel?.commentsCount : '0'} fontStyle={reels.commentButtonText} />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <LinearGradient colors={['transparent', color.lightText]} style={reels.gradietContainer}>
         <View style={reels.userInfoView}>
           <UserInfo user={reel?.user?.id} />
           <OymoFont message={reel?.description} fontStyle={reels.reelsInfoText} fontFamily='montserrat_light' />
-        </View>
-
-        <View style={reels.contolesView}>
-          <UserAvatar user={reel?.user?.id} />
-
-          <View style={reels.contoles}>
-            <LikeReels reel={reel} />
-
-            <TouchableOpacity
-              onPress={() => {
-                profile ? dispatch(setReelsProps(reel)) : null
-                profile ? navigation.navigate('ReelsComment', { item: reel }) : disabled()
-              }}
-              style={reels.commentButton}
-            >
-              <FontAwesome name='comment' size={24} color={color.white} />
-              <OymoFont message={reel?.commentsCount ? reel?.commentsCount : '0'} fontStyle={reels.commentButtonText} />
-            </TouchableOpacity>
-          </View>
         </View>
       </LinearGradient>
     </ImageBackground>

@@ -1,28 +1,22 @@
-import React, { useState, useLayoutEffect } from 'react'
-import { View, Text, Pressable, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
-
-import color from '../../style/color'
-
-import { useNavigation } from '@react-navigation/native'
+import { View, Text, ActivityIndicator, FlatList, Pressable, Image } from 'react-native'
+import React, { useEffect } from 'react'
+import { useState } from 'react'
 import { collection, getDocs, limit, onSnapshot, query, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
+import { useNavigation } from '@react-navigation/native'
+import { pReels } from '../../style/profileReels'
+import color from '../../style/color'
 import OymoFont from '../../components/OymoFont'
 
-import { pReels } from '../../style/profileReels'
-import { useSelector } from 'react-redux'
-
-const Reels = () => {
+const UserReels = ({ activeUser }) => {
   const navigation = useNavigation()
-  const { user, profile } = useSelector(state => state.user)
 
   const [reels, setReels] = useState([])
   const [reelsLimit, setLimit] = useState(50)
 
-  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
-
-  useLayoutEffect(() => {
+  useEffect(() => {
     return onSnapshot(query(collection(db, 'reels'),
-      where('user.id', '==', id), limit(reelsLimit)),
+      where('user.id', '==', activeUser), limit(reelsLimit)),
       snapshot => setReels(
         snapshot?.docs?.map(doc => ({
           id: doc?.id,
@@ -33,7 +27,7 @@ const Reels = () => {
   }, [reelsLimit, db])
 
   const getReels = async () => {
-    const queryReels = await getDocs(query(collection(db, 'reels'), where('user.id', '==', id), limit(reelsLimit)))
+    const queryReels = await getDocs(query(collection(db, 'reels'), where('user.id', '==', activeUser), limit(reelsLimit)))
 
     setReels(
       queryReels?.docs?.map(doc => ({
@@ -51,7 +45,7 @@ const Reels = () => {
             <ActivityIndicator size='large' color={color.black} />
           </View> :
           <FlatList
-            data={reels.slice(0, 50)}
+            data={reels}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
             style={pReels.container}
@@ -71,7 +65,6 @@ const Reels = () => {
 
                 <View style={{ flex: 1 }}>
                   <OymoFont message={reel?.description} lines={1} fontStyle={pReels.desctiption} />
-                  <OymoFont message={`Video - ${profile?.username}`} lines={1} fontStyle={pReels.username} />
 
                   <View style={pReels.statsContainer}>
                     <View style={pReels.statsContainerRow}>
@@ -91,11 +84,9 @@ const Reels = () => {
               </Pressable>
             )}
           />
-
       }
     </>
   )
 }
 
-export default Reels
-// in use
+export default UserReels

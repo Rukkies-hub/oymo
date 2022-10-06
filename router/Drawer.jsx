@@ -11,7 +11,7 @@ import Profile from '../screens/profile/Profile'
 import EditProfile from '../screens/editProfile/EditProfile'
 import Notifications from '../screens/notification/Notifications'
 
-const { Navigator, Screen, DrawerContentScrollView } = createDrawerNavigator()
+const { Navigator, Screen } = createDrawerNavigator()
 
 const Drawer = () => {
   return (

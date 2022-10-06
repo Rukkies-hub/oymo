@@ -20,7 +20,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import getMatchedUserInfo from '../../lib/getMatchedUserInfo'
 import { BlurView } from 'expo-blur'
-import { addDoc, collection, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from 'firebase/firestore'
+import { addDoc, collection, doc, getDocs, increment, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 
 if (
@@ -44,6 +44,8 @@ import SenderMessage from './components/SenderMessage'
 import RecieverMessage from './components/recieverMessage/RecieverMessage'
 import color from '../../style/color'
 import { AntDesign, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
+
+import { admin } from '@env'
 
 const Message = () => {
   const { matchDetails } = useRoute().params
@@ -162,6 +164,8 @@ const Message = () => {
   }
 
   const sendMessage = async () => {
+    if (profile?.coins < 1) return
+
     if (input != '') {
       await addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
         timestamp: serverTimestamp(),
@@ -178,6 +182,8 @@ const Message = () => {
       await updateDoc(doc(db, 'matches', matchDetails?.id), {
         timestamp: serverTimestamp()
       })
+      await updateDoc(doc(db, 'users', id), { coins: increment(-1) })
+      await updateDoc(doc(db, 'admin', admin), { messages: increment(1) })
     }
   }
 
@@ -226,6 +232,8 @@ const Message = () => {
       xhr.send(null)
     })
 
+    if (profile?.coins < 100) return
+
     const sourceRef = ref(storage, `messages/${id}/audio/${uuid()}`)
 
     setRecordingLoading(true)
@@ -233,8 +241,8 @@ const Message = () => {
     uploadBytes(sourceRef, blob)
       .then(snapshot => {
         getDownloadURL(snapshot?.ref)
-          .then(downloadURL => {
-            addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
+          .then(async downloadURL => {
+            await addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {
               userId: id,
               username: profile?.username,
               photoURL: matchDetails?.users[id]?.photoURL,
@@ -243,7 +251,10 @@ const Message = () => {
               duration: getDurationFormated(status?.durationMillis),
               seen: false,
               timestamp: serverTimestamp(),
-            }).finally(() => setRecordingLoading(false))
+            })
+            setRecordingLoading(false)
+            await updateDoc(doc(db, 'users', id), { coins: increment(-100) })
+            await updateDoc(doc(db, 'admin', admin), { messages: increment(1) })
           })
       })
   }

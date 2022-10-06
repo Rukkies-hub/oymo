@@ -27,8 +27,11 @@ import * as WebBrowser from 'expo-web-browser'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../features/userSlice'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 
 WebBrowser.maybeCompleteAuthSession()
+
+import * as NavigationBar from 'expo-navigation-bar'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -39,6 +42,19 @@ const Login = () => {
   const [authType, setAuthType] = useState('login')
   const [authLoading, setAuthLoading] = useState(false)
   const [showError, setShowError] = useState(false)
+
+  const navigation = useNavigation()
+
+  const isFocused = useIsFocused()
+
+  if (isFocused) {
+    NavigationBar.setVisibilityAsync('hidden')
+    NavigationBar.setBehaviorAsync('overlay-swipe')
+  }
+
+  navigation.addListener('blur', () => {
+    NavigationBar.setVisibilityAsync('visible')
+  })
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidHide', () => {
@@ -73,7 +89,10 @@ const Login = () => {
           dispatch(setUser(userCredential))
           setAuthLoading(false)
         }).catch(error => {
-          alert('Signin Error. Seems like you don`t have an account')
+          if (error.message.includes('wrong-password'))
+            alert('Wrong password. Check your passwod then try again.')
+          else if (error.message.includes('user-not-found'))
+            alert('Oops. Seems like tou do not have an account with Oymo')
         }).finally(() => setAuthLoading(false))
     }
   }
@@ -86,15 +105,18 @@ const Login = () => {
           dispatch(setUser(userCredential))
           setAuthLoading(false)
         }).catch(error => {
-          alert('Email already in use')
+          if (error.message.includes('email-already-in-use'))
+            alert('Ooops. Seems this email is already in use. Try another')
+          else if (error.message.includes('weak-password'))
+            alert('weak-password\nPassword should be at least 6 characters')
         }).finally(() => setAuthLoading(false))
     }
   }
 
   const recoverPassword = () => {
-    if(email == '') return
+    if (email == '') return
     sendPasswordResetEmail(auth, email)
-    alert("Email sent.\nCheck ur inbox, rest ur password then try logging in again.")
+    alert("Email sent.\n\nCheck ur inbox, reset ur password then try logging in again.\n\nIf you do not wish to change your password. Please Ignore Email.\n\n PS. check your spam")
   }
 
 
@@ -192,12 +214,15 @@ const Login = () => {
 
               <View style={login.buttomView}>
                 <TouchableOpacity onPress={() => setAuthType(authType == 'login' ? 'signup' : 'login')}>
-                  <Text style={{ color: color.white, fontSize: 12, fontFamily: 'text' }}>{authType == 'login' ? "Don't have an account?" : "Already have an account?" }</Text>
+                  <Text style={{ color: color.white, fontSize: 12, fontFamily: 'text' }}>{authType == 'login' ? "Don't have an account?" : "Already have an account?"}</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => setAuthType(authType == 'forgotPassword' ? 'signin' : 'forgotPassword')}>
-                  <Text style={{ color: color.white, fontSize: 12, fontFamily: 'text' }}>Forgot your password?</Text>
-                </TouchableOpacity>
+                {
+                  authType == 'login' &&
+                  <TouchableOpacity onPress={() => setAuthType(authType == 'forgotPassword' ? 'signin' : 'forgotPassword')}>
+                    <Text style={{ color: color.white, fontSize: 12, fontFamily: 'text' }}>Forgot your password?</Text>
+                  </TouchableOpacity>
+                }
               </View>
             </View>
           </>

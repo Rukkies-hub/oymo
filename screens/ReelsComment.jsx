@@ -33,7 +33,7 @@ import { ci, rc } from '../style/reelsComment'
 import OymoFont from '../components/OymoFont'
 import ReelsComments from '../components/reelsComponents/ReelsComments'
 
-import { notificationUri } from '@env'
+import { notificationUri, admin } from '@env'
 
 import { Audio } from 'expo-av'
 
@@ -73,6 +73,8 @@ const ReelsComment = () => {
   const sendComment = async () => {
     if (comment == '') return
 
+    if (profile?.coins < 10) return
+
     await addDoc(collection(db, 'reels', item?.id, 'comments'), {
       comment,
       reel: item,
@@ -83,12 +85,12 @@ const ReelsComment = () => {
     })
     setComment('')
     setHeight(40)
-
     playSound()
 
-    await updateDoc(doc(db, 'reels', item?.id), {
-      commentsCount: increment(1)
-    })
+    await updateDoc(doc(db, 'reels', item?.id), { commentsCount: increment(1) })
+    await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
+    await updateDoc(doc(db, 'admin', admin), { comments: increment(1) })
+    
 
     if (item?.user?.id != id) {
       await addDoc(collection(db, 'users', item?.user?.id, 'notifications'), {
@@ -102,6 +104,8 @@ const ReelsComment = () => {
         user: { id: id },
         timestamp: serverTimestamp()
       })
+
+      await updateDoc(doc(db, 'users', item?.user?.id), { notificationCount: increment(1) })
 
       await axios.post(notificationUri, {
         subID: item?.user?.id,
@@ -117,6 +121,8 @@ const ReelsComment = () => {
     let comment = replyCommentProps
     if (reply == '') return
 
+    if (profile?.coins < 10) return
+
     await addDoc(collection(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'replies'), {
       reply,
       reel: comment?.reel,
@@ -130,8 +136,10 @@ const ReelsComment = () => {
 
     setReply('')
     setHeight(40)
-
     playSound()
+
+    await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
+    await updateDoc(doc(db, 'admin', admin), { comments: increment(1) })
 
     if (comment?.reel?.user?.id != id) {
       await addDoc(collection(db, 'users', comment?.reel?.user?.id, 'notifications'), {
@@ -145,6 +153,8 @@ const ReelsComment = () => {
         user: { id: id },
         timestamp: serverTimestamp()
       })
+
+      await updateDoc(doc(db, 'users', comment?.reel?.user?.id), { notificationCount: increment(1) })
 
       await axios.post(notificationUri, {
         subID: item?.user?.id,
@@ -163,6 +173,8 @@ const ReelsComment = () => {
       commentsCount: increment(1)
     })
 
+    await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
+
     if (comment?.user?.id != id)
       await addDoc(collection(db, 'users', comment?.user?.id, 'notifications'), {
         action: 'reel',
@@ -174,7 +186,8 @@ const ReelsComment = () => {
         reel: comment?.reel,
         user: { id: id },
         timestamp: serverTimestamp()
-      }).then(() => {
+      }).then(async () => {
+        await updateDoc(doc(db, 'users', comment?.user?.id), { notificationCount: increment(-10) })
         axios.post(notificationUri, {
           subID: item?.user?.id,
           appId: 3167,
@@ -192,6 +205,8 @@ const ReelsComment = () => {
 
     if (reply == '') return
 
+    if (profile?.coins < 10) return
+
     await addDoc(collection(db, 'reels', comment?.reel?.id, 'comments', comment?.comment, 'replies', comment?.id, 'reply'), {
       reply,
       reel: comment?.reel,
@@ -205,8 +220,8 @@ const ReelsComment = () => {
 
     setReply('')
     setHeight(40)
-
     playSound()
+
 
     dispatch(setReelsCommentType('comment'))
 
@@ -214,9 +229,9 @@ const ReelsComment = () => {
       repliesCount: increment(1)
     })
 
-    await updateDoc(doc(db, 'reels', item?.id), {
-      commentsCount: increment(1)
-    })
+    await updateDoc(doc(db, 'reels', item?.id), { commentsCount: increment(1) })
+    await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
+    await updateDoc(doc(db, 'admin', admin), { comments: increment(1) })
   }
 
   const [loaded] = useFonts({

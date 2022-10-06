@@ -16,7 +16,9 @@ import {
   serverTimestamp,
   setDoc,
   where,
-  deleteDoc
+  deleteDoc,
+  updateDoc,
+  increment
 } from 'firebase/firestore'
 
 import { db } from '../hooks/firebase'
@@ -32,6 +34,8 @@ import { useFonts } from 'expo-font'
 import { useDispatch, useSelector } from 'react-redux'
 import { setPendingSwipes, setProfiles } from '../features/matchSlice'
 import { match } from '../style/match'
+
+import { admin } from '@env'
 
 const Match = () => {
   const navigation = useNavigation()
@@ -96,7 +100,11 @@ const Match = () => {
 
     const userSwiped = profiles[cardIndex]
 
+    if (profile?.coins < 10) return
+
     setDoc(doc(db, 'users', id, 'passes', userSwiped?.id), userSwiped)
+    await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
+    await updateDoc(doc(db, 'admin', admin), { passes: increment(1) })
 
     getAllProfiles()
     getPendingSwipes()
@@ -108,20 +116,29 @@ const Match = () => {
 
     const userSwiped = profiles[cardIndex]
 
+    if (profile?.coins < 20) return
+
     getDoc(doc(db, 'users', userSwiped?.id, 'swipes', id))
-      .then(documentSnapshot => {
+      .then(async documentSnapshot => {
         if (documentSnapshot?.exists()) {
-          setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
+          await setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
+          await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
 
           // CREAT A MATCH
-          setDoc(doc(db, 'matches', generateId(id, userSwiped?.id)), {
+          await setDoc(doc(db, 'matches', generateId(id, userSwiped?.id)), {
             users: {
               [id]: profile,
               [userSwiped?.id]: userSwiped
             },
             usersMatched: [id, userSwiped?.id],
             timestamp: serverTimestamp()
-          }).then(async () => await deleteDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id)))
+          }).then(async () => {
+            await deleteDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id))
+            await updateDoc(doc(db, 'users', id), { pendingSwipes: increment(-1) })
+            await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+            await updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
+            await updateDoc(doc(db, 'admin', admin), { matches: increment(1) })
+          })
 
           navigation.navigate('NewMatch', {
             loggedInProfile: profile,
@@ -130,14 +147,18 @@ const Match = () => {
           getAllProfiles()
           getPendingSwipes()
         } else {
-          setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
-          setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', id), profile)
+          await setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
+          await setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', id), profile)
+          await updateDoc(doc(db, 'users', userSwiped?.id), { pendingSwipes: increment(1) })
+          await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+          await updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
           getAllProfiles()
           getPendingSwipes()
         }
       })
 
     setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
+    await updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
   }
 
   const disabled = () => navigation.navigate('SetupModal')

@@ -15,7 +15,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
+import { addDoc, collection, doc, increment, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import uuid from 'uuid-random'
 import Bar from '../../components/Bar'
@@ -27,6 +27,7 @@ import color from '../../style/color'
 import { useSelector } from 'react-redux'
 import { sr } from '../../style/saveReel'
 import OymoFont from '../../components/OymoFont'
+import { admin } from '@env'
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -71,6 +72,8 @@ const SaveReels = () => {
   }, [])
 
   const saveReel = async () => {
+    if (profile?.coin < 100) return
+
     if (mediaType === 'video') {
       setLoading(true)
       const blob = await new Promise((resolve, reject) => {
@@ -102,9 +105,9 @@ const SaveReels = () => {
               uploadBytes(thumbnailRef, thumbnailBlob)
                 .then(thumbnailSnapshot => {
                   getDownloadURL(thumbnailSnapshot.ref)
-                    .then(thumbnailDownloadURL => {
+                    .then(async thumbnailDownloadURL => {
                       navigation.navigate('Reels')
-                      addDoc(collection(db, 'reels'), {
+                      await addDoc(collection(db, 'reels'), {
                         user: { id: id },
                         media: downloadURL,
                         mediaLink: snapshot?.ref?._location?.path,
@@ -114,11 +117,12 @@ const SaveReels = () => {
                         likesCount: 0,
                         commentsCount: 0,
                         timestamp: serverTimestamp()
-                      }).finally(() => {
-                        setLoading(false)
-                        setDescription('')
-                        schedulePushNotification()
                       })
+                      setLoading(false)
+                      setDescription('')
+                      schedulePushNotification()
+                      await updateDoc(doc(db, 'users', id), { coins: increment(-100) })
+                      await updateDoc(doc(db, 'admin', admin), { reels: increment(1) })
                     })
                 })
             })

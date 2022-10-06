@@ -6,11 +6,7 @@ const { width, height } = Dimensions.get('window')
 export const reels = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.white
-  },
-
-  listContainer: {
-    flex: 1,
+    backgroundColor: color.white,
     overflow: 'hidden'
   },
 
@@ -29,7 +25,7 @@ export const reels = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width,
-    height: height / 3,
+    minHeight: 100,
     zIndex: 1
   },
 
@@ -41,8 +37,14 @@ export const reels = StyleSheet.create({
     marginLeft: 10
   },
 
-  captionUsername: {
+  displayName: {
     color: color.white,
+    fontSize: 16,
+    marginRight: 10
+  },
+
+  captionUsername: {
+    color: color.offWhite,
     fontSize: 16
   },
 
@@ -55,8 +57,10 @@ export const reels = StyleSheet.create({
     marginVertical: 30,
     position: 'absolute',
     right: 0,
-    bottom: 0,
-    margin: 20
+    bottom: height / 5,
+    margin: 20,
+    backgroundColor: color.faintBlack,
+    borderRadius: 50
   },
 
   userAvatarContainer: {
@@ -80,7 +84,6 @@ export const reels = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
-    marginBottom: 70
   },
 
   commentsButton: {

@@ -12,6 +12,8 @@ import { ar } from '../../style/addReels'
 import color from '../../style/color'
 import OymoFont from '../../components/OymoFont'
 
+import * as NavigationBar from 'expo-navigation-bar'
+
 const AddReels = () => {
   const navigation = useNavigation()
   const [hasCameraPermission, setHasCameraPermission] = useState(false)
@@ -24,6 +26,15 @@ const AddReels = () => {
   const [isCameraReady, setIsCameraReady] = useState(false)
 
   const isFocused = useIsFocused()
+
+  if (isFocused) {
+    NavigationBar.setVisibilityAsync('hidden')
+    NavigationBar.setBehaviorAsync('overlay-swipe')
+  }
+
+  navigation.addListener('blur', () => {
+    NavigationBar.setVisibilityAsync('visible')
+  })
 
   useEffect(() => {
     (async () => {
@@ -95,7 +106,9 @@ const AddReels = () => {
   }
 
   if (!hasCameraPermission || !hasAudioPermission || !hasGalleryPermission) {
-    return <View />
+    return <View style={[ar.containr, { justifyContent: 'center', alignItems: 'center' }]}>
+      <OymoFont message='No camera permision' />
+    </View>
   }
 
   return (

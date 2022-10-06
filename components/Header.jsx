@@ -46,8 +46,6 @@ const Header = ({
   const { user, profile } = useSelector(state => state.user)
   const dispatch = useDispatch()
 
-  const [notificationCount, setNotificationCount] = useState([])
-
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
 
   useEffect(() => {
@@ -63,23 +61,6 @@ const Header = ({
                   id: doc?.id
                 }))
               )
-            )
-          })
-      }
-    })()
-  }, [])
-
-  useEffect(() => {
-    (async () => {
-      if (profile) {
-        onSnapshot(query(collection(db, 'users', id, 'notifications'), where('seen', '==', false)),
-          snapshot => {
-            setNotificationCount(
-              snapshot?.docs?.map(doc => ({
-                id: doc?.id,
-                notification: doc?.id,
-                ...doc?.data()
-              }))
             )
           })
       }
@@ -136,9 +117,9 @@ const Header = ({
                   <SimpleLineIcons name='bell' size={20} color={color.dark} />
 
                   {
-                    notificationCount?.length > 0 &&
+                    profile?.notificationCount > 0 &&
                     <View style={header.notificationCountView}>
-                      <OymoFont message={notificationCount?.length} fontStyle={header.notificationCountText} />
+                      <OymoFont message={profile?.notificationCount} fontStyle={header.notificationCountText} />
                     </View>
                   }
                 </TouchableOpacity>

@@ -1,14 +1,15 @@
 import { Dimensions, StyleSheet } from 'react-native'
 import color from './color'
 
-const { width } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window')
 
 export const img = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: color.white,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    height
   }
 })
 

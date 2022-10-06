@@ -19,6 +19,8 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import { doc, increment, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../../hooks/firebase'
 
+import { admin } from '@env'
+
 const events = [
   'Sleep over',
   'clubbing',
@@ -102,7 +104,7 @@ const Craate = ({ navigation }) => {
   }
 
   const saveEvent = async () => {
-    if (profile?.coins <= 0 && image) return
+    if (profile?.coins < 100 && image) return
     if (!image && title == '' && location == '' && description == '' && type == '' && date == '' && time == '' && duration == '' && !limit && gender == '') return
 
     const blob = await new Promise((resolve, reject) => {
@@ -140,9 +142,7 @@ const Craate = ({ navigation }) => {
               timestamp: serverTimestamp()
             })
 
-            await updateDoc(doc(db, 'users', id), {
-              coins: increment(-100)
-            })
+            await updateDoc(doc(db, 'users', id), { coins: increment(-100) })
 
             setLoading(false)
             setImage(null)
@@ -156,6 +156,8 @@ const Craate = ({ navigation }) => {
             setGender('')
             setLimit(null)
             navigation.goBack()
+
+            await updateDoc(doc(db, 'admin', admin), { events: increment(1) })
           })
       })
   }

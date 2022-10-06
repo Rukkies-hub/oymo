@@ -12,6 +12,8 @@ import { useSelector } from 'react-redux'
 import { reels } from '../../style/reels'
 import OymoFont from '../OymoFont'
 
+import { admin } from '@env'
+
 const LikeReels = ({ reel, navigation }) => {
   const { user, profile } = useSelector(state => state.user)
 
@@ -33,15 +35,15 @@ const LikeReels = ({ reel, navigation }) => {
     , [])
 
   const updateLike = () => new Promise(async (resolve, reject) => {
+    if (profile?.coins < 20) return
+
     if (currentLikesState.state) {
       setDisable(true)
       await deleteDoc(doc(db, 'reels', reel?.id, 'likes', id))
-      await updateDoc(doc(db, 'reels', reel?.id), {
-        likesCount: increment(-1)
-      })
-      await updateDoc(doc(db, 'users', reel?.user?.id), {
-        likesCount: increment(-1)
-      })
+      await updateDoc(doc(db, 'reels', reel?.id), { likesCount: increment(-1) })
+      await updateDoc(doc(db, 'users', reel?.user?.id), { likesCount: increment(-1) })
+      await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+      await updateDoc(doc(db, 'admin', admin), { likes: increment(-1) })
       setDisable(false)
     } else {
       setDisable(true)
@@ -57,6 +59,8 @@ const LikeReels = ({ reel, navigation }) => {
       await updateDoc(doc(db, 'users', reel?.user?.id), {
         likesCount: increment(1)
       })
+      await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+      await updateDoc(doc(db, 'admin', admin), { likes: increment(1) })
       setDisable(false)
       if (reel?.user?.id != id)
         await addDoc(collection(db, 'users', reel?.user?.id, 'notifications'), {
@@ -69,7 +73,7 @@ const LikeReels = ({ reel, navigation }) => {
           reel,
           user: { id: id },
           timestamp: serverTimestamp()
-        }).then(() => {
+        }).then(async () => {
           axios.post(`https://app.nativenotify.com/api/indie/notification`, {
             subID: reel?.user?.id,
             appId: 3167,
@@ -77,6 +81,7 @@ const LikeReels = ({ reel, navigation }) => {
             title: 'Oymo',
             message: `@${profile?.username} likes to your comment (${reel?.description?.slice(0, 100)})`
           })
+          await updateDoc(doc(db, 'users', reel?.user?.id), { notificationCount: increment(1) })
         })
     }
   })

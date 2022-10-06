@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react'
-import { View, Text, Pressable, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { View, Text, Pressable, Image, FlatList, ActivityIndicator } from 'react-native'
 
 import color from '../../style/color'
 
@@ -9,20 +9,16 @@ import { db } from '../../hooks/firebase'
 import OymoFont from '../../components/OymoFont'
 
 import { pReels } from '../../style/profileReels'
-import { useSelector } from 'react-redux'
 
-const Reels = () => {
+const Reels = ({ profile, user }) => {
   const navigation = useNavigation()
-  const { user, profile } = useSelector(state => state.user)
 
   const [reels, setReels] = useState([])
   const [reelsLimit, setLimit] = useState(50)
 
-  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
-
   useLayoutEffect(() => {
     return onSnapshot(query(collection(db, 'reels'),
-      where('user.id', '==', id), limit(reelsLimit)),
+      where('user.id', '==', user?.id), limit(reelsLimit)),
       snapshot => setReels(
         snapshot?.docs?.map(doc => ({
           id: doc?.id,
@@ -33,7 +29,7 @@ const Reels = () => {
   }, [reelsLimit, db])
 
   const getReels = async () => {
-    const queryReels = await getDocs(query(collection(db, 'reels'), where('user.id', '==', id), limit(reelsLimit)))
+    const queryReels = await getDocs(query(collection(db, 'reels'), where('user.id', '==', user?.id), limit(reelsLimit)))
 
     setReels(
       queryReels?.docs?.map(doc => ({
@@ -51,7 +47,7 @@ const Reels = () => {
             <ActivityIndicator size='large' color={color.black} />
           </View> :
           <FlatList
-            data={reels.slice(0, 50)}
+            data={reels}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
             style={pReels.container}
@@ -91,7 +87,6 @@ const Reels = () => {
               </Pressable>
             )}
           />
-
       }
     </>
   )

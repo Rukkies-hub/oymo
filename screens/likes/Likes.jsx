@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native'
-import { collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, serverTimestamp, setDoc, where } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDoc, getDocs, increment, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import generateId from '../../lib/generateId'
 import { useNavigation } from '@react-navigation/native'
@@ -77,10 +77,13 @@ const Likes = () => {
 
     const userSwiped = profiles[cardIndex]
 
+    if (profile?.coins < 20) return
+
     await getDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id))
-      .then(documentSnapshot => {
+      .then(async documentSnapshot => {
         if (documentSnapshot.exists()) {
           setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
+          await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
 
           // CREAT A MATCH
           setDoc(doc(db, 'matches', generateId(id, userSwiped?.id)), {
@@ -90,7 +93,11 @@ const Likes = () => {
             },
             usersMatched: [id, userSwiped?.id],
             timestamp: serverTimestamp()
-          }).then(async () => await deleteDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id)))
+          }).then(async () => {
+            await deleteDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id))
+            await updateDoc(doc(db, 'users', id), { pendingSwipes: increment(-1) })
+            await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+          })
 
           navigation.navigate('NewMatch', {
             loggedInProfile: profile,
@@ -135,12 +142,11 @@ const Likes = () => {
                   }
 
                   <View style={likes.controlesView}>
-                    <TouchableOpacity onPress={() => swipeLeft(like)} style={likes.nopeButton}>
-                      <OymoFont message='Nope' fontStyle={{ color: color.red }} />
-                    </TouchableOpacity>
-
                     <TouchableOpacity onPress={() => swipeRight(like)} style={likes.matchButon}>
                       <OymoFont message='Match' fontStyle={{ color: color.white }} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => swipeLeft(like)} style={likes.nopeButton}>
+                      <OymoFont message='Nope' fontStyle={{ color: color.red }} />
                     </TouchableOpacity>
                   </View>
                 </View>

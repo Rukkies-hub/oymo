@@ -38,6 +38,7 @@ import ViewAtendees from '../screens/event/screens/ViewAtendees'
 import Room from '../screens/room/Room'
 import Map from '../screens/Map'
 import DOB from '../screens/editProfile/screens/DOB'
+import ReelsOption from '../screens/modals/ReelsOption'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -70,7 +71,6 @@ const StackNavigation = () => {
                     <Screen name='UserProfile' component={UserProfile} />
                     <Screen name='ViewReel' component={ViewReel} />
                     <Screen name='Message' component={Message} />
-                    <Screen name='ViewAvatar' component={ViewAvatar} />
                     <Screen name='ViewVideo' component={ViewVideo} />
                     <Screen name='MessageCamera' component={MessageCamera} />
                     <Screen name='PreviewMessageImage' component={PreviewMessageImage} />
@@ -143,6 +143,26 @@ const StackNavigation = () => {
                     <Screen
                       name='DOB'
                       component={DOB}
+                      options={{
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
+                    <Screen
+                      name='ReelsOption'
+                      component={ReelsOption}
+                      options={{
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
+                    <Screen
+                      name='ViewAvatar'
+                      component={ViewAvatar}
                       options={{
                         ...TransitionPresets.FadeFromBottomAndroid,
                         cardStyle: {
