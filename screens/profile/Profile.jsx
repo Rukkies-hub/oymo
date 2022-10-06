@@ -11,7 +11,6 @@ import ProfileDetails from './ProfileDetailes'
 import Reels from './Reels'
 import Events from './Events'
 import Header from '../../components/Header'
-import Bar from '../../components/Bar'
 import OymoFont from '../../components/OymoFont'
 import { useState } from 'react'
 

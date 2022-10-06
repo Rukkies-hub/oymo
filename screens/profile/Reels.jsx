@@ -87,47 +87,6 @@ const Reels = () => {
               })
             }
           </>
-        // <FlatList
-        //   data={reels}
-        //   keyExtractor={item => item.id}
-        //   showsVerticalScrollIndicator={false}
-        //   style={pReels.container}
-        //   onEndReached={() => {
-        //     setLimit(reelsLimit + 4)
-        //     getReels()
-        //   }}
-        //   ListFooterComponent={() => <View style={pReels.listFooterComponent} />}
-        //   renderItem={({ item: reel }) => (
-        //     <Pressable
-        //       onPress={() => navigation.navigate('ViewReel', { reel })}
-        //       onLongPress={() => navigation.navigate('ReelsOption', { reel })}
-        //       delayLongPress={500}
-        //       style={pReels.reelsList}
-        //     >
-        //       <Image source={{ uri: reel?.thumbnail }} style={pReels.reelsThumb} />
-
-        //       <View style={{ flex: 1 }}>
-        //         <OymoFont message={reel?.description} lines={1} fontStyle={pReels.desctiption} />
-        //         <OymoFont message={`Video - ${profile?.username}`} lines={1} fontStyle={pReels.username} />
-
-        //         <View style={pReels.statsContainer}>
-        //           <View style={pReels.statsContainerRow}>
-        //             <OymoFont message={reel?.likesCount} lines={1} fontStyle={pReels.reelsCount} />
-        //             <Text style={pReels.reelsCountText}>
-        //               {reel?.likesCount == 1 ? 'Like' : 'Likes'}
-        //             </Text>
-        //           </View>
-        //           <View style={pReels.statsContainerRow}>
-        //             <OymoFont message={reel?.commentsCount} lines={1} fontStyle={pReels.reelsCount} />
-        //             <Text style={pReels.reelsCountText}>
-        //               {reel?.commentsCount == 1 ? 'Comment' : 'Comments'}
-        //             </Text>
-        //           </View>
-        //         </View>
-        //       </View>
-        //     </Pressable>
-        //   )}
-        // />
 
       }
     </View>
