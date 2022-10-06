@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { ScrollView, TouchableOpacity, View } from 'react-native'
 import color from '../../style/color'
 import { profile } from '../../style/profile'
 
@@ -9,15 +9,18 @@ import * as NavigationBar from 'expo-navigation-bar'
 import { useSelector } from 'react-redux'
 import ProfileDetails from './ProfileDetailes'
 import Reels from './Reels'
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import Events from './Events'
-
-const { Navigator, Screen } = createMaterialTopTabNavigator()
+import Header from '../../components/Header'
+import Bar from '../../components/Bar'
+import OymoFont from '../../components/OymoFont'
+import { useState } from 'react'
 
 const Profile = () => {
   const { user, profile: _profile } = useSelector(state => state.user)
   const focus = useIsFocused()
   const navigation = useNavigation()
+
+  const [view, setView] = useState('reels')
 
   if (focus) {
     NavigationBar.setVisibilityAsync('hidden')
@@ -30,34 +33,36 @@ const Profile = () => {
 
   return (
     <View style={profile.container}>
-      <>
-        {
-          _profile && user &&
-          <>
-            <ProfileDetails profile={_profile} user={user} />
-            <Navigator
-              tabBarPosition='bottom'
-              screenOptions={{
-                tabBarStyle: {
-                  backgroundColor: color.white,
-                  height: 50,
-                  elevation: 0
-                },
-                tabBarLabelStyle: {
-                  textTransform: 'capitalize',
-                  fontFamily: 'text'
-                },
-                tabBarIndicatorStyle: {
-                  backgroundColor: color.red
-                }
-              }}
-            >
-              <Screen name="UserReels" component={Reels} options={{ title: 'Reels' }} />
-              <Screen name="UserEvents" component={Events} options={{ title: 'Events' }} />
-            </Navigator>
-          </>
-        }
-      </>
+      <Header
+        showBack
+        showTitle
+        showNotification
+        title={_profile?.username}
+        showAratar={_profile?.photoURL ? true : false}
+      />
+      <ScrollView style={profile.container} showsVerticalScrollIndicator={false}>
+        <>
+          {
+            _profile && user &&
+            <>
+              <ProfileDetails profile={_profile} user={user} />
+              <View style={profile.navigationView}>
+                <TouchableOpacity onPress={() => setView('reels')} style={profile.navigationViewButtons}>
+                  <OymoFont message='Reels' fontStyle={{ color: view == 'reels' ? color.black : color.lightText }} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setView('events')} style={profile.navigationViewButtons}>
+                  <OymoFont message='Events' fontStyle={{ color: view == 'events' ? color.black : color.lightText }} />
+                </TouchableOpacity>
+              </View>
+              {
+                view == 'reels' ?
+                  <Reels /> :
+                  <Events />
+              }
+            </>
+          }
+        </>
+      </ScrollView>
     </View>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react'
-import { View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import color from '../../style/color'
 import { profile } from '../../style/profile'
 
@@ -13,6 +13,8 @@ import ProfileDetails from './ProfileDetails'
 import Reels from './Reels'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
+import Bar from '../../components/Bar'
+import Header from '../../components/Header'
 
 const UserProfile = () => {
   const { user } = useRoute().params
@@ -47,13 +49,24 @@ const UserProfile = () => {
 
   return (
     <View style={profile.container}>
-      {
-        _profile && user &&
+      <Header
+        showBack
+        showTitle
+        showNotification
+        title={_profile?.username}
+        showAratar={_profile?.photoURL ? true : false}
+      />
+      <ScrollView style={profile.container} showsVerticalScrollIndicator={false}>
         <>
-          <ProfileDetails profile={_profile} user={user} />
-          <Reels profile={_profile} user={user} />
+          {
+            _profile && user &&
+            <>
+              <ProfileDetails profile={_profile} user={user} />
+              <Reels profile={_profile} user={user} />
+            </>
+          }
         </>
-      }
+      </ScrollView>
     </View>
   )
 }

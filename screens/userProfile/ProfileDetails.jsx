@@ -148,138 +148,125 @@ const ProfileDetails = ({ profile, user }) => {
   }
 
   return (
-    <ImageBackground source={!profile?.photoURL ? require('../../assets/background2.jpg') : { uri: profile?.photoURL }} blurRadius={50}>
-      <LinearGradient colors={[color.transparent, color.white]}>
-        <Bar color={'dark'} />
+    <View>
+      <View style={_profile.profileDetailes}>
+        {
+          profile?.photoURL ?
+            <TouchableOpacity onPress={() => navigation.navigate('ViewAvatar', { avatar: profile?.photoURL })}>
+              <Image source={{ uri: profile?.photoURL }} style={_profile.avatar} />
+            </TouchableOpacity> :
+            <BlurView intensity={50} tint='light' style={_profile.blurView}>
+              <SimpleLineIcons name='user' size={30} color={color.lightText} />
+            </BlurView>
+        }
 
-        <Header
-          showBack
-          showTitle
-          showNotification
-          title={profile?.username}
-          backgroundColor={color.transparent}
-          showAratar={profile?.photoURL ? true : false}
-        />
-
-        <View style={_profile.profileDetailes}>
+        <View style={_profile.userInfoContainer}>
           {
-            profile?.photoURL ?
-              <TouchableOpacity onPress={() => navigation.navigate('ViewAvatar', { avatar: profile?.photoURL })}>
-                <Image source={{ uri: profile?.photoURL }} style={_profile.avatar} />
-              </TouchableOpacity> :
-              <BlurView intensity={50} tint='light' style={_profile.blurView}>
-                <SimpleLineIcons name='user' size={30} color={color.lightText} />
-              </BlurView>
+            profile?.username != '' &&
+            <View style={_profile.userInfo}>
+              <OymoFont message={profile?.username} fontStyle={_profile.username} fontFamily='montserrat_bold' />
+            </View>
           }
 
-          <View style={_profile.userInfoContainer}>
-            {
-              profile?.username != '' &&
-              <View style={_profile.userInfo}>
-                <OymoFont message={profile?.username} fontStyle={_profile.username} fontFamily='montserrat_bold' />
-              </View>
-            }
-
-            {
-              profile?.displayName != '' &&
-              <OymoFont message={profile?.displayName} fontStyle={_profile.displayName} fontFamily='montserrat_medium' />
-            }
-          </View>
           {
-            showMatch &&
-            <TouchableOpacity onPress={swipeRight} style={_profile.matchButton}>
-              <AntDesign name='hearto' size={20} color={color.white} />
-            </TouchableOpacity>
+            profile?.displayName != '' &&
+            <OymoFont message={profile?.displayName} fontStyle={_profile.displayName} fontFamily='montserrat_medium' />
           }
         </View>
-
         {
-          profile?.about != '' &&
-          <View style={_profile.aboutContainer}>
-            <Text
-              numberOfLines={aboutLimit}
-              style={{
-                fontFamily: 'text',
-                fontSize: 16,
-                color: color.dark
-              }}
-            >
-              {profile?.about}
-            </Text>
-            {
-              profile?.about?.length >= 100 &&
-              <>
-                {
-                  aboutLimit == 2 &&
-                  <TouchableOpacity onPress={() => setAboutLimit(100)}>
-                    <OymoFont message='Read more' fontStyle={_profile.about} fontFamily='montserrat_medium' />
-                  </TouchableOpacity>
-                }
-                {
-                  aboutLimit > 2 &&
-                  <TouchableOpacity onPress={() => setAboutLimit(2)}>
-                    <OymoFont message='Show less' fontStyle={_profile.about} fontFamily='montserrat_medium' />
-                  </TouchableOpacity>
-                }
-              </>
-            }
-          </View>
+          showMatch &&
+          <TouchableOpacity onPress={swipeRight} style={_profile.matchButton}>
+            <AntDesign name='hearto' size={20} color={color.white} />
+          </TouchableOpacity>
         }
+      </View>
 
-        {
-          profile?.passions && profile?.passions?.length > 1 &&
-          <View style={_profile.passionsContainer}>
-            {
-              profile?.passions?.map((passion, index) =>
-                <View key={index} style={_profile.passions}>
-                  <OymoFont message={passion} fontStyle={_profile.passion} />
-                </View>
-              )
-            }
-          </View>
-        }
+      {
+        profile?.about != '' &&
+        <View style={_profile.aboutContainer}>
+          <Text
+            numberOfLines={aboutLimit}
+            style={{
+              fontFamily: 'text',
+              fontSize: 16,
+              color: color.dark
+            }}
+          >
+            {profile?.about}
+          </Text>
+          {
+            profile?.about?.length >= 100 &&
+            <>
+              {
+                aboutLimit == 2 &&
+                <TouchableOpacity onPress={() => setAboutLimit(100)}>
+                  <OymoFont message='Read more' fontStyle={_profile.about} fontFamily='montserrat_medium' />
+                </TouchableOpacity>
+              }
+              {
+                aboutLimit > 2 &&
+                <TouchableOpacity onPress={() => setAboutLimit(2)}>
+                  <OymoFont message='Show less' fontStyle={_profile.about} fontFamily='montserrat_medium' />
+                </TouchableOpacity>
+              }
+            </>
+          }
+        </View>
+      }
 
-        {
-          _profile?.address != undefined &&
-          <View style={_profile.infoListContainer}>
-            <Feather name='home' size={14} color={color.dark} />
+      {
+        profile?.passions && profile?.passions?.length > 1 &&
+        <View style={_profile.passionsContainer}>
+          {
+            profile?.passions?.map((passion, index) =>
+              <View key={index} style={_profile.passions}>
+                <OymoFont message={passion} fontStyle={_profile.passion} />
+              </View>
+            )
+          }
+        </View>
+      }
 
-            <View style={_profile.infoList}>
-              <OymoFont message='Lives in' fontStyle={_profile.title} />
-              <OymoFont message={`${_profile?.address?.city}, ${_profile?.address?.country}`} fontStyle={_profile.info} fontFamily='montserrat_bold' />
-            </View>
-          </View>
-        }
-
+      {
+        _profile?.address != undefined &&
         <View style={_profile.infoListContainer}>
-          <Fontisto name='date' size={14} color={color.dark} />
+          <Feather name='home' size={14} color={color.dark} />
 
           <View style={_profile.infoList}>
-            <OymoFont message='Joined' fontStyle={_profile.title} />
-            <OymoFont message={profile?.timestamp?.toDate().toDateString()} fontStyle={_profile.info} fontFamily='montserrat_bold' />
+            <OymoFont message='Lives in' fontStyle={_profile.title} />
+            <OymoFont message={`${_profile?.address?.city}, ${_profile?.address?.country}`} fontStyle={_profile.info} fontFamily='montserrat_bold' />
           </View>
         </View>
+      }
 
-        {
-          profile?.job != undefined &&
-          <View style={_profile.infoListContainer}>
-            <Feather name='briefcase' size={14} color={color.dark} />
+      <View style={_profile.infoListContainer}>
+        <Fontisto name='date' size={14} color={color.dark} />
 
-            <Text style={[_profile.info, { fontFamily: 'text' }]}>
-              {profile?.job} {profile?.company != '' && 'at'} {profile?.company}
-            </Text>
-          </View>
-        }
+        <View style={_profile.infoList}>
+          <OymoFont message='Joined' fontStyle={_profile.title} />
+          <OymoFont message={profile?.timestamp?.toDate().toDateString()} fontStyle={_profile.info} fontFamily='montserrat_bold' />
+        </View>
+      </View>
 
-        {
-          (profile?.coords != undefined && __profile?.coords) &&
-          <View style={[_profile.infoListContainer, { marginBottom: 20 }]}>
-            <MaterialCommunityIcons name="map-marker-radius-outline" size={17} color={color.dark} />
-            <OymoFont message={`${distance(profile?.coords?.latitude, profile?.coords?.longitude, __profile?.coords?.latitude, __profile?.coords?.longitude).toFixed(2)} kilometers away`} fontStyle={_profile.info} />
-          </View>
-        }
-      </LinearGradient>
-    </ImageBackground>
+      {
+        profile?.job != undefined &&
+        <View style={_profile.infoListContainer}>
+          <Feather name='briefcase' size={14} color={color.dark} />
+
+          <Text style={[_profile.info, { fontFamily: 'text' }]}>
+            {profile?.job} {profile?.company != '' && 'at'} {profile?.company}
+          </Text>
+        </View>
+      }
+
+      {
+        (profile?.coords != undefined && __profile?.coords) &&
+        <View style={[_profile.infoListContainer, { marginBottom: 20 }]}>
+          <MaterialCommunityIcons name="map-marker-radius-outline" size={17} color={color.dark} />
+          <OymoFont message={`${distance(profile?.coords?.latitude, profile?.coords?.longitude, __profile?.coords?.latitude, __profile?.coords?.longitude).toFixed(2)} kilometers away`} fontStyle={_profile.info} />
+        </View>
+      }
+    </View>
   )
 }
 
