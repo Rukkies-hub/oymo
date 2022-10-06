@@ -16,13 +16,15 @@ const ChatRow = ({ matchDetails }) => {
   const { user, profile } = useSelector(state => state.user)
   const navigation = useNavigation()
 
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
   const [matchedUserInfo, setMatchedUserInfo] = useState(null)
   const [lastMessage, setLastMessage] = useState('')
   const [unreadMessage, setUnreadMessage] = useState([])
 
   useLayoutEffect(() => {
     (() => {
-      setMatchedUserInfo(getMatchedUserInfo(matchDetails?.users, ))
+      setMatchedUserInfo(getMatchedUserInfo(matchDetails?.users, id))
     })()
   }, [matchDetails])
 
@@ -50,7 +52,7 @@ const ChatRow = ({ matchDetails }) => {
   useLayoutEffect(() => {
     (async () => {
       onSnapshot(query(collection(db, 'matches', matchDetails?.id, 'messages'),
-        where('userId', '!=', ),
+        where('userId', '!=', id),
         where('seen', '==', false)
       ),
         snapshot => {
