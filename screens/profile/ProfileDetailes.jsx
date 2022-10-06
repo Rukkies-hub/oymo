@@ -1,14 +1,9 @@
 import React, { useState } from 'react'
-import { View, Text, ImageBackground, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 
-import { LinearGradient } from 'expo-linear-gradient'
 import { FontAwesome, Feather, Fontisto, SimpleLineIcons } from '@expo/vector-icons'
 import color from '../../style/color'
 import { useNavigation } from '@react-navigation/native'
-
-import Bar from '../../components/Bar'
-import Header from '../../components/Header'
-import { BlurView } from 'expo-blur'
 import OymoFont from '../../components/OymoFont'
 
 import { profile as _profile } from '../../style/profile'

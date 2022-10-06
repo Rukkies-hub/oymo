@@ -33,14 +33,11 @@ const Profile = () => {
 
   return (
     <View style={profile.container}>
-      <Bar color={'dark'} />
-
       <Header
         showBack
         showTitle
         showNotification
         title={_profile?.username}
-        backgroundColor={color.transparent}
         showAratar={_profile?.photoURL ? true : false}
       />
       <ScrollView style={profile.container} showsVerticalScrollIndicator={false}>
