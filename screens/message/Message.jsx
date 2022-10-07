@@ -259,8 +259,8 @@ const Message = () => {
                   </View>
 
                   <View style={{ flexDirection: 'row' }}>
-                    <OymoFont message='You matched with' fontStyle={msg.emptyMessageViewText1} />
-                    <OymoFont message={` ${getMatchedUserInfo(matchDetails?.users, id)?.username}`} fontFamily='montserrat_bold' fontStyle={msg.emptyMessageViewText1} />
+                    <OymoFont message='You matched with' fontStyle={{ ...msg.emptyMessageViewText1, color: theme ? color.white : color.dark }} />
+                    <OymoFont message={` ${getMatchedUserInfo(matchDetails?.users, id)?.username}`} fontFamily='montserrat_bold' fontStyle={{ ...msg.emptyMessageViewText1, color: theme ? color.white : color.dark }} />
                   </View>
                 </View> :
                 <FlatList

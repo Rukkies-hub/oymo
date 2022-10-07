@@ -59,7 +59,7 @@ const ProfileDetails = ({ profile, user }) => {
             style={{
               fontFamily: 'text',
               fontSize: 14,
-              color: color.dark
+              color: theme ? color.white : color.dark
             }}
           >
             {profile?.about}
@@ -70,13 +70,13 @@ const ProfileDetails = ({ profile, user }) => {
               {
                 aboutLimit == 2 &&
                 <TouchableOpacity onPress={() => setAboutLimit(100)}>
-                  <OymoFont message='Read more' fontStyle={_profile.about} fontFamily='montserrat_medium' />
+                  <OymoFont message='Read more' fontStyle={{ ..._profile.about, color: theme ? color.white : color.dark }} fontFamily='montserrat_medium' />
                 </TouchableOpacity>
               }
               {
                 aboutLimit > 2 &&
                 <TouchableOpacity onPress={() => setAboutLimit(2)}>
-                  <OymoFont message='Show less' fontStyle={_profile.about} fontFamily='montserrat_medium' />
+                  <OymoFont message='Show less' fontStyle={{ ..._profile.about, color: theme ? color.white : color.dark }} fontFamily='montserrat_medium' />
                 </TouchableOpacity>
               }
             </>
@@ -89,8 +89,8 @@ const ProfileDetails = ({ profile, user }) => {
         <View style={_profile.passionsContainer}>
           {
             profile?.passions?.map((passion, index) =>
-              <View key={index} style={_profile.passions}>
-                <OymoFont message={passion} fontStyle={_profile.passion} />
+              <View key={index} style={[_profile.passions, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
+                <OymoFont message={passion} fontStyle={{ ..._profile.passion, color: theme ? color.white : color.dark }} />
               </View>
             )
           }
@@ -100,30 +100,30 @@ const ProfileDetails = ({ profile, user }) => {
       {
         profile?.address &&
         <View style={_profile.infoListContainer}>
-          <Feather name='home' size={14} color={color.dark} />
+          <Feather name='home' size={14} color={theme ? color.white : color.dark} />
 
           <View style={_profile.infoList}>
-            <OymoFont message='Lives in' fontStyle={_profile.title} />
-            <OymoFont message={`${profile?.address?.city}, ${profile?.address?.country}`} fontStyle={_profile.info} fontFamily='montserrat_bold' />
+            <OymoFont message='Lives in' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+            <OymoFont message={`${profile?.address?.city}, ${profile?.address?.country}`} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
           </View>
         </View>
       }
 
       <View style={_profile.infoListContainer}>
-        <Fontisto name='date' size={14} color={color.dark} />
+        <Fontisto name='date' size={14} color={theme ? color.white : color.dark} />
 
         <View style={_profile.infoList}>
-          <OymoFont message='Joined' fontStyle={_profile.title} />
-          <OymoFont message={profile?.timestamp?.toDate().toDateString()} fontStyle={_profile.info} fontFamily='montserrat_bold' />
+          <OymoFont message='Joined' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+          <OymoFont message={profile?.timestamp?.toDate().toDateString()} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
         </View>
       </View>
 
       {
-        profile?.job != '' &&
+        profile?.job != undefined &&
         <View style={[_profile.infoListContainer, { marginBottom: 20 }]}>
-          <Feather name='briefcase' size={14} color={color.dark} />
+          <Feather name='briefcase' size={14} color={theme ? color.white : color.dark} />
 
-          <Text style={[_profile.info, { fontFamily: 'text' }]}>
+          <Text style={[_profile.info, { fontFamily: 'text', color: theme ? color.white : color.dark }]}>
             {profile?.job} {profile?.company != '' && 'at'} {profile?.company}
           </Text>
         </View>

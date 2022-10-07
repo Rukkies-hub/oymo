@@ -40,7 +40,7 @@ import { admin } from '@env'
 const Match = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
   const profiles = useSelector(state => state.match.profiles)
 
   const swipeRef = useRef(null)
@@ -185,7 +185,7 @@ const Match = () => {
 
   return (
     <View
-      style={match.container}
+      style={[match.container, { backgroundColor: theme ? color.dark : color.white }]}
     >
       <View style={{ flex: 1, marginTop: -5 }}>
         {
@@ -293,7 +293,7 @@ const Match = () => {
             /> :
             (
               <View style={match.indicator}>
-                <ActivityIndicator color={color.red} size='large' />
+                <ActivityIndicator color={theme ? color.white : color.black} size='large' />
               </View>
             )
         }

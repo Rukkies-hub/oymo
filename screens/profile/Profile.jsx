@@ -31,7 +31,7 @@ const Profile = () => {
   })
 
   return (
-    <View style={[profile.container, {backgroundColor: theme ? color.dark : color.white}]}>
+    <View style={[profile.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <Header
         showBack
         showTitle
@@ -47,10 +47,10 @@ const Profile = () => {
               <ProfileDetails profile={_profile} user={user} />
               <View style={profile.navigationView}>
                 <TouchableOpacity onPress={() => setView('reels')} style={profile.navigationViewButtons}>
-                  <OymoFont message='Reels' fontStyle={{ color: view == 'reels' ? color.black : color.lightText }} />
+                  <OymoFont message='Reels' fontStyle={{ color: view == 'reels' ? color.red : (theme ? color.white : color.lightText) }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => setView('events')} style={profile.navigationViewButtons}>
-                  <OymoFont message='Events' fontStyle={{ color: view == 'events' ? color.black : color.lightText }} />
+                  <OymoFont message='Events' fontStyle={{ color: view == 'events' ? color.red : (theme ? color.white : color.lightText) }} />
                 </TouchableOpacity>
               </View>
               {
