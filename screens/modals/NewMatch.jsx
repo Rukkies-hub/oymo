@@ -35,7 +35,7 @@ const NewMatch = () => {
         <View
           style={{
             alignItems: 'center',
-            marginTop: 100
+            marginTop: 30
           }}
         >
           <Text

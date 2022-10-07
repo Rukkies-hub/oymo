@@ -19,7 +19,7 @@ const Drawer = () => {
       screenOptions={{
         headerShown: false,
         drawerPosition: 'right',
-        drawerType: 'slide'
+        drawerType: 'back'
       }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >

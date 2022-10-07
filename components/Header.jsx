@@ -43,7 +43,7 @@ const Header = ({
   textColor
 }) => {
   const navigation = useNavigation()
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
   const dispatch = useDispatch()
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
@@ -78,7 +78,7 @@ const Header = ({
               onLongPress={() => navigation.navigate('Match')}
               style={header.backButton}
             >
-              <Entypo name='chevron-left' size={24} color={textColor || color.black} />
+              <Entypo name='chevron-left' size={24} color={textColor || theme ? color.white : color.black} />
             </TouchableOpacity>
           }
 

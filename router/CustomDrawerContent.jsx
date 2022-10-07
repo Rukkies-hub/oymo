@@ -2,7 +2,7 @@ import { View, Text, ImageBackground, Image, TouchableOpacity, TouchableWithoutF
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { dw } from '../style/drawer'
-import { AntDesign, Feather, FontAwesome, SimpleLineIcons } from '@expo/vector-icons'
+import { AntDesign, Feather, FontAwesome, Ionicons, SimpleLineIcons } from '@expo/vector-icons'
 import color from '../style/color'
 import OymoFont from '../components/OymoFont'
 import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'
@@ -80,6 +80,14 @@ const CustomDrawerContent = ({ navigation }) => {
           navigation.navigate('EditProfile')
         }}
         icon={() => <Feather name="edit" size={20} color={color.black} />}
+      />
+      <DrawerItem
+        label={() => <OymoFont message='Settings' />}
+        onPress={() => {
+          navigation.closeDrawer()
+          navigation.navigate('Settings')
+        }}
+        icon={() => <Ionicons name="cog-outline" size={24} color={color.black} />}
       />
       <DrawerItem
         label={() => <OymoFont message='New Post' />}

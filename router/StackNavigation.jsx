@@ -39,6 +39,7 @@ import Room from '../screens/room/Room'
 import Map from '../screens/Map'
 import DOB from '../screens/editProfile/screens/DOB'
 import ReelsOption from '../screens/modals/ReelsOption'
+import Settings from '../screens/settings/Settings'
 
 const StackNavigation = () => {
   const { user, loadingInitial } = useSelector(state => state.user)
@@ -82,6 +83,7 @@ const StackNavigation = () => {
                     <Screen name='Event' component={Event} />
                     <Screen name='Room' component={Room} />
                     <Screen name='Map' component={Map} />
+                    <Screen name='Settings' component={Settings} />
                   </Group>
 
                   <Group screenOptions={{ presentation: 'transparentModal' }}>

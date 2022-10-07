@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 
-import { FontAwesome, Feather, Fontisto, SimpleLineIcons } from '@expo/vector-icons'
+import { FontAwesome, Feather, Fontisto, SimpleLineIcons, Ionicons } from '@expo/vector-icons'
 import color from '../../style/color'
 import { useNavigation } from '@react-navigation/native'
 import OymoFont from '../../components/OymoFont'
@@ -42,6 +42,9 @@ const ProfileDetails = ({ profile, user }) => {
 
         <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={_profile.editProfileButton}>
           <FontAwesome name='edit' size={20} color={color.dark} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={[_profile.editProfileButton, { marginLeft: 10 }]}>
+          <Ionicons name="cog-outline" size={22} color={color.dark} />
         </TouchableOpacity>
       </View>
 
