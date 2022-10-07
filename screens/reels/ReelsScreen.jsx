@@ -27,7 +27,7 @@ const wait = timeout =>
 
 
 const ReelsScreen = () => {
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
   const { reelsList, reelsLimit } = useSelector(state => state.reels)
   const mediaRefs = useRef([])
 
@@ -134,7 +134,7 @@ const ReelsScreen = () => {
   }
 
   return (
-    <View style={reels.container}>
+    <View style={[reels.container, {backgroundColor: theme ? color.dark : color.white}]}>
       <FlatList
         data={reelsList}
         windowSize={2}

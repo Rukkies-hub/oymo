@@ -9,7 +9,7 @@ import { chat } from '../../../style/chat'
 import color from '../../../style/color'
 
 const SearchChat = () => {
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
   const { search, matches } = useSelector(state => state.chat)
   const dispatch = useDispatch()
 
@@ -34,14 +34,14 @@ const SearchChat = () => {
   }
 
   return (
-    <View style={chat.searchView}>
-      <Entypo name='magnifying-glass' size={24} color={color.lightText} />
+    <View style={[chat.searchView, { backgroundColor: theme ? color.black : color.offWhite }]}>
+      <Entypo name='magnifying-glass' size={24} color={theme ? color.offWhite : color.lightText} />
       <TextInput
         value={search}
         placeholder='Search'
         onChangeText={text => searchFilter(text)}
-        placeholderTextColor={color.lightText}
-        style={chat.searchInput}
+        placeholderTextColor={theme ? color.white : color.lightText}
+        style={[chat.searchInput, {color: theme ? color.white : color.dark}]}
       />
     </View>
   )

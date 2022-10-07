@@ -19,7 +19,7 @@ if (
 ) UIManager.setLayoutAnimationEnabledExperimental(true)
 
 const SenderMessage = ({ messages, matchDetails }) => {
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
 
   const navigation = useNavigation()
   const video = useRef(null)
@@ -77,7 +77,7 @@ const SenderMessage = ({ messages, matchDetails }) => {
       <Ionicons
         size={16}
         name={messages?.seen ? 'checkmark-done-circle' : 'checkmark-done-circle-outline'}
-        color={!messages?.seen ? color.lightText : color.blue}
+        color={!messages?.seen ? (theme ? color.white: color.lightText) : color.blue}
       />
 
       <View style={sm.messagView}>

@@ -6,7 +6,7 @@ const { width, height } = Dimensions.get('window')
 export const settings = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: color.white
+    backgroundColor: color.white
   },
 
   settingView: {
@@ -22,5 +22,13 @@ export const settings = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 10
+  },
+
+  title: {
+    fontFamily: 'boldText'
+  },
+
+  text: {
+    fontFamily: 'lightText'
   }
 })

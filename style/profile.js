@@ -83,7 +83,7 @@ export const profile = StyleSheet.create({
   },
 
   aboutContainer: {
-    marginTop: 20,
+    marginTop: 10,
     paddingHorizontal: 10
   },
 
@@ -132,13 +132,13 @@ export const profile = StyleSheet.create({
   },
 
   title: {
-    fontSize: 16,
+    fontSize: 14,
     color: color.dark,
     marginLeft: 5
   },
 
   info: {
-    fontSize: 16,
+    fontSize: 14,
     color: color.dark,
     marginLeft: 5
   }

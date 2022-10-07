@@ -16,7 +16,7 @@ import {
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { iv, msg } from '../../style/messag'
 import MessageHeader from './components/MessageHeader'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import getMatchedUserInfo from '../../lib/getMatchedUserInfo'
 import { BlurView } from 'expo-blur'
@@ -46,13 +46,15 @@ import color from '../../style/color'
 import { AntDesign, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons'
 
 import { admin } from '@env'
+import * as NavigationBar from 'expo-navigation-bar'
 
 const Message = () => {
   const { matchDetails } = useRoute().params
   const dispatch = useDispatch()
   const navigation = useNavigation()
+  const focused = useIsFocused()
 
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
   const { messageReply } = useSelector(state => state.message)
 
   const storage = getStorage()
@@ -70,6 +72,12 @@ const Message = () => {
   const [showRecord, setShowRecord] = useState(true)
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
+
+  if (focused) {
+    NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
+    NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
+  }
 
   useLayoutEffect(() =>
     (() => {
@@ -128,40 +136,6 @@ const Message = () => {
   useEffect(() => {
     updateSeen()
   }, [input])
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      quality: 1,
-    })
-
-    if (!result?.cancelled) {
-      if (result?.type === 'video') {
-        const { uri } = await VideoThumbnails.getThumbnailAsync(result?.uri, { time: 1000 })
-        if (uri) {
-          setMediaVidiblity(false)
-          setShowMedia(false)
-          Keyboard.dismiss
-          navigation.navigate('PreviewMessageImage', {
-            matchDetails,
-            media: {
-              ...result,
-              thumbnail: uri
-            }
-          })
-        }
-      } else {
-        setMediaVidiblity(false)
-        setShowMedia(false)
-        Keyboard.dismiss
-        navigation.navigate('PreviewMessageImage', {
-          matchDetails,
-          media: result
-        })
-      }
-    }
-  }
 
   const sendMessage = async () => {
     if (profile?.coins < 1) return
@@ -268,11 +242,11 @@ const Message = () => {
   }
 
   return (
-    <View style={msg.container}>
+    <View style={[msg.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <MessageHeader matchDetails={matchDetails} user={getMatchedUserInfo(matchDetails?.users, id)} />
 
-      <ImageBackground source={require('../../assets/chatBG.png')} style={msg.messageBackground}>
-        <BlurView intensity={110} tint='light' style={msg.messageBackground}>
+      <ImageBackground source={theme ? require('../../assets/chatBGDark.png') : require('../../assets/chatBG.png')} style={msg.messageBackground}>
+        <BlurView intensity={110} tint={theme ? 'dark' : 'light'} style={msg.messageBackground}>
           <KeyboardAvoidingView style={{ flex: 1 }}>
             {
               !messages?.length ?
@@ -306,8 +280,8 @@ const Message = () => {
             <View>
               {
                 messageReply &&
-                <TouchableOpacity activeOpacity={0.7} style={msg.messageReply}>
-                  <View style={msg.messageReplyView}>
+                <TouchableOpacity activeOpacity={0.7} style={[msg.messageReply, { backgroundColor: theme ? color.dark : color.offWhite }]}>
+                  <View style={[msg.messageReplyView, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
                     {
                       messageReply?.mediaType == 'video' &&
                       <Image source={{ uri: messageReply?.thumbnail }} resizeMode='cover' style={msg.messageReplyImage} />
@@ -340,7 +314,7 @@ const Message = () => {
                         lines={3}
                         fontFamily='montserrat_light'
                         fontStyle={{
-                          color: color.dark,
+                          color: theme ? color.white : color.dark,
                           marginLeft: messageReply?.media ? 10 : 0
                         }}
                       />
@@ -352,7 +326,7 @@ const Message = () => {
                         lines={3}
                         fontFamily='montserrat_light'
                         fontStyle={{
-                          color: color.dark,
+                          color: theme ? color.white : color.dark,
                           marginLeft: messageReply?.media ? 10 : 0,
                           marginVertical: 10
                         }}
@@ -362,7 +336,7 @@ const Message = () => {
                   {
                     messageReply &&
                     <TouchableOpacity onPress={() => dispatch(setMessageReply(null))} style={msg.canselMessageReply}>
-                      <AntDesign name='close' size={24} color={color.dark} />
+                      <AntDesign name='close' size={24} color={theme ? color.white : color.dark} />
                     </TouchableOpacity>
                   }
                 </TouchableOpacity>
@@ -374,6 +348,7 @@ const Message = () => {
                   {
                     borderTopLeftRadius: messageReply ? 0 : 12,
                     borderTopRightRadius: messageReply ? 0 : 12,
+                    backgroundColor: theme ? color.dark : color.offWhite
                   }]
                 }
               >
@@ -389,19 +364,15 @@ const Message = () => {
                       }}
                       style={iv.mediaButton}
                     >
-                      <MaterialCommunityIcons name='camera-outline' color={color.lightText} size={20} />
+                      <MaterialCommunityIcons name='camera-outline' color={theme ? color.white : color.lightText} size={20} />
                     </TouchableOpacity>
-
-                    {/* <TouchableOpacity onPress={pickImage} style={iv.mediaButton}>
-                      <MaterialCommunityIcons name='image-outline' color={color.lightText} size={20} />
-                    </TouchableOpacity> */}
                   </View>
                 }
 
                 {
                   showRecording ?
                     <View style={iv.recordingView}>
-                      <OymoFont message='Recording...' fontStyle={iv.recordingText} />
+                      <OymoFont message='Recording...' fontStyle={{ ...iv.recordingText, color: theme ? color.white : color.dark }} />
                     </View> :
                     <TextInput
                       multiline
@@ -410,15 +381,15 @@ const Message = () => {
                       onSubmitEditing={sendMessage}
                       onContentSizeChange={e => setHeight(e.nativeEvent.contentSize.height)}
                       placeholder='Aa..'
-                      placeholderTextColor={color.lightText}
-                      style={[iv.messageInput, { height }]}
+                      placeholderTextColor={theme ? color.white : color.lightText}
+                      style={[iv.messageInput, { height, color: theme ? color.white : color.dark }]}
                     />
                 }
 
                 {
                   showSend &&
                   <TouchableOpacity onPress={sendMessage} style={iv.sendButton}>
-                    <FontAwesome5 name='paper-plane' color={color.lightText} size={20} />
+                    <FontAwesome5 name='paper-plane' color={theme ? color.white : color.lightText} size={20} />
                   </TouchableOpacity>
                 }
 
@@ -439,8 +410,8 @@ const Message = () => {
                   >
                     {
                       recordingLoading ?
-                        <ActivityIndicator size='small' color={color.lightText} /> :
-                        <FontAwesome5 size={20} name='microphone-alt' color={color.lightText} />
+                        <ActivityIndicator size='small' color={theme ? color.white : color.lightText} /> :
+                        <FontAwesome5 size={20} name='microphone-alt' color={theme ? color.white : color.lightText} />
                     }
                   </TouchableOpacity>
                 }

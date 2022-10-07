@@ -5,7 +5,6 @@ export const msg = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.white,
-    borderRadius: 8,
     overflow: 'hidden'
   },
 

@@ -15,7 +15,7 @@ import OymoFont from '../../components/OymoFont'
 import { useState } from 'react'
 
 const Profile = () => {
-  const { user, profile: _profile } = useSelector(state => state.user)
+  const { user, profile: _profile, theme } = useSelector(state => state.user)
   const focus = useIsFocused()
   const navigation = useNavigation()
 
@@ -31,7 +31,7 @@ const Profile = () => {
   })
 
   return (
-    <View style={profile.container}>
+    <View style={[profile.container, {backgroundColor: theme ? color.dark : color.white}]}>
       <Header
         showBack
         showTitle
@@ -39,7 +39,7 @@ const Profile = () => {
         title={_profile?.username}
         showAratar={_profile?.photoURL ? true : false}
       />
-      <ScrollView style={profile.container} showsVerticalScrollIndicator={false}>
+      <ScrollView style={[profile.container, { backgroundColor: theme ? color.dark : color.white }]} showsVerticalScrollIndicator={false}>
         <>
           {
             _profile && user &&

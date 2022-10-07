@@ -13,6 +13,7 @@ import { Camera } from 'expo-camera'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch, useSelector } from 'react-redux'
 import { setTheme } from '../../features/userSlice'
+import Bar from '../../components/Bar'
 
 const Settings = () => {
   const dispatch = useDispatch()
@@ -82,13 +83,16 @@ const Settings = () => {
         title='Settings'
         showAratar
       />
+      <Bar color={theme ? 'light' : 'dark'} />
 
       <View style={settings.settingView}>
         <OymoFont message='Permissions' fontFamily='montserrat_bold' fontStyle={settings.settingViewHead} />
         <View style={[settings.settingViewContent, { marginTop: 10 }]}>
           <View>
-            <OymoFont message='Location' fontFamily='montserrat_bold' />
-            <OymoFont message='Allow Oymo match access your location' fontFamily='montserrat_light' />
+            <Text style={[settings.title, {color: theme ? color.white : color.dark}]}>Location</Text>
+            <Text style={[settings.text, { color: theme ? color.white : color.dark }]}>
+              Allow Oymo match access your location
+            </Text>
           </View>
           <Switch
             trackColor={{ false: color.lightText, true: color.offWhite }}
@@ -101,8 +105,10 @@ const Settings = () => {
 
         <View style={settings.settingViewContent}>
           <View>
-            <OymoFont message='Camera' fontFamily='montserrat_bold' />
-            <OymoFont message='Allow Oymo match access your camera' fontFamily='montserrat_light' />
+            <Text style={[settings.title, { color: theme ? color.white : color.dark }]}>Camera</Text>
+            <Text style={[settings.text, { color: theme ? color.white : color.dark }]}>
+              Allow Oymo match access your camera
+            </Text>
           </View>
           <Switch
             trackColor={{ false: color.lightText, true: color.offWhite }}
@@ -118,8 +124,12 @@ const Settings = () => {
         <OymoFont message={`App theme (${theme == true ? 'dark' : 'light'})`} fontFamily='montserrat_bold' fontStyle={settings.settingViewHead} />
         <View style={[settings.settingViewContent, { marginTop: 10 }]}>
           <View>
-            <OymoFont message='Theme' fontFamily='montserrat_bold' />
-            <OymoFont message='Select a preferd theme for your account' fontFamily='montserrat_light' />
+            {/* <OymoFont message='Theme' fontFamily='montserrat_bold' />
+            <OymoFont message='Select a preferd theme for your account' fontFamily='montserrat_light' /> */}
+            <Text style={[settings.title, { color: theme ? color.white : color.dark }]}>Theme</Text>
+            <Text style={[settings.text, { color: theme ? color.white : color.dark }]}>
+              Select a preferd theme for your account
+            </Text>
           </View>
           <Switch
             trackColor={{ false: color.lightText, true: color.offWhite }}

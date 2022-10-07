@@ -5,12 +5,14 @@ import { profile } from '../../style/profile'
 
 import ProfileDetails from './components/ProfileDetails'
 import UserReels from './UserReels'
+import color from '../../style/color'
 
 const Profile = () => {
   const { activeReelUser } = useSelector(state => state.reels)
+  const { theme } = useSelector(state => state.user)
 
   return (
-    <ScrollView style={profile.container} showsVerticalScrollIndicator={false}>
+    <ScrollView style={[profile.container, { backgroundColor: theme ? color.dark : color.white }]} showsVerticalScrollIndicator={false}>
       {
         activeReelUser &&
         <>

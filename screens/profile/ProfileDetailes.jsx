@@ -7,11 +7,14 @@ import { useNavigation } from '@react-navigation/native'
 import OymoFont from '../../components/OymoFont'
 
 import { profile as _profile } from '../../style/profile'
+import { useSelector } from 'react-redux'
 
 const ProfileDetails = ({ profile, user }) => {
   const navigation = useNavigation()
 
   const [aboutLimit, setAboutLimit] = useState(2)
+
+  const { theme } = useSelector(state => state.user)
 
   return (
     <View>
@@ -21,8 +24,8 @@ const ProfileDetails = ({ profile, user }) => {
             <TouchableOpacity onPress={() => navigation.navigate('ViewAvatar', { avatar: profile?.photoURL })}>
               <Image source={{ uri: profile?.photoURL }} style={_profile.avatar} />
             </TouchableOpacity> :
-            <View style={_profile.blurView}>
-              <SimpleLineIcons name='user' size={30} color={color.lightText} />
+            <View style={[_profile.blurView, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
+              <SimpleLineIcons name='user' size={30} color={theme ? color.white : color.lightText} />
             </View>
         }
 
@@ -30,13 +33,13 @@ const ProfileDetails = ({ profile, user }) => {
           {
             profile?.username != '' &&
             <View style={_profile.userInfo}>
-              <OymoFont message={profile?.username} fontStyle={_profile.username} fontFamily='montserrat_bold' />
+              <OymoFont message={profile?.username} fontStyle={{ ..._profile.username, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
             </View>
           }
 
           {
             profile?.displayName != '' &&
-            <OymoFont message={profile?.displayName} fontStyle={_profile.displayName} fontFamily='montserrat_medium' />
+            <OymoFont message={profile?.displayName} fontStyle={{ ..._profile.displayName, color: theme ? color.white : color.dark }} fontFamily='montserrat_medium' />
           }
         </View>
 
@@ -55,7 +58,7 @@ const ProfileDetails = ({ profile, user }) => {
             numberOfLines={aboutLimit}
             style={{
               fontFamily: 'text',
-              fontSize: 16,
+              fontSize: 14,
               color: color.dark
             }}
           >

@@ -9,7 +9,7 @@ import color from '../../../style/color'
 import ChatRow from './chatRow/ChatRow'
 
 const ChatList = () => {
-  const { user } = useSelector(state => state.user)
+  const { user, theme } = useSelector(state => state.user)
   const { matches, matchesFilter } = useSelector(state => state.chat)
   const dispatch = useDispatch()
 
@@ -54,7 +54,7 @@ const ChatList = () => {
       />
     ) : (
       <View style={chat.chatListFlatListLoadingContainer}>
-        <ActivityIndicator color={color.black} size='large' />
+        <ActivityIndicator color={theme ? color.white : color.black} size='large' />
       </View>
     )
   )

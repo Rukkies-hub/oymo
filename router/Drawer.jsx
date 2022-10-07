@@ -13,7 +13,20 @@ import Notifications from '../screens/notification/Notifications'
 
 const { Navigator, Screen } = createDrawerNavigator()
 
+import * as NavigationBar from 'expo-navigation-bar'
+import { useIsFocused } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
+import color from '../style/color'
+
 const Drawer = () => {
+  const { theme } = useSelector(state => state.user)
+  const focused = useIsFocused()
+
+  if (focused) {
+    NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
+    NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
+  }
+
   return (
     <Navigator
       screenOptions={{

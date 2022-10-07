@@ -188,7 +188,7 @@ const ProfileDetails = ({ profile, user }) => {
             numberOfLines={aboutLimit}
             style={{
               fontFamily: 'text',
-              fontSize: 16,
+              fontSize: 14,
               color: color.dark
             }}
           >

@@ -7,8 +7,10 @@ import { useNavigation } from '@react-navigation/native'
 import { pReels } from '../../style/profileReels'
 import color from '../../style/color'
 import OymoFont from '../../components/OymoFont'
+import { useSelector } from 'react-redux'
 
 const UserReels = ({ activeUser }) => {
+  const { theme } = useSelector(state => state.user)
   const navigation = useNavigation()
 
   const [reels, setReels] = useState([])
@@ -42,7 +44,7 @@ const UserReels = ({ activeUser }) => {
       {
         reels?.length < 1 ?
           <View style={pReels.indicatorContainer}>
-            <ActivityIndicator size='large' color={color.black} />
+            <ActivityIndicator size='large' color={theme ? color.white : color.black} />
           </View> :
           <>
             {
@@ -57,18 +59,18 @@ const UserReels = ({ activeUser }) => {
                     <Image source={{ uri: reel?.thumbnail }} style={pReels.reelsThumb} />
 
                     <View style={{ flex: 1 }}>
-                      <OymoFont message={reel?.description} lines={1} fontStyle={pReels.desctiption} />
+                      <OymoFont message={reel?.description} lines={1} fontStyle={{ ...pReels.desctiption, color: theme ? color.white : color.dark }} />
 
                       <View style={pReels.statsContainer}>
                         <View style={pReels.statsContainerRow}>
-                          <OymoFont message={reel?.likesCount} lines={1} fontStyle={pReels.reelsCount} />
-                          <Text style={pReels.reelsCountText}>
+                          <OymoFont message={reel?.likesCount} lines={1} fontStyle={{ ...pReels.reelsCount, color: theme ? color.white : color.dark }} />
+                          <Text style={[pReels.reelsCountText, { color: theme ? color.white : color.dark }]}>
                             {reel?.likesCount == 1 ? 'Like' : 'Likes'}
                           </Text>
                         </View>
                         <View style={pReels.statsContainerRow}>
-                          <OymoFont message={reel?.commentsCount} lines={1} fontStyle={pReels.reelsCount} />
-                          <Text style={pReels.reelsCountText}>
+                          <OymoFont message={reel?.commentsCount} lines={1} fontStyle={{ ...pReels.reelsCount, color: theme ? color.white : color.dark }} />
+                          <Text style={[pReels.reelsCountText, { color: theme ? color.white : color.dark }]}>
                             {reel?.commentsCount == 1 ? 'Comment' : 'Comments'}
                           </Text>
                         </View>

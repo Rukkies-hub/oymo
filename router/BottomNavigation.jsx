@@ -21,20 +21,20 @@ import LikesNavigation from '../screens/likes/LikesNavigation'
 const { Navigator, Screen } = createMaterialBottomTabNavigator()
 
 const BottomNavigation = () => {
-  const { profile } = useSelector(state => state.user)
+  const { profile, theme } = useSelector(state => state.user)
 
   return (
-    <View style={nav.container}>
-      <Bar color='dark' />
+    <View style={[nav.container, { backgroundColor: theme ? color.dark : color.white }]}>
+      <Bar color={theme ? 'light' : 'dark'} />
 
       <Header showLogo showAdd showAratar showNotification />
 
-      <Navigator barStyle={nav.barStyle}>
+      <Navigator barStyle={[nav.barStyle, { backgroundColor: theme ? color.dark : color.white }]}>
         <Screen
           name='Match'
           component={Match}
           options={{
-            tabBarIcon: () => <AntDesign name='find' size={20} color={color.black} />
+            tabBarIcon: () => <AntDesign name='find' size={20} color={theme ? color.white : color.black} />
           }}
         />
 
@@ -42,7 +42,7 @@ const BottomNavigation = () => {
           name='Reels'
           component={Reels}
           options={{
-            tabBarIcon: () => <FontAwesome name="film" size={20} color={color.black} />
+            tabBarIcon: () => <FontAwesome name="film" size={20} color={theme ? color.white : color.black} />
           }}
         />
 
@@ -59,7 +59,7 @@ const BottomNavigation = () => {
             }
           })}
           options={{
-            tabBarIcon: () => <FontAwesome name='plus-square-o' color={color.black} size={22} />
+            tabBarIcon: () => <FontAwesome name='plus-square-o' color={theme ? color.white : color.black} size={22} />
           }}
         />
 
@@ -69,7 +69,7 @@ const BottomNavigation = () => {
               name='Likes'
               component={LikesNavigation}
               options={{
-                tabBarIcon: () => <SimpleLineIcons name='like' size={20} color={color.black} />,
+                tabBarIcon: () => <SimpleLineIcons name='like' size={20} color={theme ? color.white : color.black} />,
                 tabBarBadge: profile?.pendingSwipes,
                 title: 'Likes'
               }}
@@ -78,7 +78,7 @@ const BottomNavigation = () => {
               name='Likes'
               component={LikesNavigation}
               options={{
-                tabBarIcon: () => <SimpleLineIcons name='like' size={20} color={color.black} />
+                tabBarIcon: () => <SimpleLineIcons name='like' size={20} color={theme ? color.white : color.black} />
               }}
             />
         }
@@ -87,7 +87,7 @@ const BottomNavigation = () => {
           name='Chat'
           component={Chat}
           options={{
-            tabBarIcon: () => <Ionicons name='chatbubbles-outline' size={20} color={color.black} />
+            tabBarIcon: () => <Ionicons name='chatbubbles-outline' size={20} color={theme ? color.white : color.black} />
           }}
         />
       </Navigator>

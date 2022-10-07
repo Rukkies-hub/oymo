@@ -13,7 +13,7 @@ import { auth } from '../hooks/firebase'
 const CustomDrawerContent = ({ navigation }) => {
   const dispatch = useDispatch()
 
-  const { profile } = useSelector(state => state.user)
+  const { profile, theme } = useSelector(state => state.user)
 
   const logoutUser = () => {
     navigation.closeDrawer()
@@ -23,7 +23,7 @@ const CustomDrawerContent = ({ navigation }) => {
   }
 
   return (
-    <DrawerContentScrollView style={dw.scrollView}>
+    <DrawerContentScrollView style={[dw.scrollView, { backgroundColor: theme ? color.dark : color.white }]}>
       <ImageBackground source={!profile?.photoURL ? require('../assets/background2.jpg') : { uri: profile?.photoURL }} blurRadius={70} style={dw.imgBg}>
         {
           !profile?.photoURL ?
@@ -38,88 +38,88 @@ const CustomDrawerContent = ({ navigation }) => {
           profile &&
           <>
             <Pressable onPress={() => navigation.navigate('Profile')} style={{ flexDirection: 'row', marginTop: 15 }}>
-              <OymoFont message={profile?.username} lines={1} fontFamily='montserrat_bold' fontStyle={{ color: color.white, fontSize: 20, marginRight: 10 }} />
-              {profile?.age != undefined && <OymoFont message={profile?.age} lines={1} fontStyle={{ color: color.white, fontSize: 20 }} />}
+              <OymoFont message={profile?.username} lines={1} fontFamily='montserrat_bold' fontStyle={{ color: theme ? color.black : color.white, fontSize: 20, marginRight: 10 }} />
+              {profile?.age != undefined && <OymoFont message={profile?.age} lines={1} fontStyle={{ color: theme ? color.black : color.white, fontSize: 20 }} />}
             </Pressable>
             <Pressable onPress={() => navigation.navigate('Profile')} style={dw.pointsButton}>
               <Image source={require('../assets/points.png')} style={dw.pointsImage} />
-              <OymoFont message={`${profile?.coins} Points`} lines={1} fontStyle={{ color: color.white, fontSize: 16 }} />
+              <OymoFont message={`${profile?.coins} Points`} lines={1} fontStyle={{ color: theme ? color.black : color.white, fontSize: 16 }} />
             </Pressable>
           </>
         }
       </ImageBackground>
 
       <DrawerItem
-        label={() => <OymoFont message='Match' />}
+        label={() => <OymoFont message='Match' fontStyle={{ color: theme ? color.white : color.black }} />}
         onPress={() => navigation.navigate('MatchScreen')}
-        icon={() => <AntDesign name='find' size={20} color={color.black} />}
+        icon={() => <AntDesign name='find' size={20} color={theme ? color.white : color.black} />}
       />
       <DrawerItem
-        label={() => <OymoFont message='Notifications' />}
+        label={() => <OymoFont message='Notifications' fontStyle={{ color: theme ? color.white : color.black }} />}
         onPress={() => {
           navigation.closeDrawer()
           navigation.navigate('Notifications')
         }}
-        icon={() => <SimpleLineIcons name='bell' size={20} color={color.dark} />}
+        icon={() => <SimpleLineIcons name='bell' size={20} color={theme ? color.white : color.black} />}
       />
       {
         profile &&
         <DrawerItem
-          label={() => <OymoFont message='Profile' />}
+          label={() => <OymoFont message='Profile' fontStyle={{ color: theme ? color.white : color.black }} />}
           onPress={() => {
             navigation.closeDrawer()
             navigation.navigate('Profile')
           }}
-          icon={() => <FontAwesome name='user-o' size={20} color={color.dark} />}
+          icon={() => <FontAwesome name='user-o' size={20} color={theme ? color.white : color.black} />}
         />
       }
       <DrawerItem
-        label={() => <OymoFont message='Edit profile' />}
+        label={() => <OymoFont message='Edit profile' fontStyle={{ color: theme ? color.white : color.black }} />}
         onPress={() => {
           navigation.closeDrawer()
           navigation.navigate('EditProfile')
         }}
-        icon={() => <Feather name="edit" size={20} color={color.black} />}
+        icon={() => <Feather name="edit" size={20} color={theme ? color.white : color.black} />}
       />
       <DrawerItem
-        label={() => <OymoFont message='Settings' />}
+        label={() => <OymoFont message='Settings' fontStyle={{ color: theme ? color.white : color.black }} />}
         onPress={() => {
           navigation.closeDrawer()
           navigation.navigate('Settings')
         }}
-        icon={() => <Ionicons name="cog-outline" size={24} color={color.black} />}
+        icon={() => <Ionicons name="cog-outline" size={24} color={theme ? color.white : color.black} />}
       />
       <DrawerItem
-        label={() => <OymoFont message='New Post' />}
+        label={() => <OymoFont message='New Post' fontStyle={{ color: theme ? color.white : color.black }} />}
         onPress={() => {
           navigation.closeDrawer()
           navigation.navigate('AddReelsNav')
         }}
-        icon={() => <FontAwesome name='plus-square-o' color={color.black} size={22} />}
+        icon={() => <FontAwesome name='plus-square-o' color={theme ? color.white : color.black} size={22} />}
       />
 
-      <View style={{ width: '100%', height: 1, backgroundColor: color.borderColor, marginVertical: 10 }} />
+      <View style={{ width: '100%', height: 1, backgroundColor: theme ? color.lightBorderColor : color.borderColor, marginVertical: 10 }} />
 
       <TouchableOpacity
-        style={dw.upgradeButton}
+        style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
         onPress={() => {
           navigation.closeDrawer()
           navigation.navigate('Events')
         }}
       >
         <Image source={require('../assets/event.png')} style={dw.star} />
-        <OymoFont message='Events' fontStyle={dw.upgradeButtonText} />
+        <OymoFont message='Events' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={dw.upgradeButton}
+        style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
         onPress={() => {
           navigation.closeDrawer()
           navigation.navigate('Rooms')
         }}
       >
         <Image source={require('../assets/room.png')} style={dw.star} />
-        <OymoFont message='Rooms' fontStyle={dw.upgradeButtonText} />
+        <OymoFont message='Rooms' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -127,15 +127,18 @@ const CustomDrawerContent = ({ navigation }) => {
           navigation.closeDrawer()
           navigation.navigate('Upgrade')
         }}
-        style={dw.upgradeButton}
+        style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
       >
         <Image source={require('../assets/star.png')} style={dw.star} />
-        <OymoFont message='Oymo Premium' fontStyle={dw.upgradeButtonText} />
+        <OymoFont message='Oymo Premium' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={logoutUser} style={dw.upgradeButton}>
+      <TouchableOpacity
+        onPress={logoutUser}
+        style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
+      >
         <Image source={require('../assets/power.png')} style={dw.star} />
-        <OymoFont message='Logout' fontStyle={dw.upgradeButtonText} />
+        <OymoFont message='Logout' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
       </TouchableOpacity>
     </DrawerContentScrollView>
   )
