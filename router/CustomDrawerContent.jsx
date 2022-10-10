@@ -87,7 +87,7 @@ const CustomDrawerContent = ({ navigation }) => {
           navigation.closeDrawer()
           navigation.navigate('Settings')
         }}
-        icon={() => <Ionicons name="cog-outline" size={24} color={theme ? color.white : color.black} />}
+        icon={() => <Ionicons name="cog-outline" size={20} color={theme ? color.white : color.black} />}
       />
       <DrawerItem
         label={() => <OymoFont message='New Post' fontStyle={{ color: theme ? color.white : color.black }} />}

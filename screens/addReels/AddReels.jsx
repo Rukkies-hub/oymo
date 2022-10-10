@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useLayoutEffect } from 'react'
 import { View, TouchableOpacity, Image } from 'react-native'
 import { Camera } from 'expo-camera'
 import { Audio } from 'expo-av'
-import { useIsFocused } from '@react-navigation/core'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import * as ImagePicker from 'expo-image-picker'
 import * as MediaLibrary from 'expo-media-library'
 import { MaterialIcons, Entypo } from '@expo/vector-icons'
@@ -36,8 +35,8 @@ const AddReels = () => {
     NavigationBar.setVisibilityAsync('visible')
   })
 
-  useEffect(() => {
-    (async () => {
+  useLayoutEffect(() => {
+    const call = async () => {
       const cameraStatus = await Camera?.requestCameraPermissionsAsync()
       setHasCameraPermission(cameraStatus?.status === 'granted')
 
@@ -54,7 +53,8 @@ const AddReels = () => {
         })
         setGalleryItems(userGalleryMedia.assets)
       }
-    })()
+    }
+    call()
   }, [])
 
   const recordVideo = async () => {
@@ -105,7 +105,7 @@ const AddReels = () => {
     }
   }
 
-  if (!hasCameraPermission || !hasAudioPermission || !hasGalleryPermission) {
+  if (!hasCameraPermission) {
     return <View style={[ar.containr, { justifyContent: 'center', alignItems: 'center' }]}>
       <OymoFont message='No camera permision' />
     </View>
