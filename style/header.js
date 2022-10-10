@@ -110,6 +110,7 @@ export const header = StyleSheet.create({
   showTitle: {
     fontSize: 18,
     textTransform: 'capitalize',
-    color: color.dark
+    color: color.dark,
+    fontFamily: 'text'
   }
 })

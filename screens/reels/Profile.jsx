@@ -1,18 +1,18 @@
-import { View, Text } from 'react-native'
+import { ScrollView } from 'react-native'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { profile } from '../../style/profile'
 
 import ProfileDetails from './components/ProfileDetails'
-import { useIsFocused, useNavigation } from '@react-navigation/native'
-import * as NavigationBar from 'expo-navigation-bar'
 import UserReels from './UserReels'
+import color from '../../style/color'
 
 const Profile = () => {
   const { activeReelUser } = useSelector(state => state.reels)
+  const { theme } = useSelector(state => state.user)
 
   return (
-    <View style={profile.container}>
+    <ScrollView style={[profile.container, { backgroundColor: theme ? color.dark : color.white }]} showsVerticalScrollIndicator={false}>
       {
         activeReelUser &&
         <>
@@ -20,7 +20,7 @@ const Profile = () => {
           <UserReels activeUser={activeReelUser?.user?.id} />
         </>
       }
-    </View>
+    </ScrollView>
   )
 }
 

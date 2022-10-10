@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import color from '../style/color'
 import OymoFont from '../components/OymoFont'
 import { useDispatch, useSelector } from 'react-redux'
-import { logout, setProfile, setUser } from '../features/userSlice'
+import { logout, setProfile, setTheme, setUser } from '../features/userSlice'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth, db } from '../hooks/firebase'
 import { doc, getDoc, onSnapshot, updateDoc, where } from 'firebase/firestore'
@@ -12,6 +12,7 @@ import { setReels } from '../features/reelsSlice'
 import { setPendingSwipes, setProfiles } from '../features/matchSlice'
 import { useLayoutEffect } from 'react'
 import * as Location from 'expo-location'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Splash = () => {
   const { user } = useSelector(state => state.user)
@@ -138,6 +139,19 @@ const Splash = () => {
       age: getAge(profile?.dob)
     })
   }
+
+  useEffect(() => {
+    const call = async () => {
+      try {
+        const value = await AsyncStorage.getItem('@oymo_theme')
+        if (value !== null) {
+          let _val = JSON.parse(value)
+          dispatch(setTheme(_val))
+        }
+      } catch (e) { }
+    }
+    call()
+  }, [])
 
   return (
     <View

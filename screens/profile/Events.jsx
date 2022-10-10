@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux'
 
 const Events = () => {
   const navigation = useNavigation()
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
 
   const [events, setEvents] = useState([])
   const [eventsLimit, setLimit] = useState(50)
@@ -63,17 +63,17 @@ const Events = () => {
                     <Image source={{ uri: event?.image }} style={pEvents.reelsThumb} />
 
                     <View style={{ flex: 1 }}>
-                      <OymoFont message={event?.type} lines={1} fontStyle={pEvents.desctiption} />
-                      <OymoFont message={`Location - ${event?.location}`} lines={1} fontStyle={pEvents.username} />
+                      <OymoFont message={event?.type} lines={1} fontStyle={{ ...pEvents.desctiption, color: theme ? color.white : color.dark }} />
+                      <OymoFont message={`Location - ${event?.location}`} lines={1} fontStyle={{ ...pEvents.username, color: theme ? color.white : color.dark }} />
 
                       <View style={pEvents.statsContainer}>
                         <View style={pEvents.statsContainerRow}>
-                          <OymoFont message={event?.going} lines={1} fontStyle={pEvents.reelsCount} />
-                          <OymoFont message='Attendees' lines={1} fontStyle={pEvents.reelsCountText} />
+                          <OymoFont message={event?.going} lines={1} fontStyle={{ ...pEvents.reelsCount, color: theme ? color.white : color.dark }} />
+                          <OymoFont message='Attendees' lines={1} fontStyle={{ ...pEvents.reelsCountText, color: theme ? color.white : color.dark }} />
                         </View>
                         <View style={pEvents.statsContainerRow}>
-                          <OymoFont message={event?.limit} lines={1} fontStyle={pEvents.reelsCount} />
-                          <OymoFont message='Sits available' lines={1} fontStyle={pEvents.reelsCountText} />
+                          <OymoFont message={event?.limit} lines={1} fontStyle={{ ...pEvents.reelsCount, color: theme ? color.white : color.dark }} />
+                          <OymoFont message='Sits available' lines={1} fontStyle={{ ...pEvents.reelsCountText, color: theme ? color.white : color.dark }} />
                         </View>
                       </View>
                     </View>

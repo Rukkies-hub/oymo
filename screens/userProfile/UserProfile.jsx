@@ -18,6 +18,7 @@ import Header from '../../components/Header'
 
 const UserProfile = () => {
   const { user } = useRoute().params
+  const { theme } = useSelector(state => state.user)
   const focus = useIsFocused()
   const navigation = useNavigation()
 
@@ -31,14 +32,12 @@ const UserProfile = () => {
   }, [])
 
   if (focus) {
-    NavigationBar.setPositionAsync('absolute')
-    NavigationBar.setBackgroundColorAsync(color.transparent)
+    NavigationBar.setVisibilityAsync('hidden')
+    NavigationBar.setBehaviorAsync('overlay-swipe')
   }
 
   navigation.addListener('blur', () => {
-    NavigationBar.setPositionAsync('relative')
-    NavigationBar.setBackgroundColorAsync(color.white)
-    NavigationBar.setButtonStyleAsync('dark')
+    NavigationBar.setVisibilityAsync('visible')
   })
 
   const [loaded] = useFonts({
@@ -48,7 +47,7 @@ const UserProfile = () => {
   if (!loaded) return null
 
   return (
-    <View style={profile.container}>
+    <View style={[profile.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <Header
         showBack
         showTitle
@@ -56,7 +55,7 @@ const UserProfile = () => {
         title={_profile?.username}
         showAratar={_profile?.photoURL ? true : false}
       />
-      <ScrollView style={profile.container} showsVerticalScrollIndicator={false}>
+      <ScrollView style={[profile.container, { backgroundColor: theme ? color.dark : color.white }]} showsVerticalScrollIndicator={false}>
         <>
           {
             _profile && user &&

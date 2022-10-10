@@ -13,7 +13,7 @@ import color from '../../../../style/color'
 import OymoFont from '../../../../components/OymoFont'
 
 const ChatRow = ({ matchDetails }) => {
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
   const navigation = useNavigation()
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
@@ -66,7 +66,7 @@ const ChatRow = ({ matchDetails }) => {
   }, [db])
 
   return (
-    <Pressable onPress={() => navigation.navigate('Message', { matchDetails })} style={chat.chatRow}>
+    <Pressable onPress={() => navigation.navigate('Message', { matchDetails })} style={[chat.chatRow, { backgroundColor: theme ? color.dark : color.white }]}>
       <View style={chat.chatRowView}>
         <View style={{ position: 'relative' }}>
           <View
@@ -92,7 +92,7 @@ const ChatRow = ({ matchDetails }) => {
           matchedUserInfo &&
           <View style={chat.chatInfoView}>
             <Username user={matchedUserInfo?.id} />
-            <OymoFont message={lastMessage || 'Say Hi!'} fontStyle={chat.lastMessage} />
+            <OymoFont message={lastMessage || 'Say Hi!'} fontStyle={{ ...chat.lastMessage, color: theme ? color.white : color.dark }} />
           </View>
         }
       </View>

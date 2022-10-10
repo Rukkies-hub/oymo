@@ -17,7 +17,7 @@ export const reels = StyleSheet.create({
     backgroundColor: color.transparent,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 12,
     overflow: 'hidden'
   },
 

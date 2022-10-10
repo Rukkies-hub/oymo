@@ -14,12 +14,12 @@ import {
 
 import Header from '../../components/Header'
 
-const { width } = Dimensions.get('window')
+const { width } = Dimensions.get('screen')
 
 import AutoHeightImage from 'react-native-auto-height-image'
 
 import { FontAwesome5 } from '@expo/vector-icons'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import { addDoc, collection, doc, increment, serverTimestamp, updateDoc } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
@@ -35,8 +35,10 @@ import color from '../../style/color'
 
 import { admin } from '@env'
 
+import * as NavigationBar from 'expo-navigation-bar'
+
 const PreviewMessageImage = () => {
-  const { profile, user } = useSelector(state => state.user)
+  const { profile, user, theme } = useSelector(state => state.user)
   const { matchDetails, media } = useRoute().params
   const navigation = useNavigation()
   const video = useRef(null)
@@ -50,6 +52,13 @@ const PreviewMessageImage = () => {
   const [disableButton, setDisableButton] = useState(false)
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
+  const focused = useIsFocused()
+
+  if (focused) {
+    NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
+    NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
+  }
 
   useEffect(() => {
     (() => {
@@ -175,8 +184,8 @@ const PreviewMessageImage = () => {
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }}>
-      <SafeAreaView style={pm.safeView}>
-        <Bar color='dark' />
+      <SafeAreaView style={[pm.safeView, { backgroundColor: theme ? color.dark : color.white }]}>
+        <Bar color={theme ? 'light' : 'dark'} />
         <Header showBack showTitle title={`Preview ${media?.type}`} />
 
         {
@@ -206,7 +215,7 @@ const PreviewMessageImage = () => {
           </Pressable>
         }
 
-        <View style={pm.inputView}>
+        <View style={[pm.inputView, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
           <TextInput
             multiline
             value={input}
@@ -214,15 +223,15 @@ const PreviewMessageImage = () => {
             onSubmitEditing={sendMessage}
             onContentSizeChange={e => setHeight(e.nativeEvent.contentSize.height)}
             placeholder='Aa..'
-            placeholderTextColor={color.lightText}
-            style={[pm.input, { height }]}
+            placeholderTextColor={theme ? color.white : color.lightText}
+            style={[pm.input, { height, color: theme ? color.white : color.dark }]}
           />
 
           <TouchableOpacity onPress={sendMessage} disabled={disableButton} style={pm.sendButton}>
             {
               sendLoading ?
-                <ActivityIndicator color={color.lightText} size='small' /> :
-                <FontAwesome5 name='paper-plane' color={color.lightText} size={20} />
+                <ActivityIndicator color={theme ? color.white : color.lightText} size='small' /> :
+                <FontAwesome5 name='paper-plane' color={theme ? color.white : color.lightText} size={20} />
             }
           </TouchableOpacity>
         </View>

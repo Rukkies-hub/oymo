@@ -14,7 +14,7 @@ import { setMessageReply } from '../../features/messageSlice'
 const MessageOptions = () => {
   const { messages, matchDetails } = useRoute().params
   const dispatch = useDispatch()
-  const { user } = useSelector(state => state.user)
+  const { user, theme } = useSelector(state => state.user)
 
   const navigation = useNavigation()
 
@@ -41,21 +41,21 @@ const MessageOptions = () => {
     <View style={mo.container}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={mo.goBack} />
 
-      <View style={mo.optionsView}>
+      <View style={[mo.optionsView, { backgroundColor: theme ? color.dark : color.white }]}>
         <TouchableOpacity
           onPress={() => {
             navigation.goBack()
             dispatch(setMessageReply(messages))
           }}
           activeOpacity={0.5}
-          style={mo.replyButton}
+          style={[mo.replyButton, { backgroundColor: theme ? color.lightText : color.offWhite }]}
         >
-          <OymoFont message='Reply' fontStyle={{ color: color.dark }} />
+          <OymoFont message='Reply' fontStyle={{ color: theme ? color.white : color.dark }} />
         </TouchableOpacity>
 
         {
           messages?.userId == id &&
-          <TouchableOpacity onPress={deleteMessage} activeOpacity={0.5} style={mo.deleteButton}>
+          <TouchableOpacity onPress={deleteMessage} activeOpacity={0.5} style={[mo.deleteButton, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
             <OymoFont message='Delete message' fontStyle={{ color: color.red }} />
           </TouchableOpacity>
         }

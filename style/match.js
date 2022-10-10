@@ -153,7 +153,7 @@ export const nm = StyleSheet.create({
   screenGradient: {
     flex: 1,
     padding: 20,
-    justifyContent: 'space-between'
+    justifyContent: 'flex-end'
   },
 
   glitchView: {
@@ -163,7 +163,7 @@ export const nm = StyleSheet.create({
   itis: {
     color: color.lightGreen,
     textAlign: 'center',
-    marginTop: 300,
+    marginTop: 30,
     fontSize: 30,
     textTransform: 'uppercase'
   },

@@ -9,7 +9,8 @@ export const sr = StyleSheet.create({
 
   mainView: {
     marginHorizontal: 10,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'flex-start'
   },
 
   input: {

@@ -1,17 +1,20 @@
 import React, { useState } from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 
-import { FontAwesome, Feather, Fontisto, SimpleLineIcons } from '@expo/vector-icons'
+import { FontAwesome, Feather, Fontisto, SimpleLineIcons, Ionicons } from '@expo/vector-icons'
 import color from '../../style/color'
 import { useNavigation } from '@react-navigation/native'
 import OymoFont from '../../components/OymoFont'
 
 import { profile as _profile } from '../../style/profile'
+import { useSelector } from 'react-redux'
 
 const ProfileDetails = ({ profile, user }) => {
   const navigation = useNavigation()
 
   const [aboutLimit, setAboutLimit] = useState(2)
+
+  const { theme } = useSelector(state => state.user)
 
   return (
     <View>
@@ -21,8 +24,8 @@ const ProfileDetails = ({ profile, user }) => {
             <TouchableOpacity onPress={() => navigation.navigate('ViewAvatar', { avatar: profile?.photoURL })}>
               <Image source={{ uri: profile?.photoURL }} style={_profile.avatar} />
             </TouchableOpacity> :
-            <View style={_profile.blurView}>
-              <SimpleLineIcons name='user' size={30} color={color.lightText} />
+            <View style={[_profile.blurView, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
+              <SimpleLineIcons name='user' size={30} color={theme ? color.white : color.lightText} />
             </View>
         }
 
@@ -30,18 +33,21 @@ const ProfileDetails = ({ profile, user }) => {
           {
             profile?.username != '' &&
             <View style={_profile.userInfo}>
-              <OymoFont message={profile?.username} fontStyle={_profile.username} fontFamily='montserrat_bold' />
+              <OymoFont message={profile?.username} fontStyle={{ ..._profile.username, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
             </View>
           }
 
           {
             profile?.displayName != '' &&
-            <OymoFont message={profile?.displayName} fontStyle={_profile.displayName} fontFamily='montserrat_medium' />
+            <OymoFont message={profile?.displayName} fontStyle={{ ..._profile.displayName, color: theme ? color.white : color.dark }} fontFamily='montserrat_medium' />
           }
         </View>
 
         <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={_profile.editProfileButton}>
           <FontAwesome name='edit' size={20} color={color.dark} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={[_profile.editProfileButton, { marginLeft: 10 }]}>
+          <Ionicons name="cog-outline" size={22} color={color.dark} />
         </TouchableOpacity>
       </View>
 
@@ -52,8 +58,8 @@ const ProfileDetails = ({ profile, user }) => {
             numberOfLines={aboutLimit}
             style={{
               fontFamily: 'text',
-              fontSize: 16,
-              color: color.dark
+              fontSize: 14,
+              color: theme ? color.white : color.dark
             }}
           >
             {profile?.about}
@@ -64,13 +70,13 @@ const ProfileDetails = ({ profile, user }) => {
               {
                 aboutLimit == 2 &&
                 <TouchableOpacity onPress={() => setAboutLimit(100)}>
-                  <OymoFont message='Read more' fontStyle={_profile.about} fontFamily='montserrat_medium' />
+                  <OymoFont message='Read more' fontStyle={{ ..._profile.about, color: theme ? color.white : color.dark }} fontFamily='montserrat_medium' />
                 </TouchableOpacity>
               }
               {
                 aboutLimit > 2 &&
                 <TouchableOpacity onPress={() => setAboutLimit(2)}>
-                  <OymoFont message='Show less' fontStyle={_profile.about} fontFamily='montserrat_medium' />
+                  <OymoFont message='Show less' fontStyle={{ ..._profile.about, color: theme ? color.white : color.dark }} fontFamily='montserrat_medium' />
                 </TouchableOpacity>
               }
             </>
@@ -83,8 +89,8 @@ const ProfileDetails = ({ profile, user }) => {
         <View style={_profile.passionsContainer}>
           {
             profile?.passions?.map((passion, index) =>
-              <View key={index} style={_profile.passions}>
-                <OymoFont message={passion} fontStyle={_profile.passion} />
+              <View key={index} style={[_profile.passions, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
+                <OymoFont message={passion} fontStyle={{ ..._profile.passion, color: theme ? color.white : color.dark }} />
               </View>
             )
           }
@@ -94,30 +100,30 @@ const ProfileDetails = ({ profile, user }) => {
       {
         profile?.address &&
         <View style={_profile.infoListContainer}>
-          <Feather name='home' size={14} color={color.dark} />
+          <Feather name='home' size={14} color={theme ? color.white : color.dark} />
 
           <View style={_profile.infoList}>
-            <OymoFont message='Lives in' fontStyle={_profile.title} />
-            <OymoFont message={`${profile?.address?.city}, ${profile?.address?.country}`} fontStyle={_profile.info} fontFamily='montserrat_bold' />
+            <OymoFont message='Lives in' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+            <OymoFont message={`${profile?.address?.city}, ${profile?.address?.country}`} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
           </View>
         </View>
       }
 
       <View style={_profile.infoListContainer}>
-        <Fontisto name='date' size={14} color={color.dark} />
+        <Fontisto name='date' size={14} color={theme ? color.white : color.dark} />
 
         <View style={_profile.infoList}>
-          <OymoFont message='Joined' fontStyle={_profile.title} />
-          <OymoFont message={profile?.timestamp?.toDate().toDateString()} fontStyle={_profile.info} fontFamily='montserrat_bold' />
+          <OymoFont message='Joined' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+          <OymoFont message={profile?.timestamp?.toDate().toDateString()} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
         </View>
       </View>
 
       {
-        profile?.job != '' &&
+        profile?.job != undefined &&
         <View style={[_profile.infoListContainer, { marginBottom: 20 }]}>
-          <Feather name='briefcase' size={14} color={color.dark} />
+          <Feather name='briefcase' size={14} color={theme ? color.white : color.dark} />
 
-          <Text style={[_profile.info, { fontFamily: 'text' }]}>
+          <Text style={[_profile.info, { fontFamily: 'text', color: theme ? color.white : color.dark }]}>
             {profile?.job} {profile?.company != '' && 'at'} {profile?.company}
           </Text>
         </View>

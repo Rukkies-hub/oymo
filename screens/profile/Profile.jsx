@@ -11,12 +11,11 @@ import ProfileDetails from './ProfileDetailes'
 import Reels from './Reels'
 import Events from './Events'
 import Header from '../../components/Header'
-import Bar from '../../components/Bar'
 import OymoFont from '../../components/OymoFont'
 import { useState } from 'react'
 
 const Profile = () => {
-  const { user, profile: _profile } = useSelector(state => state.user)
+  const { user, profile: _profile, theme } = useSelector(state => state.user)
   const focus = useIsFocused()
   const navigation = useNavigation()
 
@@ -32,7 +31,7 @@ const Profile = () => {
   })
 
   return (
-    <View style={profile.container}>
+    <View style={[profile.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <Header
         showBack
         showTitle
@@ -40,7 +39,7 @@ const Profile = () => {
         title={_profile?.username}
         showAratar={_profile?.photoURL ? true : false}
       />
-      <ScrollView style={profile.container} showsVerticalScrollIndicator={false}>
+      <ScrollView style={[profile.container, { backgroundColor: theme ? color.dark : color.white }]} showsVerticalScrollIndicator={false}>
         <>
           {
             _profile && user &&
@@ -48,10 +47,10 @@ const Profile = () => {
               <ProfileDetails profile={_profile} user={user} />
               <View style={profile.navigationView}>
                 <TouchableOpacity onPress={() => setView('reels')} style={profile.navigationViewButtons}>
-                  <OymoFont message='Reels' fontStyle={{ color: view == 'reels' ? color.black : color.lightText }} />
+                  <OymoFont message='Reels' fontStyle={{ color: view == 'reels' ? color.red : (theme ? color.white : color.lightText) }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => setView('events')} style={profile.navigationViewButtons}>
-                  <OymoFont message='Events' fontStyle={{ color: view == 'events' ? color.black : color.lightText }} />
+                  <OymoFont message='Events' fontStyle={{ color: view == 'events' ? color.red : (theme ? color.white : color.lightText) }} />
                 </TouchableOpacity>
               </View>
               {

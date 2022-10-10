@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 
 import Header from '../../components/Header'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
@@ -28,6 +28,7 @@ import { useSelector } from 'react-redux'
 import { sr } from '../../style/saveReel'
 import OymoFont from '../../components/OymoFont'
 import { admin } from '@env'
+import * as NavigationBar from 'expo-navigation-bar'
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -38,9 +39,15 @@ Notifications.setNotificationHandler({
 })
 
 const SaveReels = () => {
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
   const navigation = useNavigation()
   const { source, thumbnail, mediaType } = useRoute().params
+
+  const focused = useIsFocused()
+  if (focused) {
+    NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
+    NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
+  }
 
   const [description, setDescription] = useState('')
   const [loading, setLoading] = useState(false)
@@ -131,8 +138,8 @@ const SaveReels = () => {
   }
 
   return (
-    <View style={sr.container}>
-      <Bar color='dark' />
+    <View style={[sr.container, { backgroundColor: theme ? color.dark : color.white }]}>
+      <Bar color={theme ? 'light' : 'dark'} />
       <Header showBack showTitle title='Save reel' />
 
       <View style={sr.mainView}>
@@ -142,8 +149,8 @@ const SaveReels = () => {
           multiline
           maxLength={150}
           placeholder="What's on your mind..."
-          placeholderTextColor={color.dark}
-          style={sr.input}
+          placeholderTextColor={theme ? color.white : color.dark}
+          style={[sr.input, { color: theme ? color.white : color.dark }]}
         />
         <Image source={{ uri: source }} style={sr.preview} />
       </View>
@@ -151,8 +158,8 @@ const SaveReels = () => {
       <View style={{ flex: 1 }} />
 
       <View style={sr.bottomView}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={sr.cancelButton}>
-          <OymoFont message='Cancel' fontStyle={{ color: color.dark }} />
+        <TouchableOpacity onPress={() => navigation.goBack()} style={[sr.cancelButton, { backgroundColor: theme ? color.lightBorderColor : color.borderColor }]}>
+          <OymoFont message='Cancel' fontStyle={{ color: theme ? color.white : color.dark }} />
         </TouchableOpacity>
 
         <TouchableOpacity

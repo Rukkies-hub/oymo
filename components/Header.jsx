@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import {
   View,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Text
 } from 'react-native'
 
 import {
@@ -43,7 +44,7 @@ const Header = ({
   textColor
 }) => {
   const navigation = useNavigation()
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
   const dispatch = useDispatch()
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
@@ -78,13 +79,13 @@ const Header = ({
               onLongPress={() => navigation.navigate('Match')}
               style={header.backButton}
             >
-              <Entypo name='chevron-left' size={24} color={textColor || color.black} />
+              <Entypo name='chevron-left' size={24} color={textColor || theme ? color.white : color.black} />
             </TouchableOpacity>
           }
 
           {
             showLogo &&
-            <OymoFont fontStyle={header.logo} fontFamily='pacifico' message='Oymo' />
+            <OymoFont fontStyle={{ ...header.logo, color: theme ? color.white : color.black }} fontFamily='pacifico' message='Oymo' />
           }
 
           {
@@ -96,7 +97,9 @@ const Header = ({
 
           {
             showTitle &&
-            <OymoFont message={title} fontStyle={header.showTitle} />
+            <Text style={[header.showTitle, {color: theme ? color.white : color.dark}]}>
+              {title}
+            </Text>
           }
         </View>
 
@@ -113,8 +116,8 @@ const Header = ({
             <>
               {
                 showNotification &&
-                <TouchableOpacity onPress={() => navigation.navigate('Notifications')} style={header.notificationButton}>
-                  <SimpleLineIcons name='bell' size={20} color={color.dark} />
+                <TouchableOpacity onPress={() => navigation.navigate('Notifications')} style={[header.notificationButton, {backgroundColor: theme ? color.dark : color.offWhite}]}>
+                  <SimpleLineIcons name='bell' size={20} color={theme ? color.white : color.dark} />
 
                   {
                     profile?.notificationCount > 0 &&
