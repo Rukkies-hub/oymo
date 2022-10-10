@@ -32,7 +32,7 @@ import Payment from './components/Payment'
 import { signOut } from 'firebase/auth'
 
 const EditProfile = () => {
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
   const storage = getStorage()
   const navigation = useNavigation()
   const dispatch = useDispatch()
@@ -147,19 +147,16 @@ const EditProfile = () => {
   if (!loaded) return null
 
   return (
-    <KeyboardAvoidingView style={editProfile.container}>
+    <KeyboardAvoidingView style={[editProfile.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <Header showBack showTitle showAratar title='Edit Profile' />
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={editProfile.mainView}>
           {
             profile?.photoURL ?
-              <Image
-                source={{ uri: profile?.photoURL }}
-                style={editProfile.avatar}
-              /> :
+              <Image source={{ uri: profile?.photoURL }} style={editProfile.avatar} /> :
               <View style={editProfile.placeholderAvatar}>
-                <SimpleLineIcons name='user' size={30} color={color.lightText} />
+                <SimpleLineIcons name='user' size={30} color={theme ? color.white : color.lightText} />
               </View>
           }
 
@@ -168,19 +165,19 @@ const EditProfile = () => {
               <OymoFont
                 message={profile?.username ? profile?.username : 'username'}
                 fontFamily='montserrat_bold'
-                fontStyle={editProfile.username}
+                fontStyle={{ ...editProfile.username, color: theme ? color.white : color.dark }}
               />
             </View>
             <OymoFont
               message={profile?.displayName ? profile?.displayName : user?.displayName ? user?.displayName : 'Display name'}
-              fontStyle={editProfile.displayName}
+              fontStyle={{ ...editProfile.displayName, color: theme ? color.white : color.dark }}
             />
           </View>
 
           {
             profile &&
-            <TouchableOpacity onPress={pickImage} style={editProfile.pickImage}>
-              <AntDesign name='picture' size={24} color={color.dark} />
+            <TouchableOpacity onPress={pickImage} style={[editProfile.pickImage, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
+              <AntDesign name='picture' size={24} color={theme ? color.white : color.dark} />
             </TouchableOpacity>
           }
         </View>
@@ -196,8 +193,15 @@ const EditProfile = () => {
               textContentType='username'
               autoCorrect={false}
               onChangeText={setUsername}
-              placeholderTextColor={color.dark}
-              style={[editProfile.input, { fontFamily: 'text' }]}
+              placeholderTextColor={theme ? color.white : color.dark}
+              style={[
+                editProfile.input,
+                {
+                  fontFamily: 'text',
+                  backgroundColor: theme ? color.lightText : color.offWhite,
+                  color: theme ? color.white : color.dark
+                }
+              ]}
             />
 
             {
@@ -206,8 +210,15 @@ const EditProfile = () => {
                 value={displayName}
                 placeholder='Display name'
                 onChangeText={setDisplayName}
-                placeholderTextColor={color.dark}
-                style={[editProfile.input, { fontFamily: 'text' }]}
+                placeholderTextColor={theme ? color.white : color.dark}
+                style={[
+                  editProfile.input,
+                  {
+                    fontFamily: 'text',
+                    backgroundColor: theme ? color.lightText : color.offWhite,
+                    color: theme ? color.white : color.dark
+                  }
+                ]}
               />
             }
 
@@ -217,8 +228,15 @@ const EditProfile = () => {
               autoCapitalize='none'
               autoCorrect={false}
               onChangeText={setPhone}
-              placeholderTextColor={color.dark}
-              style={[editProfile.input, { fontFamily: 'text' }]}
+              placeholderTextColor={theme ? color.white : color.dark}
+              style={[
+                editProfile.input,
+                {
+                  fontFamily: 'text',
+                  backgroundColor: theme ? color.lightText : color.offWhite,
+                  color: theme ? color.white : color.dark
+                }
+              ]}
             />
 
             {
@@ -227,8 +245,15 @@ const EditProfile = () => {
                 value={job}
                 onChangeText={setJob}
                 placeholder='Enter your occupation'
-                placeholderTextColor={color.dark}
-                style={[editProfile.input, { fontFamily: 'text' }]}
+                placeholderTextColor={theme ? color.white : color.dark}
+                style={[
+                  editProfile.input,
+                  {
+                    fontFamily: 'text',
+                    backgroundColor: theme ? color.lightText : color.offWhite,
+                    color: theme ? color.white : color.dark
+                  }
+                ]}
               />
             }
 
@@ -238,8 +263,15 @@ const EditProfile = () => {
                 value={company}
                 onChangeText={setCompany}
                 placeholder='Where do you work'
-                placeholderTextColor={color.dark}
-                style={[editProfile.input, { fontFamily: 'text' }]}
+                placeholderTextColor={theme ? color.white : color.dark}
+                style={[
+                  editProfile.input,
+                  {
+                    fontFamily: 'text',
+                    backgroundColor: theme ? color.lightText : color.offWhite,
+                    color: theme ? color.white : color.dark
+                  }
+                ]}
               />
             }
 
@@ -249,8 +281,15 @@ const EditProfile = () => {
                 value={school}
                 onChangeText={setSchool}
                 placeholder='School'
-                placeholderTextColor={color.dark}
-                style={[editProfile.input, { fontFamily: 'text' }]}
+                placeholderTextColor={theme ? color.white : color.dark}
+                style={[
+                  editProfile.input,
+                  {
+                    fontFamily: 'text',
+                    backgroundColor: theme ? color.lightText : color.offWhite,
+                    color: theme ? color.white : color.dark
+                  }
+                ]}
               />
             }
 
@@ -259,8 +298,15 @@ const EditProfile = () => {
               editable={false}
               onChangeText={setCity}
               placeholder='I live in (City)'
-              placeholderTextColor={color.dark}
-              style={[editProfile.input, { fontFamily: 'text' }]}
+              placeholderTextColor={theme ? color.white : color.dark}
+              style={[
+                editProfile.input,
+                {
+                  fontFamily: 'text',
+                  backgroundColor: theme ? color.lightText : color.offWhite,
+                  color: theme ? color.white : color.dark
+                }
+              ]}
             />
 
             {
@@ -274,21 +320,28 @@ const EditProfile = () => {
                   onChangeText={setAbout}
                   placeholder='About me'
                   onContentSizeChange={e => setHeight(e.nativeEvent.contentSize.height)}
-                  placeholderTextColor={color.dark}
-                  style={[editProfile.input, { fontFamily: 'text' }]}
+                  placeholderTextColor={theme ? color.white : color.dark}
+                  style={[
+                    editProfile.input,
+                    {
+                      fontFamily: 'text',
+                      backgroundColor: theme ? color.lightText : color.offWhite,
+                      color: theme ? color.white : color.dark
+                    }
+                  ]}
                 />
               </View>
             }
 
             {
               (profile && profile?.age == undefined) &&
-              <TouchableOpacity onPress={() => navigation.navigate('DOB')} style={{ marginBottom: 20 }}>
+              <View style={{ marginBottom: 20 }}>
                 <OymoFont message='Date of birth' fontStyle={editProfile.passionsText} fontFamily='montserrat_bold' />
 
                 <TouchableOpacity onPress={() => navigation.navigate('DOB')} style={[editProfile.genderButton, { marginTop: 10 }]}>
                   <OymoFont message='Set your birth date' fontStyle={editProfile.genderText} fontFamily='montserrat_bold' />
                 </TouchableOpacity>
-              </TouchableOpacity>
+              </View>
             }
 
             {
@@ -307,8 +360,8 @@ const EditProfile = () => {
                     >
                       {
                         profile?.passions?.map((passion, index) => (
-                          <View key={index} style={editProfile.passions}>
-                            <OymoFont message={passion} fontStyle={editProfile.passion} />
+                          <View key={index} style={[editProfile.passions, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
+                            <OymoFont message={passion} fontStyle={{ ...editProfile.passion, color: theme ? color.white : color.dark }} />
                           </View>
                         ))
                       }
@@ -330,10 +383,10 @@ const EditProfile = () => {
             {profile &&
               <TouchableOpacity
                 onPress={() => navigation.navigate('Upgrade')}
-                style={editProfile.goPro}
+                style={[editProfile.goPro, { backgroundColor: theme ? color.lightText : color.offWhite }]}
               >
                 <Image source={require('../../assets/star.png')} style={editProfile.star} />
-                <OymoFont message='Oymo Premium' fontStyle={editProfile.upgradeButtonText} />
+                <OymoFont message='Oymo Premium' fontStyle={{ ...editProfile.upgradeButtonText, color: theme ? color.white : color.dark }} />
               </TouchableOpacity>
             }
 
@@ -349,13 +402,13 @@ const EditProfile = () => {
               }
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={logoutUser} style={editProfile.logoutButton}>
+            <TouchableOpacity onPress={logoutUser} style={[editProfile.logoutButton, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
               <OymoFont message='Logout' fontStyle={editProfile.logoutButtonText} />
             </TouchableOpacity>
 
             <View style={editProfile.bottomContainer}>
               <Image source={require('../../assets/adaptive-icon.png')} style={editProfile.logo} />
-              <OymoFont message={`Version ${Constants?.manifest?.version}`} fontStyle={editProfile.version} />
+              <OymoFont message={`Version ${Constants?.manifest?.version}`} fontStyle={{ ...editProfile.version, color: theme ? color.white : color.dark }} />
             </View>
           </View>
         </ScrollView>

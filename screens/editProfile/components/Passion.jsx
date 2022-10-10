@@ -82,7 +82,7 @@ const passionList = [
 
 const Passion = () => {
   const navigation = useNavigation()
-  const { profile, user } = useSelector(state => state.user)
+  const { profile, user, theme } = useSelector(state => state.user)
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
 
@@ -100,16 +100,19 @@ const Passion = () => {
   }
 
   return (
-    <SafeAreaView style={ps.container}>
+    <SafeAreaView style={[ps.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <Header showBack showTitle title='Select Passion' />
 
-      <OymoFont message="Select passions that you'd like to share with the people you connect with. Choose a minimum of 3." fontStyle={ps.headText} />
+      <OymoFont
+        message="Select passions that you'd like to share with the people you connect with. Choose a minimum of 3."
+        fontStyle={{ ...ps.headText, color: theme ? color.white : color.dark }}
+      />
 
       <View style={ps.infoView}>
-        <OymoFont message='Edit Passions' fontStyle={ps.titleText} />
+        <OymoFont message='Edit Passions' fontStyle={{ ...ps.titleText, color: theme ? color.white : color.dark }} />
         {
           passions?.length > 0 &&
-          <OymoFont message={`${passions?.length}/5`} fontStyle={ps.passionCount} />
+          <OymoFont message={`${passions?.length}/5`} fontStyle={{ ...ps.passionCount, color: theme ? color.white : color.dark }} />
         }
       </View>
 
@@ -125,9 +128,9 @@ const Passion = () => {
                       if (passions?.includes(passion)) setPassions(passions?.filter(item => item !== passion))
                       else if (passions?.length <= 4) setPassions(oldArray => [...oldArray, passion])
                     }}
-                    style={[ps.passionButton, { borderColor: passions?.includes(passion) ? color.red : color.borderColor }]}
+                    style={[ps.passionButton, { borderColor: passions?.includes(passion) ? color.red : (theme ? color.lightBorderColor : color.borderColor) }]}
                   >
-                    <Text style={[ps.passion, { color: passions?.includes(passion) ? color.red : color.lightText }]}>
+                    <Text style={[ps.passion, { color: passions?.includes(passion) ? color.red : (theme ? color.white : color.lightText) }]}>
                       {passion}
                     </Text>
                   </TouchableOpacity>

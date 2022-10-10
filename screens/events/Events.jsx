@@ -6,12 +6,15 @@ import Header from '../../components/Header'
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import color from '../../style/color'
+import { useSelector } from 'react-redux'
 
 const { Navigator, Screen } = createMaterialTopTabNavigator()
 
 const Events = () => {
+  const { theme } = useSelector(state => state.user)
+
   return (
-    <View style={events.container}>
+    <View style={[events.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <Header
         showBack
         showLogo

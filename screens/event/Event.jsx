@@ -1,7 +1,7 @@
 import { View, Text, ImageBackground, TouchableOpacity, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { _event } from '../../style/event'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import color from '../../style/color'
 import Header from '../../components/Header'
@@ -13,6 +13,7 @@ import { db } from '../../hooks/firebase'
 import Avatar from './components/Avatar'
 import UserAvatar from './components/UserAvatar'
 import Bar from '../../components/Bar'
+import * as NavigationBar from 'expo-navigation-bar'
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -20,7 +21,8 @@ const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 
 const Event = () => {
   const { event } = useRoute().params
   const navigation = useNavigation()
-  const { profile, user } = useSelector(state => state.user)
+  const focus = useIsFocused()
+  const { profile, user, theme } = useSelector(state => state.user)
 
   const [activeButton, setActiveButton] = useState(true)
   const [eventState, setEventState] = useState('open')
@@ -29,6 +31,11 @@ const Event = () => {
   const [attendees, setAttendees] = useState([])
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
+  if (focus) {
+    NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
+    NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
+  }
 
   useEffect(() =>
     onSnapshot(doc(db, 'events', event?.id), doc => {
@@ -105,7 +112,7 @@ const Event = () => {
   }
 
   return (
-    <View style={_event.container}>
+    <View style={[_event.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <ImageBackground source={{ uri: event?.image }} style={_event.gradient}>
         <LinearGradient colors={['transparent', color.deepBlueSea]} style={_event.gradient}>
           <Bar color='light' />
@@ -170,7 +177,7 @@ const Event = () => {
           <OymoFont message={event?.description} fontStyle={_event.description} />
         </View>
 
-        <View style={_event.bottomView}>
+        <View style={[_event.bottomView, { backgroundColor: theme ? color.dark : color.white }]}>
           <View style={_event.bottomViewSides}>
             <View style={_event.bottomViewSidesLeft}>
               <Avatar user={event?.user} />
