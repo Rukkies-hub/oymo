@@ -97,6 +97,9 @@ export const ar = StyleSheet.create({
   },
 
   galleryButton: {
+    backgroundColor: color.faintBlack,
+    borderRadius: 12,
+    overflow: 'hidden',
     width: 50,
     height: 50,
     justifyContent: 'center',
