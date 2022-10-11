@@ -121,11 +121,11 @@ const Match = () => {
     getDoc(doc(db, 'users', userSwiped?.id, 'swipes', id))
       .then(async documentSnapshot => {
         if (documentSnapshot?.exists()) {
-          await setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
-          await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+          setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
+          updateDoc(doc(db, 'users', id), { coins: increment(-20) })
 
           // CREAT A MATCH
-          await setDoc(doc(db, 'matches', generateId(id, userSwiped?.id)), {
+          setDoc(doc(db, 'matches', generateId(id, userSwiped?.id)), {
             users: {
               [id]: profile,
               [userSwiped?.id]: userSwiped
@@ -133,11 +133,11 @@ const Match = () => {
             usersMatched: [id, userSwiped?.id],
             timestamp: serverTimestamp()
           }).then(async () => {
-            await deleteDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id))
-            await updateDoc(doc(db, 'users', id), { pendingSwipes: increment(-1) })
-            await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
-            await updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
-            await updateDoc(doc(db, 'admin', admin), { matches: increment(1) })
+            deleteDoc(doc(db, 'users', id, 'pendingSwipes', userSwiped?.id))
+            updateDoc(doc(db, 'users', id), { pendingSwipes: increment(-1) })
+            updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+            updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
+            updateDoc(doc(db, 'admin', admin), { matches: increment(1) })
           })
 
           navigation.navigate('NewMatch', {
@@ -147,18 +147,18 @@ const Match = () => {
           getAllProfiles()
           getPendingSwipes()
         } else {
-          await setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
-          await setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', id), profile)
-          await updateDoc(doc(db, 'users', userSwiped?.id), { pendingSwipes: increment(1) })
-          await updateDoc(doc(db, 'users', id), { coins: increment(-20) })
-          await updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
+          setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
+          setDoc(doc(db, 'users', userSwiped?.id, 'pendingSwipes', id), profile)
+          updateDoc(doc(db, 'users', userSwiped?.id), { pendingSwipes: increment(1) })
+          updateDoc(doc(db, 'users', id), { coins: increment(-20) })
+          updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
           getAllProfiles()
           getPendingSwipes()
         }
       })
 
     setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
-    await updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
+    updateDoc(doc(db, 'admin', admin), { swipes: increment(1) })
   }
 
   const disabled = () => navigation.navigate('SetupModal')
@@ -217,7 +217,7 @@ const Match = () => {
                 <View key={card?.id} style={match.card}>
                   <Image style={match.cardImage} source={{ uri: card?.photoURL }} />
 
-                  <LinearGradient colors={['transparent', color.black]} style={match.cardGradient}>
+                  <LinearGradient colors={['transparent', theme ? color.dark : color.black]} style={match.cardGradient}>
                     <View style={match.userDetail}>
                       <TouchableOpacity onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.usernameButton}>
                         <OymoFont fontStyle={match.username} fontFamily='montserrat_bold' message={card?.username} />

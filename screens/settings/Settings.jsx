@@ -14,10 +14,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch, useSelector } from 'react-redux'
 import { setTheme } from '../../features/userSlice'
 import Bar from '../../components/Bar'
+import * as NavigationBar from 'expo-navigation-bar'
+import { useIsFocused } from '@react-navigation/native'
 
 const Settings = () => {
   const dispatch = useDispatch()
   const { theme } = useSelector(state => state.user)
+  const focus = useIsFocused()
+
+  if (focus) {
+    NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
+    NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
+  }
 
   const [locationPermision, setLocationPermision] = useState(false)
   const [cameraPermision, setCameraPermision] = useState(false)

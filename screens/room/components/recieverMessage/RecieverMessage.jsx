@@ -6,6 +6,7 @@ import { rm } from '../../../../style/room'
 import OymoFont from '../../../../components/OymoFont'
 import color from '../../../../style/color'
 import UserInfo from './UserInfo'
+import { useSelector } from 'react-redux'
 
 if (
   Platform.OS === 'android' &&
@@ -13,6 +14,7 @@ if (
 ) UIManager.setLayoutAnimationEnabledExperimental(true)
 
 const RecieverMessage = ({ messages }) => {
+  const { theme } = useSelector(state => state.user)
   const [showTime, setShowTime] = useState(false)
   const [numberOfLines, setNumberOfLines] = useState(10)
 
@@ -42,16 +44,19 @@ const RecieverMessage = ({ messages }) => {
           {
             messages?.message &&
             <View>
-              <View style={[rm.chatView, { backgroundColor: messages?.message ? color.offWhite : color.transparent }]}>
+              <View style={[rm.chatView, { backgroundColor: messages?.message ? (theme ? color.dark : color.offWhite) : color.transparent }]}>
                 <UserInfo user={messages?.userId} />
-                <OymoFont message={messages?.message} fontStyle={rm.replyMessageText} />
+                <OymoFont message={messages?.message} fontStyle={{...rm.replyMessageText, color: theme ? color.white : color.dark}} />
               </View>
               {
                 messages?.timestamp &&
                 <>
                   {
                     showTime &&
-                    <OymoFont message={new Date(messages?.timestamp?.seconds * 1000 + messages?.timestamp?.nanoseconds / 1000000).toDateString()} fontStyle={rm.messageTimestamp} />
+                      <OymoFont
+                        message={new Date(messages?.timestamp?.seconds * 1000 + messages?.timestamp?.nanoseconds / 1000000).toDateString()}
+                        fontStyle={{...rm.messageTimestamp, color: theme ? color.white : color.dark}}
+                      />
                   }
                 </>
               }

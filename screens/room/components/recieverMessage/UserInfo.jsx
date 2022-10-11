@@ -8,7 +8,7 @@ import OymoFont from '../../../../components/OymoFont'
 import color from '../../../../style/color'
 
 const UserInfo = ({ user }) => {
-  const { profile } = useSelector(state => state.user)
+  const { profile, theme } = useSelector(state => state.user)
   const navigation = useNavigation()
   const [userInfo, setUserInfo] = useState(null)
 
@@ -31,7 +31,7 @@ const UserInfo = ({ user }) => {
         message={`@${userInfo?.username}`}
         lines={1}
         fontStyle={{
-          color: color.dark,
+          color: theme ? color.white : color.dark,
           fontSize: 10
         }}
         fontFamily='montserrat_bold'

@@ -7,7 +7,7 @@ import { db } from '../../../hooks/firebase'
 import { useSelector } from 'react-redux'
 
 const LookingFor = () => {
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
 
   const [lookingFor, setLookingFor] = useState(profile?.lookingFor)
 
@@ -57,7 +57,7 @@ const LookingFor = () => {
           onPress={lookingForMen}
           style={{
             flex: 1,
-            backgroundColor: lookingFor == 'male' ? color.red : color.offWhite,
+            backgroundColor: lookingFor == 'male' ? color.red : (theme ? color.lightText : color.offWhite),
             justifyContent: 'center',
             alignItems: 'center',
             height: 45,
@@ -68,7 +68,7 @@ const LookingFor = () => {
           <Text
             style={{
               fontFamily: 'text',
-              color: lookingFor == 'male' ? color.white : color.dark
+              color: lookingFor == 'male' ? color.white : (theme ? color.white : color.dark)
             }}
           >
             Men
@@ -79,7 +79,7 @@ const LookingFor = () => {
           onPress={lookingForWomen}
           style={{
             flex: 1,
-            backgroundColor: lookingFor == 'female' ? color.red : color.offWhite,
+            backgroundColor: lookingFor == 'female' ? color.red : (theme ? color.lightText : color.offWhite),
             justifyContent: 'center',
             alignItems: 'center',
             height: 45,
@@ -90,7 +90,7 @@ const LookingFor = () => {
           <Text
             style={{
               fontFamily: 'text',
-              color: lookingFor == 'female' ? color.white : color.dark
+              color: lookingFor == 'female' ? color.white : (theme ? color.white : color.dark)
             }}
           >
             Women

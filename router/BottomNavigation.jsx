@@ -17,11 +17,20 @@ import { nav } from '../style/navigation'
 import Chat from '../screens/chat/Chat'
 import AddReels from '../screens/addReels/AddReels'
 import LikesNavigation from '../screens/likes/LikesNavigation'
+import { useIsFocused } from '@react-navigation/native'
+import * as NavigationBar from 'expo-navigation-bar'
 
 const { Navigator, Screen } = createMaterialBottomTabNavigator()
 
 const BottomNavigation = () => {
   const { profile, theme } = useSelector(state => state.user)
+
+  const focused = useIsFocused()
+
+  if (focused) {
+    NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
+    NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
+  }
 
   return (
     <View style={[nav.container, { backgroundColor: theme ? color.dark : color.white }]}>
@@ -59,7 +68,8 @@ const BottomNavigation = () => {
             }
           })}
           options={{
-            tabBarIcon: () => <FontAwesome name='plus-square-o' color={theme ? color.white : color.black} size={22} />
+            tabBarIcon: () => <FontAwesome name='plus-square-o' color={theme ? color.white : color.black} size={22} />,
+            title: 'Post'
           }}
         />
 

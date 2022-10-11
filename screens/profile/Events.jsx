@@ -48,7 +48,7 @@ const Events = () => {
       {
         events?.length < 1 ?
           <View style={pEvents.indicatorContainer}>
-            <ActivityIndicator size='large' color={color.black} />
+            <ActivityIndicator size='large' color={theme ? color.white : color.black} />
           </View> :
           <>
             {

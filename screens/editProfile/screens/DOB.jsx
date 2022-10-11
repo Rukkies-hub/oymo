@@ -36,8 +36,8 @@ const DOB = () => {
   const [year, setYear] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const { user } = useSelector(state => state.user)
-  
+  const { user, theme } = useSelector(state => state.user)
+
   const id = user?.uid == undefined ? user?.user?.uid : user?.uid
 
   const saveDOB = async () => {
@@ -65,18 +65,18 @@ const DOB = () => {
     <View style={dob.container}>
       <TouchableOpacity onPress={() => navigation.goBack()} style={dob.goBackButton} />
 
-      <View style={dob.sheet}>
+      <View style={[dob.sheet, { backgroundColor: theme ? color.dark : color.white }]}>
         <OymoFont message='Warning!!!' fontFamily='montserrat_bold' fontStyle={dob.warning} />
 
         <OymoFont
           message='You only have one chance to set this information'
           fontFamily='montserrat_bold'
-          fontStyle={dob.caption}
+          fontStyle={{ ...dob.caption, color: theme ? color.white : color.dark }}
         />
         <OymoFont
           message={`${day || 'dd'}/${month || 'mm'}/${year || 'yyyy'}`}
           fontFamily='montserrat_bold'
-          fontStyle={dob.mainDate}
+          fontStyle={{ ...dob.mainDate, color: theme ? color.white : color.dark }}
         />
 
         <View style={dob.calender}>

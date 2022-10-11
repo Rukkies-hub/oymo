@@ -40,9 +40,18 @@ import Map from '../screens/Map'
 import DOB from '../screens/editProfile/screens/DOB'
 import ReelsOption from '../screens/modals/ReelsOption'
 import Settings from '../screens/settings/Settings'
+import { useIsFocused } from '@react-navigation/native'
+import * as NavigationBar from 'expo-navigation-bar'
 
 const StackNavigation = () => {
-  const { user, loadingInitial } = useSelector(state => state.user)
+  const { user, loadingInitial, theme } = useSelector(state => state.user)
+
+  const focused = useIsFocused()
+
+  if (focused) {
+    NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
+    NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
+  }
 
   return (
     <Navigator

@@ -9,12 +9,14 @@ import color from '../../style/color'
 import OymoFont from '../../components/OymoFont'
 import { useNavigation } from '@react-navigation/native'
 import { useCallback } from 'react'
+import { useSelector } from 'react-redux'
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
 const Rooms = () => {
+  const { theme } = useSelector(state => state.user)
   const navigation = useNavigation()
 
   const [rooms, setRooms] = useState([])
@@ -42,7 +44,7 @@ const Rooms = () => {
   }, [])
 
   return (
-    <View style={_rooms.container}>
+    <View style={[_rooms.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <Header
         showBack
         showLogo

@@ -7,12 +7,14 @@ import { collection, getDocs, orderBy, query } from 'firebase/firestore'
 import { db } from '../../../hooks/firebase'
 import OymoFont from '../../../components/OymoFont'
 import Card from './Card'
+import { useSelector } from 'react-redux'
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout))
 }
 
 const AllEvents = ({ navigation }) => {
+  const { theme } = useSelector(state => state.user)
   const [allEvents, setAllEvents] = useState([])
   const [refreshing, setRefreshing] = useState(false)
 
@@ -39,8 +41,16 @@ const AllEvents = ({ navigation }) => {
   }, [db])
 
   return (
-    <View style={events.container}>
-      <OymoFont message='Welcom to Events' fontFamily='montserrat_bold' fontStyle={{ fontSize: 25, color: color.dark, marginHorizontal: 10 }} />
+    <View style={[events.container, { backgroundColor: theme ? color.dark : color.white }]}>
+      <OymoFont
+        message='Welcom to Events'
+        fontFamily='montserrat_bold'
+        fontStyle={{
+          fontSize: 25,
+          color: theme ? color.white : color.dark,
+          marginHorizontal: 10
+        }}
+      />
 
       <FlatList
         data={allEvents}

@@ -18,7 +18,7 @@ import { admin } from '@env'
 const Room = () => {
   const { room } = useRoute().params
   const navigation = useNavigation()
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
   const { messageReply } = useSelector(state => state.message)
 
   const [messages, setMessages] = useState([])
@@ -55,11 +55,11 @@ const Room = () => {
   }
 
   return (
-    <View style={msg.container}>
+    <View style={[msg.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <MessageHeader room={room} />
 
-      <ImageBackground source={require('../../assets/chatBG.png')} style={msg.messageBackground}>
-        <BlurView intensity={110} tint='light' style={msg.messageBackground}>
+      <ImageBackground source={theme ? require('../../assets/chatBGDark.png') : require('../../assets/chatBG.png')} style={msg.messageBackground}>
+        <BlurView intensity={110} tint={theme ? 'dark' : 'light'} style={msg.messageBackground}>
           <KeyboardAvoidingView style={{ flex: 1 }}>
             {
               !messages.length ?
@@ -91,6 +91,7 @@ const Room = () => {
                 {
                   borderTopLeftRadius: messageReply ? 0 : 12,
                   borderTopRightRadius: messageReply ? 0 : 12,
+                  backgroundColor: theme ? color.dark : color.offWhite
                 }]
               }
             >
@@ -101,12 +102,12 @@ const Room = () => {
                 onSubmitEditing={sendMessage}
                 onContentSizeChange={e => setHeight(e.nativeEvent.contentSize.height)}
                 placeholder='Aa..'
-                placeholderTextColor={color.lightText}
-                style={[iv.messageInput, { height }]}
+                placeholderTextColor={theme ? color.offWhite : color.lightText}
+                style={[iv.messageInput, { height, color: theme ? color.white : color.dark }]}
               />
 
               <TouchableOpacity onPress={sendMessage} style={iv.sendButton}>
-                <FontAwesome5 name='paper-plane' color={color.lightText} size={20} />
+                <FontAwesome5 name='paper-plane' color={theme ? color.white : color.lightText} size={20} />
               </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>

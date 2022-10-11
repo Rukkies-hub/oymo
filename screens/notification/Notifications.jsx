@@ -5,18 +5,25 @@ import color from '../../style/color'
 import { AntDesign, Fontisto, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { collection, deleteDoc, doc, getDocs, increment, query, updateDoc, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { SwipeListView } from 'react-native-swipe-list-view'
 import UserInfo from './components/UserInfo'
 import UserAvatar from './components/UserAvatar'
 import { useSelector } from 'react-redux'
 import { notify } from '../../style/notification'
 import OymoFont from '../../components/OymoFont'
+import * as NavigationBar from 'expo-navigation-bar'
 
 const Notifications = () => {
   const navigation = useNavigation()
-  const { user, profile } = useSelector(state => state.user)
+  const focus = useIsFocused()
+  const { user, profile, theme } = useSelector(state => state.user)
   const { notifications } = useSelector(state => state.notification)
+
+  if (focus) {
+    NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
+    NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
+  }
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
 
@@ -110,27 +117,27 @@ const Notifications = () => {
 
   const renderHiddenItem = ({ item }) => (
     <View style={notify.hiddenContolersView}>
-      <TouchableOpacity onPress={() => markAsRead(item)} style={notify.markAsReadButton}>
-        <Ionicons name='checkmark-done' size={24} color={item?.seen ? color.dark : color.blue} />
+      <TouchableOpacity onPress={() => markAsRead(item)} style={[notify.markAsReadButton, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
+        <Ionicons name='checkmark-done' size={24} color={item?.seen ? (theme ? color.white : color.dark) : color.blue} />
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => deleteNotification(item)} style={notify.deleteNotification}>
+      <TouchableOpacity onPress={() => deleteNotification(item)} style={[notify.deleteNotification, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
         <Feather name='trash-2' size={20} color={color.red} />
       </TouchableOpacity>
     </View >
   )
 
   return (
-    <SafeAreaView style={notify.container}>
+    <SafeAreaView style={[notify.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <Header showBack showTitle title='Notifications' showAratar showNotification />
 
       {
         notifications.length >= 1 &&
         <>
           <View style={notify.headerView}>
-            <TouchableOpacity onPress={markAllAsRead} style={notify.markAllAsReadButton}>
-              <OymoFont message='Mark all as read' fontStyle={{ color: color.dark }} />
+            <TouchableOpacity onPress={markAllAsRead} style={[notify.markAllAsReadButton, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
+              <OymoFont message='Mark all as read' fontStyle={{ color: theme ? color.white : color.dark }} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={clearAll} style={notify.clearAllButton}>
+            <TouchableOpacity onPress={clearAll} style={[notify.clearAllButton, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
               <Feather name='trash-2' size={20} color={color.red} />
             </TouchableOpacity>
           </View>
@@ -155,7 +162,7 @@ const Notifications = () => {
             <TouchableOpacity
               onPress={() => viewNotification(notification)}
               activeOpacity={1}
-              style={[notify.notification, { backgroundColor: notification?.seen == false ? color.offWhite : color.white }]}
+              style={[notify.notification, { backgroundColor: notification?.seen == false ? (theme ? color.lightText : color.offWhite) : (theme ? color.dark : color.white) }]}
             >
               <View style={notify.avatarView}>
                 <UserAvatar user={notification?.user?.id} />
@@ -184,7 +191,7 @@ const Notifications = () => {
                   <UserInfo user={notification?.user?.id} />
                   <OymoFont
                     message={notification?.activity == 'likes' ? 'likes your post' : notification?.activity == 'joined' ? 'Joined your event' : 'commented on your post'}
-                    fontStyle={notify.activityTxt}
+                    fontStyle={{...notify.activityTxt, color: theme ? color.white : color.dark}}
                     fontFamily='montserrat_light'
                   />
                 </View>

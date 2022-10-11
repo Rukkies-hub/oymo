@@ -9,6 +9,15 @@ export const ar = StyleSheet.create({
     backgroundColor: color.black
   },
 
+  permissionButton: {
+    backgroundColor: color.red,
+    width: '60%',
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12
+  },
+
   camera: {
     flex: 1,
     backgroundColor: color.black,
@@ -88,12 +97,10 @@ export const ar = StyleSheet.create({
   },
 
   galleryButton: {
-    borderWidth: 2,
-    borderColor: color.white,
-    borderRadius: 12,
-    overflow: 'hidden',
     width: 50,
-    height: 50
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   preview: {
