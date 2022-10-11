@@ -47,7 +47,7 @@ const EditProfile = () => {
   const [notification, setNotification] = useState(false)
 
   // INPUTS
-  const [displayName, setDisplayName] = useState(user?.displayName)
+  const [displayName, setDisplayName] = useState(profile?.displayName)
   const [username, setUsername] = useState(profile?.username)
   const [phone, setPhone] = useState(profile?.phone)
   const [job, setJob] = useState(profile?.job)
