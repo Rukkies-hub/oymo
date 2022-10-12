@@ -2,9 +2,8 @@ import React, { useEffect } from 'react'
 
 import { Camera, CameraType, FlashMode, VideoQuality } from 'expo-camera'
 import { useState } from 'react'
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import { useIsFocused, useNavigation } from '@react-navigation/native'
-import { useSelector } from 'react-redux'
 import { ar } from '../../style/addReels'
 import Bar from '../../components/Bar'
 import OymoFont from '../../components/OymoFont'
@@ -16,7 +15,6 @@ import * as ImagePicker from 'expo-image-picker'
 import { Audio } from 'expo-av'
 
 const AddReels = () => {
-  const { theme } = useSelector(state => state.user)
   const [type, setType] = useState(CameraType.back)
   const [cameraFlash, setCameraFlash] = useState(CameraType.back)
   const [isCameraReady, setIsCameraReady] = useState(false)
@@ -131,9 +129,9 @@ const AddReels = () => {
           <TouchableOpacity onPress={() => navigation.goBack()} style={ar.goBack}>
             <Entypo name='chevron-left' size={24} color={color.white} />
           </TouchableOpacity>
-
         </Camera>
       }
+      
       <View style={ar.controlersView}>
         <TouchableOpacity onPress={toggleCameraType} style={ar.flip}>
           <MaterialIcons name='flip-camera-android' color={color.white} size={24} />

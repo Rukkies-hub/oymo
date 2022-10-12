@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, TouchableOpacity, SafeAreaView, FlatList, Text, ActivityIndicator } from 'react-native'
+import { View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native'
 import { collection, deleteDoc, doc, increment, onSnapshot, orderBy, query } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import { useNavigation } from '@react-navigation/native'
@@ -14,7 +14,7 @@ import color from '../../style/color'
 import { admin } from '@env'
 
 const Passes = () => {
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
   const navigation = useNavigation()
 
   const [passes, setPasses] = useState([])
@@ -43,7 +43,7 @@ const Passes = () => {
   const disabled = () => navigation.navigate('SetupModal')
 
   return (
-    <View style={likes.likesContainer}>
+    <View style={[likes.likesContainer, { backgroundColor: theme ? color.dark : color.white }]}>
       {
         passes?.length >= 1 ?
           <FlatList
@@ -63,17 +63,17 @@ const Passes = () => {
                   {
                     pass?.address?.city != undefined &&
                     <View style={likes.infoContainer}>
-                      <Feather name='home' size={12} color={color.dark} />
+                      <Feather name='home' size={12} color={theme ? color.white : color.dark} />
 
                       <View style={likes.infoView}>
-                        <OymoFont message='Lives in' fontStyle={likes.infoText} />
-                        <OymoFont message={pass?.address?.city} fontStyle={likes.infoText} fontFamily='montserrat_bold' />
+                        <OymoFont message='Lives in' fontStyle={{ ...likes.infoText, color: theme ? color.white : color.dark }} />
+                        <OymoFont message={pass?.address?.city} fontStyle={{ ...likes.infoText, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
                       </View>
                     </View>
                   }
                   <View style={likes.controlesView}>
                     <TouchableOpacity onPress={() => profile ? undoPass(pass) : disabled()} style={likes.matchButon}>
-                      <Feather name='trash-2' size={20} color={color.white} />
+                      <OymoFont message='Undo pass' fontStyle={{ ...likes.infoText, marginLeft: 0, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -81,7 +81,7 @@ const Passes = () => {
             )}
           /> :
           <View style={likes.loading}>
-            <ActivityIndicator size='large' color={color.red} />
+            <ActivityIndicator size='large' color={theme ? color.white : color.white} />
           </View>
       }
     </View>

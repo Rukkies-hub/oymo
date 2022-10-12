@@ -1,47 +1,33 @@
-import React, { useEffect, useState } from 'react'
-import { View, SafeAreaView, Text, TouchableOpacity, Image, Dimensions } from 'react-native'
+import React, { useEffect } from 'react'
 
-import { Camera } from 'expo-camera'
-
+import { Camera, CameraType, FlashMode, VideoQuality } from 'expo-camera'
+import { useState } from 'react'
+import { Button, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
+import { ar } from '../../style/addReels'
+import Bar from '../../components/Bar'
+import OymoFont from '../../components/OymoFont'
+import color from '../../style/color'
+import * as NavigationBar from 'expo-navigation-bar'
+import { Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons'
+import * as VideoThumbnails from 'expo-video-thumbnails'
+import * as ImagePicker from 'expo-image-picker'
 import { Audio } from 'expo-av'
 
-import { useIsFocused } from '@react-navigation/core'
-
-import color from '../../style/color'
-
-import { useNavigation, useRoute } from '@react-navigation/native'
-
-import * as ImagePicker from 'expo-image-picker'
-
-import * as MediaLibrary from 'expo-media-library'
-
-import { MaterialIcons, Entypo } from '@expo/vector-icons'
-
-import Bar from '../../components/Bar'
-
-import * as VideoThumbnails from 'expo-video-thumbnails'
-
-import { mc } from '../../style/messageCamera'
-import OymoFont from '../../components/OymoFont'
-
-const { width } = Dimensions.get('window')
-
-import * as NavigationBar from 'expo-navigation-bar'
+const { width, height } = Dimensions.get('screen')
 
 const MessageCamera = () => {
   const { matchDetails } = useRoute().params
 
-  const navigation = useNavigation()
-  const [hasCameraPermission, setHasCameraPermission] = useState(false)
-  const [hasAudioPermission, setHasAudioPermission] = useState(false)
-  const [hasGalleryPermission, setHasGalleryPermissions] = useState(false)
-  const [galleryItems, setGalleryItems] = useState([])
-  const [cameraRef, setCameraRef] = useState(null)
-  const [cameraType, setCameraType] = useState(Camera?.Constants?.Type?.back)
-  const [cameraFlash, setCameraFlash] = useState(Camera?.Constants?.FlashMode?.off)
+  const [type, setType] = useState(CameraType.back)
+  const [cameraFlash, setCameraFlash] = useState(CameraType.back)
   const [isCameraReady, setIsCameraReady] = useState(false)
+  const [cameraRef, setCameraRef] = useState(null)
 
+  const [permission, requestPermission] = Camera.useCameraPermissions()
   const isFocused = useIsFocused()
+  const navigation = useNavigation()
 
   if (isFocused) {
     NavigationBar.setVisibilityAsync('hidden')
@@ -54,29 +40,27 @@ const MessageCamera = () => {
 
   useEffect(() => {
     (async () => {
-      const cameraStatus = await Camera?.requestCameraPermissionsAsync()
-      setHasCameraPermission(cameraStatus?.status === 'granted')
-
-      const audioStatus = await Audio.requestPermissionsAsync()
-      setHasAudioPermission(audioStatus?.status === 'granted')
-
-      const galleryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync()
-      setHasGalleryPermissions(galleryStatus?.status === 'granted')
-
-      if (galleryStatus?.status == 'granted') {
-        const userGalleryMedia = await MediaLibrary.getAssetsAsync({
-          sortBy: ['creationTime'],
-          mediaType: ['video']
-        })
-        setGalleryItems(userGalleryMedia.assets)
-      }
+      await Audio.requestPermissionsAsync()
     })()
   }, [])
+
+  if (!permission) {
+    // Camera permissions are still loading
+    return <View />
+  }
+
+  const toggleCameraType = () => {
+    setType(current => (current === CameraType.back ? CameraType.front : CameraType.back))
+  }
+
+  const toggleCameraFlash = () => {
+    setCameraFlash(current => (current === FlashMode.torch ? FlashMode.off : FlashMode.torch))
+  }
 
   const recordVideo = async () => {
     if (cameraRef)
       try {
-        const options = { maxDuration: 10, quality: Camera?.Constants?.VideoQuality['480'] }
+        const options = { maxDuration: 10, quality: VideoQuality['480'] }
         const videoRecordPromise = cameraRef?.recordAsync(options)
 
         if (videoRecordPromise) {
@@ -143,15 +127,6 @@ const MessageCamera = () => {
     }
   }
 
-  const generateThumbnail = async (source) => {
-    try {
-      const { uri } = await VideoThumbnails.getThumbnailAsync(source, { time: 3000 })
-      return uri
-    } catch (e) {
-      console.warn(e.message)
-    }
-  }
-
   const takePictire = async () => {
     if (cameraRef) {
       const data = await cameraRef?.takePictureAsync(null)
@@ -165,77 +140,73 @@ const MessageCamera = () => {
     }
   }
 
-  if (!hasCameraPermission || !hasAudioPermission || !hasGalleryPermission)
-    return <View />
+  const generateThumbnail = async (source) => {
+    try {
+      const { uri } = await VideoThumbnails.getThumbnailAsync(source, { time: 3000 })
+      return uri
+    } catch (e) {
+      console.warn(e)
+    }
+  }
+
+  if (!permission.granted) {
+    // Camera permissions are not granted yet
+    return (
+      <View style={[ar.containr, { justifyContent: 'center', alignItems: 'center' }]}>
+        <OymoFont message='We need your permission to show the camera' fontStyle={{ color: color.white, marginBottom: 10 }} />
+        <TouchableOpacity onPress={requestPermission} style={ar.permissionButton}>
+          <OymoFont message='grant permission' fontStyle={{ color: color.white }} />
+        </TouchableOpacity>
+      </View>
+    )
+  }
 
   return (
-    <View style={mc.containr}>
-      <Bar color={'light'} />
+    <View style={[ar.containr]}>
+      <Bar color='light' />
 
       {
-        isFocused ?
-          <Camera
-            ref={ref => setCameraRef(ref)}
-            ratio={'16:9'}
-            type={cameraType}
-            flashMode={cameraFlash}
-            onCameraReady={() => setIsCameraReady(true)}
-            style={mc.camera}
-          />
-          : null
+        isFocused &&
+        <Camera
+          type={type}
+          ratio={'16:9'}
+          style={ar.camera}
+          flashMode={cameraFlash}
+          ref={ref => setCameraRef(ref)}
+          onCameraReady={() => setIsCameraReady(true)}
+        >
+          <TouchableOpacity onPress={() => navigation.goBack()} style={ar.goBack}>
+            <Entypo name='chevron-left' size={24} color={color.white} />
+          </TouchableOpacity>
+        </Camera>
       }
 
-      <TouchableOpacity onPress={() => navigation.goBack()} style={mc.goBack}>
-        <Entypo name='chevron-left' size={24} color={color.white} />
-      </TouchableOpacity>
-
-      <View style={mc.controlersView}>
-        <TouchableOpacity
-          onPress={
-            () => setCameraType(
-              cameraType === Camera?.Constants?.Type?.back ?
-                Camera?.Constants?.Type?.front : Camera?.Constants?.Type?.back
-            )
-          }
-          style={mc.flip}
-        >
+      <View style={ar.controlersView}>
+        <TouchableOpacity onPress={toggleCameraType} style={ar.flip}>
           <MaterialIcons name='flip-camera-android' color={color.white} size={24} />
-          <OymoFont message='Flip' fontStyle={mc.flipText} />
+          <OymoFont message='Flip' fontStyle={ar.flipText} />
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={
-            () => setCameraFlash(
-              cameraFlash === Camera?.Constants?.FlashMode?.torch ?
-                Camera?.Constants?.FlashMode?.off : Camera?.Constants?.FlashMode?.torch
-            )
-          }
-          style={mc.flash}
-        >
+        <TouchableOpacity onPress={toggleCameraFlash} style={ar.flash}>
           <MaterialIcons name='bolt' color={color.white} size={24} />
-          <OymoFont message='Flash' fontStyle={mc.flashText} />
+          <OymoFont message='Flash' fontStyle={ar.flashText} />
         </TouchableOpacity>
       </View>
 
-      <View style={mc.actionsView}>
+      <View style={ar.actionsView}>
         <View style={{ flex: 1 }} />
-        <View style={mc.captureView}>
+        <View style={ar.captureView}>
           <TouchableOpacity
             disabled={!isCameraReady}
             onPress={takePictire}
             onLongPress={recordVideo}
             onPressOut={stopVideo}
-            style={mc.captureButton}
+            style={ar.captureButton}
           />
         </View>
-
         <View style={{ flex: 1 }}>
-          <TouchableOpacity onPress={pickFromGallery} style={mc.galleryButton}>
-            {
-              galleryItems[0] == undefined ?
-                <View /> :
-                <Image source={{ uri: galleryItems[0].uri }} style={mc.preview} />
-            }
+          <TouchableOpacity onPress={pickFromGallery} style={ar.galleryButton}>
+            <Ionicons name="images-outline" size={26} color={color.white} />
           </TouchableOpacity>
         </View>
       </View>

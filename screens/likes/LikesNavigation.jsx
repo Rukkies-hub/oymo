@@ -9,11 +9,11 @@ import OymoFont from '../../components/OymoFont'
 import color from '../../style/color'
 
 const LikesNavigation = ({ navigation }) => {
-  const { profile } = useSelector(state => state.user)
+  const { profile, theme } = useSelector(state => state.user)
   const [visible, setVisible] = useState('likes')
 
   return (
-    <View style={likes.container}>
+    <View style={[likes.container, { backgroundColor: theme ? color.dark : color.white }]}>
       {
         !profile ?
           <View style={likes.setupView}>
@@ -30,13 +30,13 @@ const LikesNavigation = ({ navigation }) => {
             </View>
           </View> :
           <>
-            <View style={likes.nav}>
+            <View style={[likes.nav, { borderBottomColor: theme ? color.lightBorderColor : color.borderColor }]}>
               <TouchableOpacity onPress={() => setVisible('likes')} style={likes.navButton}>
-                <OymoFont message='Likes' fontStyle={{ color: visible == 'likes' ? color.red : color.dark }} />
+                <OymoFont message='Likes' fontStyle={{ color: visible == 'likes' ? color.red : (theme ? color.white : color.dark) }} />
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => setVisible('passes')} style={likes.navButton}>
-                <OymoFont message='Passes' fontStyle={{ color: visible == 'passes' ? color.red : color.dark }} />
+                <OymoFont message='Passes' fontStyle={{ color: visible == 'passes' ? color.red : (theme ? color.white : color.dark) }} />
               </TouchableOpacity>
             </View>
 
