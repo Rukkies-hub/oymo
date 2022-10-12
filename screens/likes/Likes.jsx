@@ -14,7 +14,7 @@ import color from '../../style/color'
 import { setPendingSwipes, setProfiles } from '../../features/matchSlice'
 
 const Likes = () => {
-  const { user, profile } = useSelector(state => state.user)
+  const { user, profile, theme } = useSelector(state => state.user)
   const { pendingSwipes, profiles } = useSelector(state => state.match)
   const navigation = useNavigation()
   const dispatch = useDispatch()
@@ -111,7 +111,7 @@ const Likes = () => {
   }
 
   return (
-    <View style={likes.likesContainer}>
+    <View style={[likes.likesContainer, { backgroundColor: theme ? color.dark : color.white }]}>
       {
         pendingSwipes?.length > 0 ?
           <FlatList
@@ -132,11 +132,11 @@ const Likes = () => {
                   {
                     like?.address?.city != undefined &&
                     <View style={likes.infoContainer}>
-                      <Feather name='home' size={12} color={color.dark} />
+                      <Feather name='home' size={12} color={theme ? color.white : color.dark} />
 
                       <View style={likes.infoView}>
-                        <OymoFont message='Lives in' fontStyle={likes.infoText} />
-                        <OymoFont message={like?.address?.city} lines={1} fontStyle={likes.infoText} fontFamily='montserrat_bold' />
+                        <OymoFont message='Lives in' fontStyle={{...likes.infoText, color: theme ? color.white : color.dark}} />
+                        <OymoFont message={like?.address?.city} lines={1} fontStyle={{...likes.infoText, color: theme ? color.white : color.dark}} fontFamily='montserrat_bold' />
                       </View>
                     </View>
                   }
@@ -145,7 +145,7 @@ const Likes = () => {
                     <TouchableOpacity onPress={() => swipeRight(like)} style={likes.matchButon}>
                       <OymoFont message='Match' fontStyle={{ color: color.white }} />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => swipeLeft(like)} style={likes.nopeButton}>
+                    <TouchableOpacity onPress={() => swipeLeft(like)} style={[likes.nopeButton, {backgroundColor: theme ? color.lightText : color.offWhite}]}>
                       <OymoFont message='Nope' fontStyle={{ color: color.red }} />
                     </TouchableOpacity>
                   </View>
@@ -154,7 +154,7 @@ const Likes = () => {
             )}
           /> :
           <View style={likes.loading}>
-            <ActivityIndicator size='large' color={color.red} />
+            <ActivityIndicator size='large' color={theme ? color.white : color.white} />
           </View>
       }
     </View>
