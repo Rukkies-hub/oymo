@@ -69,6 +69,10 @@ const Rooms = () => {
               <Pressable onPress={() => navigation.navigate('Room', { room })}>
                 <ImageBackground source={{ uri: room?.image }} style={_rooms.bg}>
                   <LinearGradient colors={['transparent', color.lightText]} style={_rooms.gradient}>
+                    <View style={_rooms.countView}>
+                      <OymoFont message={room?.messagesCount != undefined ? room?.messagesCount : '0'} lines={1} fontFamily='montserrat_bold' fontStyle={_rooms.count} />
+                      <OymoFont message='Messages' lines={1} fontFamily='montserrat_bold' fontStyle={{ ..._rooms.count, marginLeft: 10 }} />
+                    </View>
                     <OymoFont message={room?.name} lines={1} fontFamily='montserrat_bold' fontStyle={_rooms.title} />
                   </LinearGradient>
                 </ImageBackground>

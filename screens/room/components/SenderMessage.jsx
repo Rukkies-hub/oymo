@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { sm } from '../../../style/room'
 import OymoFont from '../../../components/OymoFont'
 import color from '../../../style/color'
+import { useSelector } from 'react-redux'
 
 if (
   Platform.OS === 'android' &&
@@ -10,6 +11,7 @@ if (
 ) UIManager.setLayoutAnimationEnabledExperimental(true)
 
 const SenderMessage = ({ messages }) => {
+  const { theme } = useSelector(state => state.user)
   const [numberOfLines, setNumberOfLines] = useState(10)
   const [showTime, setShowTime] = useState(false)
 
@@ -46,7 +48,7 @@ const SenderMessage = ({ messages }) => {
                     <View style={sm.messageTimestampView}>
                       <OymoFont
                         message={new Date(messages?.timestamp?.seconds * 1000 + messages?.timestamp?.nanoseconds / 1000000).toDateString()}
-                        fontStyle={sm.messageTimestamp}
+                        fontStyle={{ ...sm.messageTimestamp, color: theme ? color.white : color.dark }}
                       />
                     </View>
                   }
