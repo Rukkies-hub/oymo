@@ -9,14 +9,12 @@ import color from '../../style/color'
 import { pRo } from '../../style/profileReels'
 import OymoFont from '../../components/OymoFont'
 
-const ReelsOption = () => {
+const EventOption = () => {
   const navigation = useNavigation()
-  const { reel } = useRoute().params
+  const { event } = useRoute().params
   const { profile } = useSelector(state => state.user)
 
-  const deleteReel = () => {
-    navigation.goBack()
-    deleteDoc(doc(db, 'reels', reel?.id))
+  const deleteEvent = async () => {
   }
 
   return (
@@ -27,14 +25,14 @@ const ReelsOption = () => {
       />
       <View style={pRo.sheet}>
         <View style={pRo.previewView}>
-          <Image source={{ uri: reel?.thumbnail }} style={pRo.previewImage} />
+          <Image source={{ uri: event?.image }} style={pRo.previewImage} />
 
           <View style={{ flex: 1 }}>
-            <OymoFont message={reel?.description} fontStyle={pRo.previewTitle} lines={1} />
-            <OymoFont message={`Video - ${profile?.username}`} fontStyle={pRo.previewSubTitle} lines={1} fontFamily='montserrat_light' />
+            <OymoFont message={event?.description} fontStyle={pRo.previewTitle} lines={1} />
+            <OymoFont message={`Event - ${profile?.username}`} fontStyle={pRo.previewSubTitle} lines={1} fontFamily='montserrat_light' />
           </View>
         </View>
-        <TouchableOpacity onPress={deleteReel} activeOpacity={0.5} style={pRo.deleteButton}>
+        <TouchableOpacity onPress={deleteEvent} activeOpacity={0.5} style={pRo.deleteButton}>
           <Feather name='trash-2' size={20} color={color.white} />
           <OymoFont message='Delete' fontStyle={pRo.deleteButtonText} />
         </TouchableOpacity>
@@ -43,4 +41,4 @@ const ReelsOption = () => {
   )
 }
 
-export default ReelsOption
+export default EventOption

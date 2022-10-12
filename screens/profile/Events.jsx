@@ -56,9 +56,10 @@ const Events = () => {
                 return (
                   <Pressable
                     key={index}
-                    onPress={() => navigation.navigate('Event', { event })}
                     delayLongPress={500}
                     style={pEvents.reelsList}
+                    onPress={() => navigation.navigate('Event', { event })}
+                    // onLongPress={() => navigation.navigate('EventOption', { event })}
                   >
                     <Image source={{ uri: event?.image }} style={pEvents.reelsThumb} />
 

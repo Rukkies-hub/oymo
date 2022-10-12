@@ -101,7 +101,6 @@ const Event = () => {
         })
       }
     }
-
   }
 
   const cancelJoin = async () => {

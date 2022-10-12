@@ -42,6 +42,7 @@ import ReelsOption from '../screens/modals/ReelsOption'
 import Settings from '../screens/settings/Settings'
 import { useIsFocused } from '@react-navigation/native'
 import * as NavigationBar from 'expo-navigation-bar'
+import EventOption from '../screens/modals/EventOption'
 
 const StackNavigation = () => {
   const { user, loadingInitial, theme } = useSelector(state => state.user)
@@ -164,6 +165,16 @@ const StackNavigation = () => {
                     <Screen
                       name='ReelsOption'
                       component={ReelsOption}
+                      options={{
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
+                    <Screen
+                      name='EventOption'
+                      component={EventOption}
                       options={{
                         ...TransitionPresets.FadeFromBottomAndroid,
                         cardStyle: {
