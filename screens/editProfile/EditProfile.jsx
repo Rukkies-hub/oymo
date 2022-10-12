@@ -386,7 +386,7 @@ const EditProfile = () => {
                 style={[editProfile.goPro, { backgroundColor: theme ? color.lightText : color.offWhite }]}
               >
                 <Image source={require('../../assets/star.png')} style={editProfile.star} />
-                <OymoFont message='Oymo Premium' fontStyle={{ ...editProfile.upgradeButtonText, color: theme ? color.white : color.dark }} />
+                <OymoFont message='Buy Coins' fontStyle={{ ...editProfile.upgradeButtonText, color: theme ? color.white : color.dark }} />
               </TouchableOpacity>
             }
 

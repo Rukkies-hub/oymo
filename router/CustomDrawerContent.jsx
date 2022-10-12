@@ -130,7 +130,7 @@ const CustomDrawerContent = ({ navigation }) => {
         style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
       >
         <Image source={require('../assets/star.png')} style={dw.star} />
-        <OymoFont message='Oymo Premium' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
+        <OymoFont message='Buy Coins' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
       </TouchableOpacity>
 
       <TouchableOpacity

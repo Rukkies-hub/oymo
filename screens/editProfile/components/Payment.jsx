@@ -7,7 +7,7 @@ import { paystackPublic } from '@env'
 import color from '../../../style/color'
 
 import uuid from 'uuid-random'
-import { doc, updateDoc } from 'firebase/firestore'
+import { doc, increment, updateDoc } from 'firebase/firestore'
 import { db } from '../../../hooks/firebase'
 
 import * as Device from 'expo-device'
@@ -59,7 +59,7 @@ const Payment = ({ amount }) => {
     if (transaction?.message === 'Approved') {
       setLoading(true)
       await updateDoc(doc(db, 'users', id), {
-        coins: profile?.coins + 5000
+        coins: increment(5000)
       })
       setLoading(false)
       schedulePushNotification()
@@ -106,7 +106,7 @@ const Payment = ({ amount }) => {
         {
           !loading ?
             <Text style={{ color: color.white, fontFamily: 'text' }}>
-              Subscribe for $2.00
+              Buy Coins for $2.00
             </Text> :
             <ActivityIndicator color={color.goldDark} size='small' />
         }

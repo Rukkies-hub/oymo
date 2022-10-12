@@ -24,10 +24,11 @@ const UserInfo = ({ _user }) => {
 
   return (
     <TouchableOpacity
-      onPress={() =>
-        userInfo?.id == id ? navigation.navigate('Profile') :
-          navigation.navigate('UserProfile', { user: userInfo })
-      }
+      onPress={() => {
+        profile ? (
+          userInfo?.id == id ? navigation.navigate('Profile') : navigation.navigate('UserProfile', { user: userInfo })
+        ) : null
+      }}
       style={{
         flexDirection: 'row'
       }}

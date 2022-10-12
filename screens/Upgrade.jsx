@@ -25,8 +25,8 @@ const Upgrade = ({ navigation }) => {
         <View style={ug.head}>
           <Image source={require('../assets/star.png')} style={ug.star} />
 
-          <OymoFont message='Oymo Premium' fontFamily='montserrat_bold' fontStyle={ug.ht1} />
-          <Text style={ug.ht2}>Go <Text style={{ fontFamily: 'boldText' }}>beyond th limits</Text>, get <Text style={{ fontFamily: 'boldText' }}>exclusive features</Text> ans dupport us by suscribing to <Text style={{ fontFamily: 'boldText' }}>Oymo Premium</Text>.</Text>
+          <OymoFont message='Oymo coins' fontFamily='montserrat_bold' fontStyle={ug.ht1} />
+          <Text style={ug.ht2}>Go <Text style={{ fontFamily: 'boldText' }}>beyond th limits</Text>, get <Text style={{ fontFamily: 'boldText' }}>exclusive features</Text> and support us by buying more <Text style={{ fontFamily: 'boldText' }}>Oymo coins</Text>.</Text>
         </View>
 
         <Payment amount={amount} />
