@@ -43,14 +43,17 @@ const Room = () => {
   const sendMessage = async () => {
     if (profile?.coins < 1) return
     if (input != '') {
-      await addDoc(collection(db, 'rooms', room?.id, 'messages'), {
+      addDoc(collection(db, 'rooms', room?.id, 'messages'), {
         userId: id,
         message: input,
         timestamp: serverTimestamp()
       })
       setInput('')
-      await updateDoc(doc(db, 'users', id), { coins: increment(-1) })
-      await updateDoc(doc(db, 'admin', admin), { roomMessages: increment(1) })
+      updateDoc(doc(db, 'users', id), { coins: increment(-1) })
+      updateDoc(doc(db, 'rooms', room?.id), {
+        messagesCount: increment(1)
+      })
+      updateDoc(doc(db, 'admin', admin), { roomMessages: increment(1) })
     }
   }
 

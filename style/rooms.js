@@ -25,7 +25,26 @@ export const _rooms = StyleSheet.create({
   gradient: {
     flex: 1,
     padding: 10,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    position: 'relative'
+  },
+
+  countView: {
+    backgroundColor: color.faintBlack,
+    minWidth: 40,
+    height: 40,
+    borderRadius: 12,
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 10
+  },
+
+  count: {
+    color: color.white
   },
 
   title: {
