@@ -44,10 +44,10 @@ const ProfileDetails = ({ profile, user }) => {
         </View>
 
         <TouchableOpacity onPress={() => navigation.navigate('EditProfile')} style={_profile.editProfileButton}>
-          <FontAwesome name='edit' size={20} color={color.dark} />
+          <FontAwesome name='edit' size={20} color={theme ? color.white : color.dark} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={[_profile.editProfileButton, { marginLeft: 10 }]}>
-          <Ionicons name="cog-outline" size={22} color={color.dark} />
+          <Ionicons name="cog-outline" size={22} color={theme ? color.white : color.dark} />
         </TouchableOpacity>
       </View>
 

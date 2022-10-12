@@ -162,7 +162,7 @@ const Notifications = () => {
             <TouchableOpacity
               onPress={() => viewNotification(notification)}
               activeOpacity={1}
-              style={[notify.notification, { backgroundColor: notification?.seen == false ? (theme ? color.lightText : color.offWhite) : (theme ? color.dark : color.white) }]}
+              style={[notify.notification, { backgroundColor: notification?.seen == false ? (theme ? color.black : color.offWhite) : (theme ? color.dark : color.white) }]}
             >
               <View style={notify.avatarView}>
                 <UserAvatar user={notification?.user?.id} />
