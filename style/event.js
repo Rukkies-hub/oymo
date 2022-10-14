@@ -95,12 +95,6 @@ export const _event = StyleSheet.create({
     borderRadius: 100
   },
 
-  avatars: {
-    flexDirection: 'row',
-    position: 'relative',
-    marginLeft: 10
-  },
-
   userAvatarView: {
     left: -10
   },
@@ -110,23 +104,6 @@ export const _event = StyleSheet.create({
     height: 40,
     borderRadius: 100,
     marginLeft: 10
-  },
-
-  more: {
-    borderWidth: 2,
-    borderColor: color.white,
-    backgroundColor: color.red,
-    width: 40,
-    height: 40,
-    borderRadius: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: -25
-  },
-
-  moreText: {
-    color: color.white,
-    fontSize: 16
   },
 
   progressSpace: {

@@ -1,4 +1,4 @@
-import { View, Text, ImageBackground, TouchableOpacity, Image } from 'react-native'
+import { View, Text, ImageBackground, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { _event } from '../../style/event'
 import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
@@ -8,12 +8,13 @@ import Header from '../../components/Header'
 import { useSelector } from 'react-redux'
 import OymoFont from '../../components/OymoFont'
 import { Feather, FontAwesome, MaterialIcons } from '@expo/vector-icons'
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, increment, onSnapshot, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
+import { addDoc, arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, increment, onSnapshot, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import Avatar from './components/Avatar'
 import UserAvatar from './components/UserAvatar'
 import Bar from '../../components/Bar'
 import * as NavigationBar from 'expo-navigation-bar'
+import UserInfo from './components/UserInfo'
 
 const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -82,7 +83,11 @@ const Event = () => {
         alert('Sorry, you can not join your own event')
       } else {
         await setDoc(doc(db, 'events', event?.id, 'attendees', id), { profile })
-        await updateDoc(doc(db, 'events', event?.id), { limit: increment(-1), going: increment(1) })
+        await updateDoc(doc(db, 'events', event?.id), {
+          limit: increment(-1),
+          going: increment(1),
+          attendees: arrayUnion(id)
+        })
         setLimit(limit - 1)
         setGoing(going + 1)
         await setDoc(doc(db, 'users', id, 'events', event?.id), { event })
@@ -104,9 +109,13 @@ const Event = () => {
   }
 
   const cancelJoin = async () => {
-    await deleteDoc(doc(db, 'events', event?.id, 'attendees', id))
-    await deleteDoc(doc(db, 'users', id, 'events', event?.id))
-    await updateDoc(doc(db, 'events', event?.id), { limit: increment(1), going: increment(-1) })
+    deleteDoc(doc(db, 'events', event?.id, 'attendees', id))
+    deleteDoc(doc(db, 'users', id, 'events', event?.id))
+    updateDoc(doc(db, 'events', event?.id), {
+      limit: increment(1),
+      going: increment(-1),
+      attendees: arrayRemove(id)
+    })
     setActiveButton(true)
   }
 
@@ -180,21 +189,7 @@ const Event = () => {
           <View style={_event.bottomViewSides}>
             <View style={_event.bottomViewSidesLeft}>
               <Avatar user={event?.user} />
-              {
-                attendees?.length >= 1 &&
-                <View style={_event.avatars}>
-                  {
-                    attendees?.splice(0, 3).map((item, id) => {
-                      return (
-                        <UserAvatar key={id} user={item?.id} index={id} />
-                      )
-                    })
-                  }
-                  <TouchableOpacity onPress={() => navigation.navigate('ViewAtendees', { event })} style={[_event.more, { zIndex: attendees?.length + 1 }]}>
-                    <OymoFont message={`+${attendees?.length + 1}`} fontStyle={_event.moreText} fontFamily='montserrat_bold' />
-                  </TouchableOpacity>
-                </View>
-              }
+              <UserInfo _user={event?.user} />
             </View>
             <View style={[_event.bottomViewSidesRight, { borderColor: limit <= 0 ? color.lightText : color.red }]}>
               <OymoFont message='Attendees' fontStyle={limit <= 0 ? _event.notInProgressSpace : _event.progressSpace} />
