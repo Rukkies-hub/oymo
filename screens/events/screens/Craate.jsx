@@ -16,7 +16,7 @@ import SelectDropdown from 'react-native-select-dropdown'
 import uuid from 'uuid-random'
 import { useSelector } from 'react-redux'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
-import { doc, increment, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
+import { addDoc, doc, increment, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../../hooks/firebase'
 
 import { admin } from '@env'
@@ -126,7 +126,7 @@ const Craate = ({ navigation }) => {
       .then(snapshot => {
         getDownloadURL(snapshot?.ref)
           .then(async downloadURL => {
-            await setDoc(doc(db, 'events', uuid()), {
+            await addDoc(doc(db, 'events'), {
               user: id,
               image: downloadURL,
               title,
@@ -138,6 +138,7 @@ const Craate = ({ navigation }) => {
               description,
               gender,
               going: 0,
+              link,
               limit: parseInt(limit),
               timestamp: serverTimestamp()
             })

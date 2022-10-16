@@ -8,24 +8,31 @@ import { useSelector } from 'react-redux'
 import color from '../../style/color'
 import { pRo } from '../../style/profileReels'
 import OymoFont from '../../components/OymoFont'
+import { deleteObject, getStorage, ref } from 'firebase/storage'
 
 const EventOption = () => {
   const navigation = useNavigation()
   const { event } = useRoute().params
   const { profile, theme } = useSelector(state => state.user)
+  const storage = getStorage()
 
   const deleteEvent = async () => {
     if (event?.attendees != undefined && event?.attendees?.length >= 1) {
-      // event?.attendees.forEach(async (user, index) => {
-      //   await deleteDoc(doc(db, 'users', user, 'events', event?.id))
-      // })
-      // const querySnapshot = await getDocs(collection(db, 'events', event?.id, 'attendees'))
-      // querySnapshot.forEach(async (doc) => {
-      //   await deleteDoc(doc(db, 'events', event?.id, 'attendees', doc.data()?.profile?.id))
-      // })
-      // await deleteDoc(doc(db, 'events', event?.id))
-      // navigation.goBack()
-      
+      event?.attendees.forEach(async (user, index) => {
+        await deleteDoc(doc(db, 'users', user, 'events', event?.id))
+      })
+      const querySnapshot = await getDocs(collection(db, 'events', event?.id, 'attendees'))
+      querySnapshot.forEach(async (doc) => {
+        await deleteDoc(doc(db, 'events', event?.id, 'attendees', doc.data()?.profile?.id))
+      })
+
+      const deleteEventRef = ref(storage, event?.link)
+
+      await deleteObject(deleteEventRef)
+        .then(async () => {
+          await deleteDoc(doc(db, 'events', event?.id))
+          navigation.goBack()
+        })
     }
   }
 

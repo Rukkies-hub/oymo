@@ -185,27 +185,30 @@ const Event = () => {
           <OymoFont message={event?.description} fontStyle={_event.description} />
         </View>
 
-        <View style={[_event.bottomView, { backgroundColor: theme ? color.dark : color.white }]}>
-          <View style={_event.bottomViewSides}>
-            <View style={_event.bottomViewSidesLeft}>
-              <Avatar user={event?.user} />
-              <UserInfo _user={event?.user} />
+        {
+          profile &&
+          <View style={[_event.bottomView, { backgroundColor: theme ? color.dark : color.white }]}>
+            <View style={_event.bottomViewSides}>
+              <View style={_event.bottomViewSidesLeft}>
+                <Avatar user={event?.user} />
+                <UserInfo _user={event?.user} />
+              </View>
+              <View style={[_event.bottomViewSidesRight, { borderColor: limit <= 0 ? color.lightText : color.red }]}>
+                <OymoFont message='Attendees' fontStyle={limit <= 0 ? _event.notInProgressSpace : _event.progressSpace} />
+                <OymoFont message={`${going}/${limit}`} fontFamily='montserrat_bold' fontStyle={limit <= 0 ? _event.notInProgress : _event.progress} />
+              </View>
             </View>
-            <View style={[_event.bottomViewSidesRight, { borderColor: limit <= 0 ? color.lightText : color.red }]}>
-              <OymoFont message='Attendees' fontStyle={limit <= 0 ? _event.notInProgressSpace : _event.progressSpace} />
-              <OymoFont message={`${going}/${limit}`} fontFamily='montserrat_bold' fontStyle={limit <= 0 ? _event.notInProgress : _event.progress} />
-            </View>
+            {
+              activeButton ?
+                <TouchableOpacity onPress={() => eventState == 'open' ? join() : null} style={[_event.joinButton, { backgroundColor: eventState == 'open' ? color.red : color.offWhite }]}>
+                  <OymoFont message={eventState == 'open' ? 'Going' : 'Closed'} fontStyle={eventState == 'open' ? _event.joinButtonText : _event.joinButtonTextInactive} fontFamily='montserrat_bold' />
+                </TouchableOpacity> :
+                <TouchableOpacity onPress={cancelJoin} style={[_event.joinButton, { backgroundColor: color.offWhite }]}>
+                  <OymoFont message='Cancel event' fontStyle={_event.joinButtonTextInactive} fontFamily='montserrat_bold' />
+                </TouchableOpacity>
+            }
           </View>
-          {
-            activeButton ?
-              <TouchableOpacity onPress={() => eventState == 'open' ? join() : null} style={[_event.joinButton, { backgroundColor: eventState == 'open' ? color.red : color.offWhite }]}>
-                <OymoFont message={eventState == 'open' ? 'Going' : 'Closed'} fontStyle={eventState == 'open' ? _event.joinButtonText : _event.joinButtonTextInactive} fontFamily='montserrat_bold' />
-              </TouchableOpacity> :
-              <TouchableOpacity onPress={cancelJoin} style={[_event.joinButton, { backgroundColor: color.offWhite }]}>
-                <OymoFont message='Cancel event' fontStyle={_event.joinButtonTextInactive} fontFamily='montserrat_bold' />
-              </TouchableOpacity>
-          }
-        </View>
+        }
       </View>
     </View>
   )

@@ -85,7 +85,7 @@ const DOB = () => {
             onSelect={(selectedItem, index) => setDay(selectedItem)}
             buttonTextAfterSelection={(selectedItem, index) => selectedItem}
             rowTextForSelection={(item, index) => item}
-            defaultButtonText='Select day'
+            defaultButtonText='Day'
             buttonStyle={{
               flex: 1,
               height: 45,
@@ -128,7 +128,7 @@ const DOB = () => {
             onSelect={(selectedItem, index) => setMonth(selectedItem.id)}
             buttonTextAfterSelection={(selectedItem, index) => selectedItem.id}
             rowTextForSelection={(item, index) => item.id}
-            defaultButtonText='Select months'
+            defaultButtonText='Month'
             buttonStyle={{
               flex: 1,
               height: 45,
@@ -171,7 +171,7 @@ const DOB = () => {
             onSelect={(selectedItem, index) => setYear(selectedItem)}
             buttonTextAfterSelection={(selectedItem, index) => selectedItem}
             rowTextForSelection={(item, index) => item}
-            defaultButtonText='Select year'
+            defaultButtonText='Year'
             buttonStyle={{
               flex: 1,
               height: 45,

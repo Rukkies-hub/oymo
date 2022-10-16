@@ -14,7 +14,7 @@ const wait = (timeout) => {
 }
 
 const AllEvents = ({ navigation }) => {
-  const { theme } = useSelector(state => state.user)
+  const { theme, profile } = useSelector(state => state.user)
   const [allEvents, setAllEvents] = useState([])
   const [refreshing, setRefreshing] = useState(false)
 
@@ -62,9 +62,12 @@ const AllEvents = ({ navigation }) => {
         renderItem={({ item }) => <Card event={item} />}
       />
 
-      <TouchableOpacity style={events.fab} onPress={() => navigation.navigate('Craate')}>
-        <AntDesign name="plus" size={24} color={color.white} />
-      </TouchableOpacity>
+      {
+        profile &&
+        <TouchableOpacity style={events.fab} onPress={() => navigation.navigate('Craate')}>
+          <AntDesign name="plus" size={24} color={color.white} />
+        </TouchableOpacity>
+      }
     </View>
   )
 }
