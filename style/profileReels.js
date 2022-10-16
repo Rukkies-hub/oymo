@@ -100,8 +100,7 @@ export const pRo = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
     backgroundColor: color.offWhite,
-    borderRadius: 12,
-    paddingBottom: 10
+    borderRadius: 12
   },
 
   previewImage: {

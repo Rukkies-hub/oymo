@@ -156,7 +156,7 @@ const Message = () => {
       await updateDoc(doc(db, 'matches', matchDetails?.id), {
         timestamp: serverTimestamp()
       })
-      await updateDoc(doc(db, 'users', id), { coins: increment(-1) })
+      await updateDoc(doc(db, 'users', id), { coins: increment(-5) })
       await updateDoc(doc(db, 'admin', admin), { messages: increment(1) })
     }
   }
