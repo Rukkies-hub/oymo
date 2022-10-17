@@ -44,15 +44,17 @@ const ProfileDetails = ({ activeUser }) => {
 
   useEffect(() => {
     const needle = userInfo
-    const cardIndex = profiles?.findIndex(item => item.id === needle)
+    const cardIndex = profiles?.findIndex(item => item.id === needle?.id)
 
-    // if (!profiles[cardIndex]) return
+    if (!profiles[cardIndex]) {
+      setShowMatch(false)
+      return
+    }
 
-    // const userSwiped = profiles[cardIndex]
+    const userSwiped = profiles[cardIndex]
 
-    // if (userSwiped) setShowMatch(true)
-    console.log(cardIndex)
-  }, [])
+    if (userSwiped) setShowMatch(true)
+  }, [activeUser, navigation, userInfo])
 
   const getPendingSwipes = async () => {
     dispatch(setPendingSwipes([]))
