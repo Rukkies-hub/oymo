@@ -18,21 +18,23 @@ import { useState } from 'react'
 import { useFonts } from 'expo-font'
 import OymoFont from '../components/OymoFont'
 import { createUserWithEmailAndPassword, GoogleAuthProvider, sendPasswordResetEmail, signInWithCredential, signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../hooks/firebase'
+import { auth, db } from '../hooks/firebase'
 
 import { webClientId, iosClientId, androidClientId } from '@env'
 
 import * as Google from 'expo-auth-session/providers/google'
 import * as WebBrowser from 'expo-web-browser'
-import { Ionicons, MaterialIcons } from '@expo/vector-icons'
+import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../features/userSlice'
+import { doc, setDoc } from 'firebase/firestore'
 
 WebBrowser.maybeCompleteAuthSession()
 
-const Login = () => {
+const Auth = () => {
   const dispatch = useDispatch()
   const [googleLoadng, setGoogleLoadng] = useState(false)
+  const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [securePasswordEntry, setSecurePasswordEntry] = useState(true)
@@ -85,9 +87,10 @@ const Login = () => {
     if (email.match(regexEmail) && password != '') {
       setAuthLoading(true)
       createUserWithEmailAndPassword(auth, email, password)
-        .then(userCredential => {
+        .then(async userCredential => {
           dispatch(setUser(userCredential))
           setAuthLoading(false)
+          await setDoc(doc(db, 'users', userCredential?.uid != undefined ? userCredential?.uid : userCredential?.user?.uid), { phone })
         }).catch(error => {
           if (error.message.includes('email-already-in-use'))
             alert('Ooops. Seems this email is already in use. Try another')
@@ -124,10 +127,25 @@ const Login = () => {
           <>
             <View style={login.heading}>
               <OymoFont message='Welcome to Oymo' fontStyle={login.headingText} fontFamily='montserrat_medium' />
-              <OymoFont message='Login to your account' fontStyle={login.headingSubText} fontFamily='montserrat_medium' />
+              <OymoFont message={authType == 'login' ? 'Login to your account' : authType == 'signup' ? 'Create an account' : 'Login to your account'} fontStyle={login.headingSubText} fontFamily='montserrat_medium' />
             </View>
 
             <View style={{ marginTop: 40, width: '100%' }}>
+              {
+                authType == 'signup' &&
+                <View style={[login.inputView, { marginBottom: 20 }]}>
+                  <AntDesign name="phone" size={20} color={color.white} style={{ marginHorizontal: 10 }} />
+                  <TextInput
+                    autoCapitalize='none'
+                    placeholder='Phone'
+                    value={phone}
+                    onChangeText={setPhone}
+                    placeholderTextColor={color.white}
+                    style={login.input}
+                  />
+                </View>
+              }
+
               <View style={login.inputView}>
                 <MaterialIcons name='alternate-email' size={24} color={color.white} style={{ marginHorizontal: 10 }} />
                 <TextInput
@@ -185,7 +203,7 @@ const Login = () => {
                   }
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => promptAsync()} style={login.googleLoginButton}>
+                {/* <TouchableOpacity onPress={() => promptAsync()} style={login.googleLoginButton}>
                   {
                     googleLoadng ?
                       <ActivityIndicator size='small' color={color.red} /> :
@@ -193,7 +211,7 @@ const Login = () => {
                         <Image source={require('../assets/google.png')} style={login.googleImage} />
                       </View>
                   }
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
 
               <View style={login.buttomView}>
@@ -216,4 +234,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Auth
