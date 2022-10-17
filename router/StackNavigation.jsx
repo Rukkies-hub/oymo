@@ -4,7 +4,7 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 
 const { Navigator, Screen, Group } = createStackNavigator()
 
-import Login from '../screens/Login'
+import Auth from '../screens/Auth'
 import { useSelector } from 'react-redux'
 import Splash from './Splash'
 import Profile from '../screens/profile/Profile'
@@ -199,7 +199,7 @@ const StackNavigation = () => {
                   </Group>
                 </>
               ) :
-                <Screen name='Login' component={Login} />
+                <Screen name='Auth' component={Auth} />
             }
           </>
       }
