@@ -74,12 +74,16 @@ const ProfileDetails = ({ profile, user }) => {
         const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
           .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
           .filter(doc => doc?.id !== id)
+          .filter(doc => distance(doc?.data()?.coords?.latitude, doc?.data()?.coords?.longitude, __profile?.coords?.latitude, __profile?.coords?.longitude).toFixed(2) <= 1)
           .map(doc => ({
             id: doc?.id,
             ...doc?.data()
           }))
 
-        if (array.length >= 1) dispatch(setProfiles(array))
+        if (array.length >= 1) {
+          dispatch(setProfiles([]))
+          dispatch(setProfiles(array))
+        }
         else dispatch(setProfiles([]))
       })
   }
