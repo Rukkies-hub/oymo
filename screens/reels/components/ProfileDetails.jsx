@@ -91,7 +91,10 @@ const ProfileDetails = ({ activeUser }) => {
             ...doc?.data()
           }))
 
-        if (array.length >= 1) dispatch(setProfiles(array))
+        if (array.length >= 1) {
+          dispatch(setProfiles([]))
+          dispatch(setProfiles(array))
+        }
         else dispatch(setProfiles([]))
       })
   }

@@ -8,7 +8,6 @@ export const matchSlice = createSlice({
   },
   reducers: {
     setProfiles: (state, action) => {
-      state.profiles = []
       state.profiles.push(...action.payload)
     },
 
