@@ -33,7 +33,6 @@ const UserInfo = ({ _user }) => {
         flexDirection: 'row'
       }}
     >
-      {userInfo?.displayName != undefined && <OymoFont message={userInfo?.displayName} fontStyle={reels.displayName} fontFamily='montserrat_bold' />}
       {userInfo?.username != undefined && <OymoFont message={`@${userInfo?.username}`} fontStyle={reels.captionUsername} fontFamily='montserrat_light' />}
     </TouchableOpacity>
   )

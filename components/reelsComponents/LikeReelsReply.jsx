@@ -42,7 +42,6 @@ const LikeReelsReply = ({ reply }) => {
         comment: reply?.comment,
         reply: reply?.id,
         photoURL: userProfile?.photoURL,
-        displayName: userProfile?.displayName,
         username: userProfile?.username,
       })
       await updateDoc(doc(db, 'reels', reply?.reel?.id, 'comments', reply?.comment, 'replies', reply?.id), {

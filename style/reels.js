@@ -37,12 +37,6 @@ export const reels = StyleSheet.create({
     marginLeft: 10
   },
 
-  displayName: {
-    color: color.white,
-    fontSize: 16,
-    marginRight: 10
-  },
-
   captionUsername: {
     color: color.offWhite,
     fontSize: 16

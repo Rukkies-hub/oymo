@@ -35,16 +35,19 @@ const CustomDrawerContent = ({ navigation }) => {
             </TouchableWithoutFeedback>
         }
         {
-          profile &&
+          profile?.username != undefined &&
           <>
             <Pressable onPress={() => navigation.navigate('Profile')} style={{ flexDirection: 'row', marginTop: 15 }}>
               <OymoFont message={profile?.username} lines={1} fontFamily='montserrat_bold' fontStyle={{ color: theme ? color.black : color.white, fontSize: 20, marginRight: 10 }} />
               {profile?.age != undefined && <OymoFont message={profile?.age} lines={1} fontStyle={{ color: theme ? color.black : color.white, fontSize: 20 }} />}
             </Pressable>
-            <Pressable onPress={() => navigation.navigate('Profile')} style={dw.pointsButton}>
-              <Image source={require('../assets/points.png')} style={dw.pointsImage} />
-              <OymoFont message={`${profile?.coins} Points`} lines={1} fontStyle={{ color: theme ? color.black : color.white, fontSize: 16 }} />
-            </Pressable>
+            {
+              profile?.coins != undefined &&
+              <Pressable onPress={() => navigation.navigate('Profile')} style={dw.pointsButton}>
+                <Image source={require('../assets/points.png')} style={dw.pointsImage} />
+                <OymoFont message={`${profile?.coins} Points`} lines={1} fontStyle={{ color: theme ? color.black : color.white, fontSize: 16 }} />
+              </Pressable>
+            }
           </>
         }
       </ImageBackground>

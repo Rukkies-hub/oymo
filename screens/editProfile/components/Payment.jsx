@@ -81,7 +81,7 @@ const Payment = ({ amount }) => {
           activityIndicatorColor='green'
           channels={['card', 'bank', 'ussd']}
           refNumber={`Oymo-${uuid()}`}
-          billingName={profile?.displayName || profile?.username}
+          billingName={profile?.username}
           onCancel={(e) => {
             setModalVisible(false)
           }}

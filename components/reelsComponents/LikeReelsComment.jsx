@@ -46,7 +46,6 @@ const LikeReelsComment = ({ comment, reelId }) => {
       await setDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'likes', id), {
         id: profile?.id,
         photoURL: profile?.photoURL,
-        displayName: profile?.displayName,
         username: profile?.username,
       })
       await updateDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id), {
