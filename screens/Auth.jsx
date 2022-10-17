@@ -26,8 +26,8 @@ import * as Google from 'expo-auth-session/providers/google'
 import * as WebBrowser from 'expo-web-browser'
 import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { useDispatch } from 'react-redux'
-import { setUser } from '../features/userSlice'
-import { doc, setDoc } from 'firebase/firestore'
+import { setProfile, setUser } from '../features/userSlice'
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -90,7 +90,16 @@ const Auth = () => {
         .then(async userCredential => {
           dispatch(setUser(userCredential))
           setAuthLoading(false)
-          await setDoc(doc(db, 'users', userCredential?.uid != undefined ? userCredential?.uid : userCredential?.user?.uid), { phone })
+          let id = userCredential?.uid != undefined ? userCredential?.uid : userCredential?.user?.uid
+          await setDoc(doc(db, 'users', id), {
+            phone,
+            coins: 5000,
+            timestamp: serverTimestamp(),
+            id
+          })
+
+          const profile = await (await getDoc(doc(db, 'users', id))).data()
+          dispatch(setProfile(profile))
         }).catch(error => {
           if (error.message.includes('email-already-in-use'))
             alert('Ooops. Seems this email is already in use. Try another')
