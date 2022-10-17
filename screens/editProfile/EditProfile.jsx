@@ -30,6 +30,7 @@ import { logout, setProfile } from '../../features/userSlice'
 import LookingFor from './components/LookingFor'
 import Payment from './components/Payment'
 import { signOut } from 'firebase/auth'
+import * as Location from 'expo-location'
 
 const EditProfile = () => {
   const { user, profile, theme } = useSelector(state => state.user)
@@ -45,12 +46,13 @@ const EditProfile = () => {
   const [updateLoading, setUpdateLoading] = useState(false)
   const [expoPushToken, setExpoPushToken] = useState('')
   const [notification, setNotification] = useState(false)
+  const [errorMsg, setErrorMsg] = useState(null)
 
   // INPUTS
+  const [city, setCity] = useState(profile?.address?.city)
   const [username, setUsername] = useState(profile?.username)
   const [phone, setPhone] = useState(profile?.phone)
   const [about, setAbout] = useState(profile?.about)
-  const [city, setCity] = useState(profile?.address?.city)
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
 
@@ -121,7 +123,7 @@ const EditProfile = () => {
     if (phone != '' && phone != undefined) await updateDoc(doc(db, 'users', id), { phone })
     setUpdateLoading(false)
     schedulePushNotification('Update successful', 'Your profile has been updated successfully')
-    
+
     const profile = await (await getDoc(doc(db, 'users', id))).data()
     dispatch(setProfile(profile))
   }
@@ -130,6 +132,24 @@ const EditProfile = () => {
     signOut(auth)
     dispatch(logout())
     dispatch(setProfile(null))
+  }
+
+  const setMyLocation = async user => {
+    let { status } = await Location.requestForegroundPermissionsAsync()
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied')
+      return
+    }
+
+    let { coords } = await Location.getCurrentPositionAsync({})
+    const address = await Location.reverseGeocodeAsync(coords)
+
+    setCity(address[0].city)
+
+    await updateDoc(doc(db, 'users', id), {
+      coords,
+      address: address[0]
+    })
   }
 
   const [loaded] = useFonts({
@@ -207,21 +227,19 @@ const EditProfile = () => {
               ]}
             />
 
-            <TextInput
-              value={city}
-              editable={false}
-              onChangeText={setCity}
-              placeholder='I live in (City)'
-              placeholderTextColor={theme ? color.white : color.dark}
+            <TouchableOpacity
+              onPress={setMyLocation}
               style={[
                 editProfile.input,
                 {
-                  fontFamily: 'text',
                   backgroundColor: theme ? color.lightText : color.offWhite,
-                  color: theme ? color.white : color.dark
+                  justifyContent: 'center',
+                  alignItems: 'flex-start'
                 }
               ]}
-            />
+            >
+              <OymoFont message={city == undefined ? 'City' : city} />
+            </TouchableOpacity>
 
             {
               profile &&

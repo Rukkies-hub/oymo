@@ -72,6 +72,11 @@ export const editProfile = StyleSheet.create({
     color: color.dark
   },
 
+  locationInput: {
+    backgroundColor: color.offWhite,
+    paddingHorizontal: 10
+  },
+
   aboutContainer: {
     minHeight: 45,
     marginTop: 20
