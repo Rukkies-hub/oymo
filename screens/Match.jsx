@@ -79,6 +79,7 @@ const Match = () => {
         const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
           .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
           .filter(doc => doc?.id !== id)
+          .filter(doc => distance(doc?.data()?.coords?.latitude, doc?.data()?.coords?.longitude, profile?.coords?.latitude, profile?.coords?.longitude).toFixed(2) <= 1)
           .map(doc => ({
             id: doc?.id,
             ...doc?.data()
@@ -163,7 +164,7 @@ const Match = () => {
 
   const disabled = () => navigation.navigate('SetupModal')
 
-  function distance (lat1, lon1, lat2, lon2, unit) {
+  const distance = (lat1, lon1, lat2, lon2, unit) => {
     var radlat1 = Math.PI * lat1 / 180
     var radlat2 = Math.PI * lat2 / 180
     var theta = lon1 - lon2
