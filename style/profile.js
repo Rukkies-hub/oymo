@@ -60,10 +60,6 @@ export const profile = StyleSheet.create({
     fontSize: 20
   },
 
-  displayName: {
-    color: color.dark
-  },
-
   editProfileButton: {
     flexDirection: 'row',
     justifyContent: 'center',

@@ -48,8 +48,6 @@ export const editProfile = StyleSheet.create({
     color: color.dark
   },
 
-  displayName: { fontSize: 18 },
-
   pickImage: {
     width: 40,
     height: 40,

@@ -177,11 +177,6 @@ const ProfileDetails = ({ activeUser }) => {
               <OymoFont message={userInfo?.username} fontStyle={{ ..._profile.username, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
             </View>
           }
-
-          {
-            userInfo?.displayName != undefined &&
-            <OymoFont message={userInfo?.displayName} fontStyle={{ ..._profile.displayName, color: theme ? color.white : color.dark }} fontFamily='montserrat_medium' />
-          }
         </View>
         {
           id != activeUser &&
@@ -262,17 +257,6 @@ const ProfileDetails = ({ activeUser }) => {
           <OymoFont message={userInfo?.timestamp?.toDate().toDateString()} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
         </View>
       </View>
-
-      {
-        userInfo?.job != undefined &&
-        <View style={_profile.infoListContainer}>
-          <Feather name='briefcase' size={14} color={theme ? color.white : color.dark} />
-
-          <Text style={[_profile.info, { fontFamily: 'text', color: theme ? color.white : color.dark }]}>
-            {userInfo?.job} {userInfo?.company != '' && 'at'} {userInfo?.company}
-          </Text>
-        </View>
-      }
 
       {
         (userInfo?.coords != undefined && profile?.coords) &&

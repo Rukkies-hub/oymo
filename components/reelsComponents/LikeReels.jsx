@@ -50,7 +50,6 @@ const LikeReels = ({ reel, navigation }) => {
       await setDoc(doc(db, 'reels', reel?.id, 'likes', id), {
         id: id,
         photoURL: profile?.photoURL,
-        displayName: profile?.displayName,
         username: profile?.username,
       })
       await updateDoc(doc(db, 'reels', reel?.id), {

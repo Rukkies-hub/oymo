@@ -233,24 +233,6 @@ const Match = () => {
                     </View>
 
                     {
-                      card?.job != undefined &&
-                      <View style={match.detailesContainer}>
-                        <MaterialCommunityIcons name='briefcase-variant-outline' size={17} color={color.white} />
-                        <Text style={[match.detail, { fontFamily: 'lightText' }]}>
-                          {` ${card?.job}`} {card?.job ? 'at' : null} {card?.company}
-                        </Text>
-                      </View>
-                    }
-
-                    {
-                      card?.school != undefined &&
-                      <View style={match.detailesContainer}>
-                        <MaterialCommunityIcons name='school-outline' size={17} color={color.white} />
-                        <OymoFont message={` ${card?.school}`} fontStyle={match.detail} fontFamily='montserrat_light' />
-                      </View>
-                    }
-
-                    {
                       card?.address != undefined &&
                       <View style={match.detailesContainer}>
                         <MaterialCommunityIcons name='home-outline' size={17} color={color.white} />
