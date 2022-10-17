@@ -9,25 +9,27 @@ import { ci } from '../../../style/reelsComment'
 import { setReply } from '../../../features/reelsSlice'
 
 const Input = ({ user }) => {
-  const { reelsCommentType, reply } = useSelector(state => state.reels)
+  const { reelsCommentType, reply, replyCommentProps } = useSelector(state => state.reels)
+  const { profile } = useSelector(state => state.user)
   const dispatch = useDispatch()
 
   const [userInfo, setUserInfo] = useState(null)
   const [height, setHeight] = useState(40)
 
   useEffect(() => {
-    (async () => {
-      const userI = await (await getDoc(doc(db, 'users', user))).data()
+    const call = async () => {
+      const userI = await (await getDoc(doc(db, 'users', replyCommentProps ? replyCommentProps?.user?.id : user?.user?.id))).data()
       setUserInfo(userI)
-    })()
-  }, [])
+    }
+    call()
+  }, [replyCommentProps])
 
   return (
     <TextInput
       multiline
       value={reelsCommentType == 'reply' ? reply : reply}
       onChangeText={value => reelsCommentType == 'reply' ? dispatch(setReply(value)) : dispatch(setReply(value))}
-      placeholder={reelsCommentType == 'reply' ? `Reply @${userInfo?.username}` : `Reply @${userInfo?.username}'s comment`}
+      placeholder={reelsCommentType == 'reply' ? `Reply @${userInfo?.username}` : `Reply @${userInfo?.username}`}
       placeholderTextColor={color.lightText}
       onContentSizeChange={e => setHeight(e.nativeEvent.contentSize.height)}
       style={[ci.input, { height }]}

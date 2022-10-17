@@ -69,7 +69,7 @@ const ViewReelsCommentsLikecomments = ({ comment }) => {
           appId: 3167,
           appToken,
           title: 'Oymo',
-          message: `@${profile?.username} likes to your comment (${comment?.comment.slice(0, 100)})`
+          message: `@${profile?.username} likes to your comment (${comment?.comment})`
         })
       })
     }

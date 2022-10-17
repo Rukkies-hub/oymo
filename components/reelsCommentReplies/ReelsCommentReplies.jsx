@@ -41,7 +41,7 @@ const ReelsCommentReplies = ({ comment, background }) => {
   return (
     <View style={{ marginTop: 10 }}>
       <FlatList
-        data={replies?.splice(0, 1)}
+        data={replies}
         keyExtractor={item => item?.id}
         style={{ flex: 1 }}
         renderItem={({ item: reply }) =>

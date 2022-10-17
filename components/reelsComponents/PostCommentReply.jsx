@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, TouchableOpacity } from 'react-native'
 import { useDispatch } from 'react-redux'
-import { setPostCommentType, setReplyCommentProps } from '../../features/reelsSlice'
+import { setReelsCommentType, setReplyCommentProps } from '../../features/reelsSlice'
 
 import color from '../../style/color'
 import { vrc } from '../../style/reelsComment'
@@ -13,7 +13,7 @@ const PostCommentReply = ({ comment }) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        dispatch(setPostCommentType('reply'))
+        dispatch(setReelsCommentType('reply'))
         dispatch(setReplyCommentProps(comment))
       }}
       style={vrc.pcrButton}

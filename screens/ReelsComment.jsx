@@ -90,7 +90,7 @@ const ReelsComment = () => {
     await updateDoc(doc(db, 'reels', item?.id), { commentsCount: increment(1) })
     await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
     await updateDoc(doc(db, 'admin', admin), { comments: increment(1) })
-    
+
 
     if (item?.user?.id != id) {
       await addDoc(collection(db, 'users', item?.user?.id, 'notifications'), {
@@ -112,7 +112,7 @@ const ReelsComment = () => {
         appId: 3167,
         appToken,
         title: 'Oymo',
-        message: `@${profile?.username} commented on your video \n ${comment.slice(0, 100)}`
+        message: `@${profile?.username} commented on your video \n ${comment}`
       })
     }
   }
@@ -140,6 +140,9 @@ const ReelsComment = () => {
 
     await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
     await updateDoc(doc(db, 'admin', admin), { comments: increment(1) })
+    await updateDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id), { repliesCount: increment(1) })
+    await updateDoc(doc(db, 'reels', item?.id), { commentsCount: increment(1) })
+    await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
 
     if (comment?.reel?.user?.id != id) {
       await addDoc(collection(db, 'users', comment?.reel?.user?.id, 'notifications'), {
@@ -161,19 +164,9 @@ const ReelsComment = () => {
         appId: 3167,
         appToken,
         title: 'Oymo',
-        message: `@${profile?.username} replied to your comment \n ${comment.slice(0, 100)}`
+        message: `@${profile?.username} replied to your comment \n ${comment}`
       })
     }
-
-    await updateDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id), {
-      repliesCount: increment(1)
-    })
-
-    await updateDoc(doc(db, 'reels', item?.id), {
-      commentsCount: increment(1)
-    })
-
-    await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
 
     if (comment?.user?.id != id)
       await addDoc(collection(db, 'users', comment?.user?.id, 'notifications'), {
@@ -193,7 +186,7 @@ const ReelsComment = () => {
           appId: 3167,
           appToken,
           title: 'Oymo',
-          message: `@${profile?.username} replied to your comment \n ${comment.slice(0, 100)}`
+          message: `@${profile?.username} replied to your comment \n ${comment}`
         })
       })
 
