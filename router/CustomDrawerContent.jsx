@@ -125,16 +125,19 @@ const CustomDrawerContent = ({ navigation }) => {
         <OymoFont message='Rooms' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
       </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={() => {
-          navigation.closeDrawer()
-          navigation.navigate('Upgrade')
-        }}
-        style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
-      >
-        <Image source={require('../assets/star.png')} style={dw.star} />
-        <OymoFont message='Buy Coins' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
-      </TouchableOpacity>
+      {
+        profile?.username != undefined &&
+        <TouchableOpacity
+          onPress={() => {
+            navigation.closeDrawer()
+            navigation.navigate('Upgrade')
+          }}
+          style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
+        >
+          <Image source={require('../assets/star.png')} style={dw.star} />
+          <OymoFont message='Buy Coins' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
+        </TouchableOpacity>
+      }
 
       <TouchableOpacity
         onPress={logoutUser}
