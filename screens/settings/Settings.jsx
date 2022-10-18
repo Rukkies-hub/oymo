@@ -1,5 +1,5 @@
-import { View, Text, Switch } from 'react-native'
-import React, { useEffect } from 'react'
+import { View, Text, Switch, Dimensions } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { settings } from '../../style/settings'
 
 import Header from '../../components/Header'
@@ -12,12 +12,20 @@ import { setTheme } from '../../features/userSlice'
 import Bar from '../../components/Bar'
 import * as NavigationBar from 'expo-navigation-bar'
 import { useIsFocused } from '@react-navigation/native'
-import RangeSlider from 'rn-range-slider'
+import Slider from '@react-native-community/slider'
+import { doc, updateDoc } from 'firebase/firestore'
+import { db } from '../../hooks/firebase'
+
+const { width } = Dimensions.get('window')
 
 const Settings = () => {
   const dispatch = useDispatch()
-  const { theme } = useSelector(state => state.user)
+  const { theme, user, profile } = useSelector(state => state.user)
   const focus = useIsFocused()
+
+  const [distance, setDistance] = useState(profile?.radius != undefined ? profile?.radius : 1)
+
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
 
   if (focus) {
     NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
@@ -51,13 +59,22 @@ const Settings = () => {
           let _val = JSON.parse(value)
           dispatch(setTheme(_val))
         }
-      } catch (e) {}
+      } catch (e) { }
     }
     call()
   }, [theme])
 
+  useEffect(() => {
+    const call = async () => {
+      await updateDoc(doc(db, 'users', id), {
+        radius: distance
+      })
+    }
+    call()
+  }, [distance])
+
   return (
-    <View style={[settings.container, {backgroundColor: theme ? color.dark : color.white}]}>
+    <View style={[settings.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <Header
         showBack
         showTitle
@@ -82,6 +99,28 @@ const Settings = () => {
             onValueChange={toggleTheme}
             value={theme}
           />
+        </View>
+      </View>
+
+      <View style={settings.settingView}>
+        <OymoFont message='Match settings' fontFamily='montserrat_bold' fontStyle={settings.settingViewHead} />
+        <View style={[settings.settingViewContent, { marginTop: 10 }]}>
+          <View>
+            <Text style={[settings.title, { color: theme ? color.white : color.dark }]}>Match radius ({profile?.radius != undefined ? profile?.radius : 1})</Text>
+            <Slider
+              style={{ width, height: 40, marginLeft: -10 }}
+              step={1}
+              value={distance}
+              minimumValue={0}
+              maximumValue={10}
+              thumbTintColor={color.red}
+              minimumTrackTintColor={color.lightBorderColor}
+              maximumTrackTintColor={theme ? color.white : color.dark}
+              onValueChange={(low, high, fromUser) => {
+                setDistance(low)
+              }}
+            />
+          </View>
         </View>
       </View>
     </View>
