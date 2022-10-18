@@ -208,8 +208,8 @@ const Match = () => {
               backgroundColor={color.transparent}
               cardHorizontalMargin={0}
               cardVerticalMargin={0}
-              onSwipedLeft={cardIndex => profile ? swipeLeft(cardIndex) : disabled()}
-              onSwipedRight={cardIndex => profile ? swipeRight(cardIndex) : disabled()}
+              onSwipedLeft={cardIndex => (profile?.photoURL != undefined && profile?.username != undefined) ? swipeLeft(cardIndex) : disabled()}
+              onSwipedRight={cardIndex => (profile?.photoURL != undefined && profile?.username != undefined) ? swipeRight(cardIndex) : disabled()}
               onTapCard={() => !profile ? disabled() : null}
               dragStart={() => !profile ? disabled() : null}
               overlayLabels={{
@@ -223,7 +223,7 @@ const Match = () => {
 
                   <LinearGradient colors={['transparent', theme ? color.dark : color.black]} style={match.cardGradient}>
                     <View style={match.userDetail}>
-                      <TouchableOpacity onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.usernameButton}>
+                      <TouchableOpacity onPress={() => (profile?.photoURL != undefined && profile?.username != undefined) ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.usernameButton}>
                         <OymoFont fontStyle={match.username} fontFamily='montserrat_bold' message={card?.username} />
                         {
                           card?.age != undefined &&
@@ -231,7 +231,7 @@ const Match = () => {
                         }
                       </TouchableOpacity>
 
-                      <TouchableOpacity onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.moreInfoButton}>
+                      <TouchableOpacity onPress={() => (profile?.photoURL != undefined && profile?.username != undefined) ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.moreInfoButton}>
                         <MaterialCommunityIcons name='information-outline' size={20} color={color.white} />
                       </TouchableOpacity>
                     </View>

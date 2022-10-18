@@ -8123,6 +8123,11 @@ rn-glitch-effect@^1.1.0:
   resolved "https://registry.yarnpkg.com/rn-glitch-effect/-/rn-glitch-effect-1.1.0.tgz#ee36fc21983fb5dc0011cbd8320231335edee2ef"
   integrity sha512-UzvxE4mFgnGPnJLMGK8Xw7tAlFWLAiCCDIqapn85iMcpvI0aZZXNcZ0qwq1xA7QJCGvHtnFA7qDTj7Cy3bXbGQ==
 
+rn-range-slider@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/rn-range-slider/-/rn-range-slider-2.2.2.tgz#bab4abf12f028df55364e041af6fce29ad46d7ea"
+  integrity sha512-34qdWz0oPEa6Wa9+B0+IihxolfydGPfzKvIyjieCyz4+YzVuSizalwpwRufxAnojfFPxqX1Kt/CTBckt8K7eEQ==
+
 rukkiecodes-expo-snackbar@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/rukkiecodes-expo-snackbar/-/rukkiecodes-expo-snackbar-0.0.1.tgz#765a87312cda2695f9dcc29077e63131d0504383"

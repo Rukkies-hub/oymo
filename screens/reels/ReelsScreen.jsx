@@ -94,7 +94,7 @@ const ReelsScreen = () => {
         <ReelsSingle item={item} ref={ReelSingleRef => (mediaRefs.current[item?.id] = ReelSingleRef)} />
 
         {
-          profile &&
+          (profile?.photoURL != undefined && profile?.username != undefined) &&
           <View style={reels.controlersContainer}>
             <UserAvatar reel={item} _user={item?.user?.id} />
 
@@ -134,7 +134,7 @@ const ReelsScreen = () => {
   }
 
   return (
-    <View style={[reels.container, {backgroundColor: theme ? color.dark : color.white}]}>
+    <View style={[reels.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <FlatList
         data={reelsList}
         windowSize={2}

@@ -1,14 +1,10 @@
 import { View, Text, Switch } from 'react-native'
-import React, { useEffect, useLayoutEffect } from 'react'
+import React, { useEffect } from 'react'
 import { settings } from '../../style/settings'
 
 import Header from '../../components/Header'
 import OymoFont from '../../components/OymoFont'
-import { useState } from 'react'
 import color from '../../style/color'
-
-import * as Location from 'expo-location'
-import { Camera } from 'expo-camera'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,12 +22,6 @@ const Settings = () => {
     NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
     NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
   }
-
-  const [locationPermision, setLocationPermision] = useState(false)
-  const [cameraPermision, setCameraPermision] = useState(false)
-
-  const toggleLocationPermision = () => setLocationPermision(previousState => !previousState)
-  const toggleCameraPermision = () => setCameraPermision(previousState => !previousState)
 
   const toggleTheme = async () => {
     try {
@@ -51,24 +41,6 @@ const Settings = () => {
       }
     } catch (e) { }
   }
-
-  useEffect(() => {
-    const call = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync()
-      if (status == 'granted') setLocationPermision(true)
-      else setLocationPermision(false)
-    }
-    call()
-  }, [])
-
-  useEffect(() => {
-    const call = async () => {
-      const { status } = await Camera?.requestCameraPermissionsAsync()
-      if (status == 'granted') setCameraPermision(true)
-      else setCameraPermision(false)
-    }
-    call()
-  }, [])
 
   useEffect(() => {
     const call = async () => {
@@ -94,46 +66,9 @@ const Settings = () => {
       <Bar color={theme ? 'light' : 'dark'} />
 
       <View style={settings.settingView}>
-        <OymoFont message='Permissions' fontFamily='montserrat_bold' fontStyle={settings.settingViewHead} />
-        <View style={[settings.settingViewContent, { marginTop: 10 }]}>
-          <View>
-            <Text style={[settings.title, {color: theme ? color.white : color.dark}]}>Location</Text>
-            <Text style={[settings.text, { color: theme ? color.white : color.dark }]}>
-              Allow Oymo match access your location
-            </Text>
-          </View>
-          <Switch
-            trackColor={{ false: color.lightText, true: color.offWhite }}
-            thumbColor={locationPermision ? color.red : color.offWhite}
-            ios_backgroundColor={color.lightText}
-            onValueChange={toggleLocationPermision}
-            value={locationPermision}
-          />
-        </View>
-
-        <View style={settings.settingViewContent}>
-          <View>
-            <Text style={[settings.title, { color: theme ? color.white : color.dark }]}>Camera</Text>
-            <Text style={[settings.text, { color: theme ? color.white : color.dark }]}>
-              Allow Oymo match access your camera
-            </Text>
-          </View>
-          <Switch
-            trackColor={{ false: color.lightText, true: color.offWhite }}
-            thumbColor={cameraPermision ? color.red : color.offWhite}
-            ios_backgroundColor={color.lightText}
-            onValueChange={toggleCameraPermision}
-            value={cameraPermision}
-          />
-        </View>
-      </View>
-
-      <View style={settings.settingView}>
         <OymoFont message={`App theme (${theme == true ? 'dark' : 'light'})`} fontFamily='montserrat_bold' fontStyle={settings.settingViewHead} />
         <View style={[settings.settingViewContent, { marginTop: 10 }]}>
           <View>
-            {/* <OymoFont message='Theme' fontFamily='montserrat_bold' />
-            <OymoFont message='Select a preferd theme for your account' fontFamily='montserrat_light' /> */}
             <Text style={[settings.title, { color: theme ? color.white : color.dark }]}>Theme</Text>
             <Text style={[settings.text, { color: theme ? color.white : color.dark }]}>
               Select a preferd theme for your account

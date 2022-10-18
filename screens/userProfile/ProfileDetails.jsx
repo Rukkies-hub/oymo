@@ -177,7 +177,7 @@ const ProfileDetails = ({ profile, user }) => {
         </View>
         {
           showMatch &&
-          <TouchableOpacity onPress={swipeRight} style={_profile.matchButton}>
+          <TouchableOpacity onPress={() => (__profile?.photoURL != undefined && __profile?.username != undefined) ? swipeRight() : navigation.navigate('SetupModal')} style={_profile.matchButton}>
             <AntDesign name='hearto' size={20} color={color.white} />
           </TouchableOpacity>
         }
