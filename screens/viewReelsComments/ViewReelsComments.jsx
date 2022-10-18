@@ -25,7 +25,7 @@ import { Audio } from 'expo-av'
 
 const ViewReelsComments = () => {
   const { user, profile } = useSelector(state => state.user)
-  const { reelsCommentType, reply } = useSelector(state => state.reels)
+  const { reelsCommentType, reply, replyCommentProps } = useSelector(state => state.reels)
   const dispatch = useDispatch()
 
   const navigation = useNavigation()
@@ -66,6 +66,7 @@ const ViewReelsComments = () => {
     await sound.playAsync()
   }
 
+
   useEffect(() => {
     return sound
       ? () => {
@@ -76,6 +77,7 @@ const ViewReelsComments = () => {
 
   const sendCommentReply = async () => {
     if (reply == '') return
+
     await addDoc(collection(db, 'reels', comment?.reel?.id, 'comments', comment?.id, 'replies'), {
       reply,
       reel: comment?.reel,
@@ -89,6 +91,9 @@ const ViewReelsComments = () => {
     dispatch(setReply(''))
     dispatch(setReelsCommentType('reply'))
     playSound()
+
+    await updateDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id), { repliesCount: increment(1) })
+    await updateDoc(doc(db, 'reels', comment?.reel?.id), { commentsCount: increment(1) })
 
     if (comment?.reel?.user?.id != id) {
       await addDoc(collection(db, 'users', comment?.reel?.user?.id, 'notifications'), {
@@ -108,17 +113,9 @@ const ViewReelsComments = () => {
         appId: 3167,
         appToken,
         title: 'Oymo',
-        message: `@${profile?.username} replied to your comment (${_comment.slice(0, 100)})`
+        message: `@${profile?.username} replied to your comment (${_comment})`
       })
     }
-
-    await updateDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id), {
-      repliesCount: increment(1)
-    })
-
-    await updateDoc(doc(db, 'reels', comment?.reel?.id), {
-      commentsCount: increment(1)
-    })
   }
 
   const sendCommentReplyReply = async () => {
@@ -128,7 +125,7 @@ const ViewReelsComments = () => {
       reply,
       reel: comment?.reel,
       comment: comment?.id,
-      reelComment: comment,
+      reelComment: replyCommentProps,
       likesCount: 0,
       repliesCount: 0,
       user: { id: id },
@@ -137,6 +134,9 @@ const ViewReelsComments = () => {
     dispatch(setReply(''))
     dispatch(setReelsCommentType('reply'))
     playSound()
+    
+    await updateDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id), { repliesCount: increment(1) })
+    await updateDoc(doc(db, 'reels', comment?.reel?.id), { commentsCount: increment(1) })
 
     if (comment?.reel?.user?.id != id) {
       await addDoc(collection(db, 'users', comment?.reel?.user?.id, 'notifications'), {
@@ -156,17 +156,9 @@ const ViewReelsComments = () => {
         appId: 3167,
         appToken,
         title: 'Oymo',
-        message: `@${profile?.username} replied to your comment (${_comment.slice(0, 100)})`
+        message: `@${profile?.username} replied to your comment (${_comment})`
       })
     }
-
-    await updateDoc(doc(db, 'reels', comment?.reel?.id, 'comments', comment?.id), {
-      repliesCount: increment(1)
-    })
-
-    await updateDoc(doc(db, 'reels', comment?.reel?.id), {
-      commentsCount: increment(1)
-    })
   }
 
   return (
@@ -232,7 +224,7 @@ const ViewReelsComments = () => {
         </View>
 
         <View style={ci.inputView}>
-          <Input user={comment?.user?.id} />
+          <Input user={comment} />
 
           <TouchableOpacity
             onPress={() => reelsCommentType == 'reply' ? sendCommentReply() : sendCommentReplyReply()}

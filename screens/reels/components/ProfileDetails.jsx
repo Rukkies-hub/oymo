@@ -71,6 +71,9 @@ const ProfileDetails = ({ activeUser }) => {
   }
 
   const getAllProfiles = async () => {
+    const profile = await (await getDoc(doc(db, 'users', id))).data()
+    if (!profile) return
+    
     const passes = await getDocs(collection(db, 'users', id, 'passes'))
       .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
 

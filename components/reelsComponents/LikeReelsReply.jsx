@@ -38,11 +38,11 @@ const LikeReelsReply = ({ reply }) => {
       })
     } else {
       await setDoc(doc(db, 'reels', reply?.reel?.id, 'comments', reply?.comment, 'replies', reply?.id, 'likes', id), {
-        id: userProfile?.id,
+        id: id,
         comment: reply?.comment,
         reply: reply?.id,
-        photoURL: userProfile?.photoURL,
-        username: userProfile?.username,
+        photoURL: profile?.photoURL,
+        username: profile?.username,
       })
       await updateDoc(doc(db, 'reels', reply?.reel?.id, 'comments', reply?.comment, 'replies', reply?.id), {
         likesCount: increment(1)

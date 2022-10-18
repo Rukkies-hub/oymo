@@ -78,7 +78,7 @@ const LikeReels = ({ reel, navigation }) => {
             appId: 3167,
             appToken,
             title: 'Oymo',
-            message: `@${profile?.username} likes to your comment (${reel?.description?.slice(0, 100)})`
+            message: `@${profile?.username} likes to your comment (${reel?.description})`
           })
           await updateDoc(doc(db, 'users', reel?.user?.id), { notificationCount: increment(1) })
         })
