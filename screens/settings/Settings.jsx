@@ -12,6 +12,7 @@ import { setTheme } from '../../features/userSlice'
 import Bar from '../../components/Bar'
 import * as NavigationBar from 'expo-navigation-bar'
 import { useIsFocused } from '@react-navigation/native'
+import RangeSlider from 'rn-range-slider'
 
 const Settings = () => {
   const dispatch = useDispatch()
