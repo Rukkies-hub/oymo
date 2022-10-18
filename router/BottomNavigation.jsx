@@ -61,7 +61,7 @@ const BottomNavigation = () => {
           listeners={({ navigation }) => ({
             tabPress: e => {
               e.preventDefault()
-              if (profile)
+              if (profile?.photoURL != undefined && profile?.username != undefined)
                 navigation.navigate('AddReels')
               else
                 navigation.navigate('SetupModal')

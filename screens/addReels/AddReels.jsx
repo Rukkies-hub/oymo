@@ -8,7 +8,6 @@ import { ar } from '../../style/addReels'
 import Bar from '../../components/Bar'
 import OymoFont from '../../components/OymoFont'
 import color from '../../style/color'
-import * as NavigationBar from 'expo-navigation-bar'
 import { Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import * as VideoThumbnails from 'expo-video-thumbnails'
 import * as ImagePicker from 'expo-image-picker'
@@ -23,15 +22,6 @@ const AddReels = () => {
   const [permission, requestPermission] = Camera.useCameraPermissions()
   const isFocused = useIsFocused()
   const navigation = useNavigation()
-
-  if (isFocused) {
-    NavigationBar.setVisibilityAsync('hidden')
-    NavigationBar.setBehaviorAsync('overlay-swipe')
-  }
-
-  navigation.addListener('blur', () => {
-    NavigationBar.setVisibilityAsync('visible')
-  })
 
   useEffect(() => {
     (async () => {

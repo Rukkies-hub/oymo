@@ -93,7 +93,7 @@ const StackNavigation = () => {
                     <Screen name='Event' component={Event} />
                     <Screen name='Room' component={Room} />
                     <Screen name='Map' component={Map} />
-                    <Screen name='Settings' component={Settings} />
+                    <Screen name='Settings' component={Settings} options={{ gestureEnabled: false }} />
                   </Group>
 
                   <Group screenOptions={{ presentation: 'transparentModal' }}>

@@ -25,9 +25,9 @@ const UserInfo = ({ _user }) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        profile ? (
+        (profile?.photoURL != undefined && profile?.username != undefined) ? (
           userInfo?.id == id ? navigation.navigate('Profile') : navigation.navigate('UserProfile', { user: userInfo })
-        ) : null
+        ) : navigation.navigate('SetupModal')
       }}
       style={{
         flexDirection: 'row'

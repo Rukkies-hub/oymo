@@ -3,9 +3,6 @@ import { ScrollView, TouchableOpacity, View } from 'react-native'
 import color from '../../style/color'
 import { profile } from '../../style/profile'
 
-import { useIsFocused, useNavigation } from '@react-navigation/native'
-
-import * as NavigationBar from 'expo-navigation-bar'
 import { useSelector } from 'react-redux'
 import ProfileDetails from './ProfileDetailes'
 import Reels from './Reels'
@@ -16,19 +13,8 @@ import { useState } from 'react'
 
 const Profile = () => {
   const { user, profile: _profile, theme } = useSelector(state => state.user)
-  const focus = useIsFocused()
-  const navigation = useNavigation()
 
   const [view, setView] = useState('reels')
-
-  if (focus) {
-    NavigationBar.setVisibilityAsync('hidden')
-    NavigationBar.setBehaviorAsync('overlay-swipe')
-  }
-
-  navigation.addListener('blur', () => {
-    NavigationBar.setVisibilityAsync('visible')
-  })
 
   return (
     <View style={[profile.container, { backgroundColor: theme ? color.dark : color.white }]}>

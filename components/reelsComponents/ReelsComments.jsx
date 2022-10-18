@@ -73,7 +73,6 @@ const ReelsComments = ({ reel, background }) => {
             <View style={_comments.commentContainer}>
               <View style={_comments.commentShell}>
                 <UserInfo _user={comment?.user?.id} />
-
                 <OymoFont message={comment?.comment} fontStyle={_comments.comment} />
               </View>
 

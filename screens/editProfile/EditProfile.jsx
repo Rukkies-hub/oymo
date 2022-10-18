@@ -28,7 +28,6 @@ import { editProfile } from '../../style/editProfile'
 import OymoFont from '../../components/OymoFont'
 import { logout, setProfile } from '../../features/userSlice'
 import LookingFor from './components/LookingFor'
-import Payment from './components/Payment'
 import { signOut } from 'firebase/auth'
 import * as Location from 'expo-location'
 
@@ -51,7 +50,6 @@ const EditProfile = () => {
   // INPUTS
   const [city, setCity] = useState(profile?.address?.city)
   const [username, setUsername] = useState(profile?.username)
-  const [phone, setPhone] = useState(profile?.phone)
   const [about, setAbout] = useState(profile?.about)
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
@@ -78,10 +76,10 @@ const EditProfile = () => {
     (() => {
       if (profile) setDisabled(false)
       else
-        if (username != undefined && phone != undefined)
+        if (username != undefined)
           setDisabled(false)
     })()
-  }, [username, phone])
+  }, [username])
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidHide', () => {
@@ -107,7 +105,6 @@ const EditProfile = () => {
     await setDoc(doc(db, 'users', id), {
       id: id,
       username,
-      phone,
       coins: 5000,
       timestamp: serverTimestamp()
     })
@@ -120,7 +117,6 @@ const EditProfile = () => {
 
     if (username != '' && username != undefined) await updateDoc(doc(db, 'users', id), { username })
     if (about != '' && about != undefined) await updateDoc(doc(db, 'users', id), { about })
-    if (phone != '' && phone != undefined) await updateDoc(doc(db, 'users', id), { phone })
     setUpdateLoading(false)
     schedulePushNotification('Update successful', 'Your profile has been updated successfully')
 
@@ -181,7 +177,7 @@ const EditProfile = () => {
           </View>
 
           {
-            profile &&
+            profile?.username != undefined &&
             <TouchableOpacity onPress={pickImage} style={[editProfile.pickImage, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
               <AntDesign name='picture' size={24} color={theme ? color.white : color.dark} />
             </TouchableOpacity>
@@ -210,23 +206,6 @@ const EditProfile = () => {
               ]}
             />
 
-            <TextInput
-              value={phone}
-              placeholder='(Country code) Phone'
-              autoCapitalize='none'
-              autoCorrect={false}
-              onChangeText={setPhone}
-              placeholderTextColor={theme ? color.white : color.dark}
-              style={[
-                editProfile.input,
-                {
-                  fontFamily: 'text',
-                  backgroundColor: theme ? color.lightText : color.offWhite,
-                  color: theme ? color.white : color.dark
-                }
-              ]}
-            />
-
             <TouchableOpacity
               onPress={setMyLocation}
               style={[
@@ -238,7 +217,7 @@ const EditProfile = () => {
                 }
               ]}
             >
-              <OymoFont message={city == undefined ? 'City' : city} />
+              <OymoFont message={city == undefined ? 'City' : city} fontStyle={{ color: theme ? color.white : color.dark }} />
             </TouchableOpacity>
 
             {
@@ -312,7 +291,7 @@ const EditProfile = () => {
 
             {profile && <LookingFor />}
 
-            {profile &&
+            {profile?.username != undefined &&
               <TouchableOpacity
                 onPress={() => navigation.navigate('Upgrade')}
                 style={[editProfile.goPro, { backgroundColor: theme ? color.lightText : color.offWhite }]}

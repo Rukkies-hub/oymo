@@ -92,49 +92,61 @@ const CustomDrawerContent = ({ navigation }) => {
         }}
         icon={() => <Ionicons name="cog-outline" size={20} color={theme ? color.white : color.black} />}
       />
-      <DrawerItem
-        label={() => <OymoFont message='New Post' fontStyle={{ color: theme ? color.white : color.black }} />}
-        onPress={() => {
-          navigation.closeDrawer()
-          navigation.navigate('AddReelsNav')
-        }}
-        icon={() => <FontAwesome name='plus-square-o' color={theme ? color.white : color.black} size={22} />}
-      />
+      {
+        (profile?.photoURL != undefined && profile?.username) &&
+        <DrawerItem
+          label={() => <OymoFont message='New Post' fontStyle={{ color: theme ? color.white : color.black }} />}
+          onPress={() => {
+            navigation.closeDrawer()
+            navigation.navigate('AddReelsNav')
+          }}
+          icon={() => <FontAwesome name='plus-square-o' color={theme ? color.white : color.black} size={22} />}
+        />
+      }
 
       <View style={{ width: '100%', height: 1, backgroundColor: theme ? color.lightBorderColor : color.borderColor, marginVertical: 10 }} />
 
-      <TouchableOpacity
-        style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
-        onPress={() => {
-          navigation.closeDrawer()
-          navigation.navigate('Events')
-        }}
-      >
-        <Image source={require('../assets/event.png')} style={dw.star} />
-        <OymoFont message='Events' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
-      </TouchableOpacity>
+      {
+        (profile?.photoURL != undefined && profile?.username) &&
+        <TouchableOpacity
+          style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
+          onPress={() => {
+            navigation.closeDrawer()
+            navigation.navigate('Events')
+          }}
+        >
+          <Image source={require('../assets/event.png')} style={dw.star} />
+          <OymoFont message='Events' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
+        </TouchableOpacity>
+      }
 
-      <TouchableOpacity
-        style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
-        onPress={() => {
-          navigation.closeDrawer()
-          navigation.navigate('Rooms')
-        }}
-      >
-        <Image source={require('../assets/room.png')} style={dw.star} />
-        <OymoFont message='Rooms' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
-      </TouchableOpacity>
+      {
+        (profile?.photoURL != undefined && profile?.username) &&
+        <TouchableOpacity
+          style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
+          onPress={() => {
+            navigation.closeDrawer()
+            navigation.navigate('Rooms')
+          }}
+        >
+          <Image source={require('../assets/room.png')} style={dw.star} />
+          <OymoFont message='Rooms' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
+        </TouchableOpacity>
+      }
 
-      <TouchableOpacity
-        onPress={() => {
-          navigation.closeDrawer()
-          navigation.navigate('Upgrade')
-        }}
-        style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
-      >
-        <Image source={require('../assets/star.png')} style={dw.star} />
-        <OymoFont message='Buy Coins' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
-      </TouchableOpacity>
+      {
+        (profile?.photoURL != undefined && profile?.username) &&
+        <TouchableOpacity
+          onPress={() => {
+            navigation.closeDrawer()
+            navigation.navigate('Upgrade')
+          }}
+          style={[dw.upgradeButton, { backgroundColor: theme ? color.dark : color.white }]}
+        >
+          <Image source={require('../assets/star.png')} style={dw.star} />
+          <OymoFont message='Buy Coins' fontStyle={{ ...dw.upgradeButtonText, color: theme ? color.white : color.black }} />
+        </TouchableOpacity>
+      }
 
       <TouchableOpacity
         onPress={logoutUser}

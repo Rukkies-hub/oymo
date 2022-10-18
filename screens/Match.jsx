@@ -82,7 +82,7 @@ const Match = () => {
         const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
           .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
           .filter(doc => doc?.id !== id)
-          .filter(doc => distance(doc?.data()?.coords?.latitude, doc?.data()?.coords?.longitude, profile?.coords?.latitude, profile?.coords?.longitude).toFixed(2) <= 1)
+          .filter(doc => distance(doc?.data()?.coords?.latitude, doc?.data()?.coords?.longitude, profile?.coords?.latitude, profile?.coords?.longitude).toFixed(2) <= profile?.radius != undefined ? profile?.radius : 1)
           .map(doc => ({
             id: doc?.id,
             ...doc?.data()
@@ -208,8 +208,8 @@ const Match = () => {
               backgroundColor={color.transparent}
               cardHorizontalMargin={0}
               cardVerticalMargin={0}
-              onSwipedLeft={cardIndex => profile ? swipeLeft(cardIndex) : disabled()}
-              onSwipedRight={cardIndex => profile ? swipeRight(cardIndex) : disabled()}
+              onSwipedLeft={cardIndex => (profile?.photoURL != undefined && profile?.username != undefined) ? swipeLeft(cardIndex) : disabled()}
+              onSwipedRight={cardIndex => (profile?.photoURL != undefined && profile?.username != undefined) ? swipeRight(cardIndex) : disabled()}
               onTapCard={() => !profile ? disabled() : null}
               dragStart={() => !profile ? disabled() : null}
               overlayLabels={{
@@ -223,7 +223,7 @@ const Match = () => {
 
                   <LinearGradient colors={['transparent', theme ? color.dark : color.black]} style={match.cardGradient}>
                     <View style={match.userDetail}>
-                      <TouchableOpacity onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.usernameButton}>
+                      <TouchableOpacity onPress={() => (profile?.photoURL != undefined && profile?.username != undefined) ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.usernameButton}>
                         <OymoFont fontStyle={match.username} fontFamily='montserrat_bold' message={card?.username} />
                         {
                           card?.age != undefined &&
@@ -231,7 +231,7 @@ const Match = () => {
                         }
                       </TouchableOpacity>
 
-                      <TouchableOpacity onPress={() => profile ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.moreInfoButton}>
+                      <TouchableOpacity onPress={() => (profile?.photoURL != undefined && profile?.username != undefined) ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.moreInfoButton}>
                         <MaterialCommunityIcons name='information-outline' size={20} color={color.white} />
                       </TouchableOpacity>
                     </View>

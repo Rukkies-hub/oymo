@@ -24,17 +24,16 @@ import { webClientId, iosClientId, androidClientId } from '@env'
 
 import * as Google from 'expo-auth-session/providers/google'
 import * as WebBrowser from 'expo-web-browser'
-import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons'
+import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { useDispatch } from 'react-redux'
 import { setProfile, setUser } from '../features/userSlice'
-import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore'
-
+import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
+import * as Location from 'expo-location'
 WebBrowser.maybeCompleteAuthSession()
 
 const Auth = () => {
   const dispatch = useDispatch()
   const [googleLoadng, setGoogleLoadng] = useState(false)
-  const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [securePasswordEntry, setSecurePasswordEntry] = useState(true)
@@ -67,13 +66,21 @@ const Auth = () => {
 
   let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
-  const signin = () => {
+  const signin = async () => {
     if (email.match(regexEmail) && password != '') {
       setAuthLoading(true)
+      let { coords } = await Location.getCurrentPositionAsync({})
+      const address = await Location.reverseGeocodeAsync(coords)
+
       signInWithEmailAndPassword(auth, email, password)
-        .then(userCredential => {
+        .then(async userCredential => {
+          let id = userCredential?.uid != undefined ? userCredential?.uid : userCredential?.user?.uid
           dispatch(setUser(userCredential))
           setAuthLoading(false)
+          await updateDoc(doc(db, 'users', id), {
+            coords,
+            address: address[0],
+          })
         }).catch(error => {
           if (error.message.includes('wrong-password'))
             alert('Wrong password. Check your passwod then try again.')
@@ -83,16 +90,21 @@ const Auth = () => {
     }
   }
 
-  const signup = () => {
+  const signup = async () => {
     if (email.match(regexEmail) && password != '') {
       setAuthLoading(true)
+      let { coords } = await Location.getCurrentPositionAsync({})
+      const address = await Location.reverseGeocodeAsync(coords)
+
       createUserWithEmailAndPassword(auth, email, password)
         .then(async userCredential => {
           dispatch(setUser(userCredential))
           setAuthLoading(false)
           let id = userCredential?.uid != undefined ? userCredential?.uid : userCredential?.user?.uid
           await setDoc(doc(db, 'users', id), {
-            phone,
+            email,
+            coords,
+            address: address[0],
             coins: 5000,
             timestamp: serverTimestamp(),
             id
@@ -140,21 +152,6 @@ const Auth = () => {
             </View>
 
             <View style={{ marginTop: 40, width: '100%' }}>
-              {
-                authType == 'signup' &&
-                <View style={[login.inputView, { marginBottom: 20 }]}>
-                  <AntDesign name="phone" size={20} color={color.white} style={{ marginHorizontal: 10 }} />
-                  <TextInput
-                    autoCapitalize='none'
-                    placeholder='Phone'
-                    value={phone}
-                    onChangeText={setPhone}
-                    placeholderTextColor={color.white}
-                    style={login.input}
-                  />
-                </View>
-              }
-
               <View style={login.inputView}>
                 <MaterialIcons name='alternate-email' size={24} color={color.white} style={{ marginHorizontal: 10 }} />
                 <TextInput
