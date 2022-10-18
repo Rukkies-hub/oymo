@@ -102,27 +102,36 @@ const Settings = () => {
         </View>
       </View>
 
-      <View style={settings.settingView}>
-        <OymoFont message='Match settings' fontFamily='montserrat_bold' fontStyle={settings.settingViewHead} />
-        <View style={[settings.settingViewContent, { marginTop: 10 }]}>
-          <View>
-            <Text style={[settings.title, { color: theme ? color.white : color.dark }]}>Match radius ({profile?.radius != undefined ? profile?.radius : 1})</Text>
-            <Slider
-              style={{ width, height: 40, marginLeft: -10 }}
-              step={1}
-              value={distance}
-              minimumValue={0}
-              maximumValue={10}
-              thumbTintColor={color.red}
-              minimumTrackTintColor={color.lightBorderColor}
-              maximumTrackTintColor={theme ? color.white : color.dark}
-              onValueChange={(low, high, fromUser) => {
-                setDistance(low)
-              }}
-            />
+      {
+        (profile?.photoURL != undefined && profile?.username != undefined) &&
+        <View style={settings.settingView}>
+          <OymoFont message='Match settings' fontFamily='montserrat_bold' fontStyle={settings.settingViewHead} />
+          <View style={[settings.settingViewContent, { marginTop: 10 }]}>
+            <View>
+              <Text style={[settings.title, { color: theme ? color.white : color.dark }]}>Match radius ({profile?.radius != undefined ? profile?.radius : 1})</Text>
+              <Text style={[settings.text, { color: theme ? color.white : color.dark }]}>
+                Set your search radius to find people around you
+              </Text>
+              <Text style={[settings.text, { color: theme ? color.white : color.dark }]}>
+                You can see users {profile?.radius != undefined ? profile?.radius : 1}kilometer around you
+              </Text>
+              <Slider
+                style={{ width, height: 40, marginLeft: -10 }}
+                step={1}
+                value={distance}
+                minimumValue={0}
+                maximumValue={10}
+                thumbTintColor={color.red}
+                minimumTrackTintColor={color.lightBorderColor}
+                maximumTrackTintColor={theme ? color.white : color.dark}
+                onValueChange={(low, high, fromUser) => {
+                  setDistance(low)
+                }}
+              />
+            </View>
           </View>
         </View>
-      </View>
+      }
     </View>
   )
 }
