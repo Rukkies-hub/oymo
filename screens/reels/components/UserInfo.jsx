@@ -7,7 +7,7 @@ import OymoFont from '../../../components/OymoFont'
 import { reels } from '../../../style/reels'
 import { useSelector } from 'react-redux'
 
-const UserInfo = ({ _user }) => {
+const UserInfo = ({ _user, font }) => {
   const { user, profile } = useSelector(state => state.user)
   const navigation = useNavigation()
 
@@ -33,7 +33,7 @@ const UserInfo = ({ _user }) => {
         flexDirection: 'row'
       }}
     >
-      {userInfo?.username != undefined && <OymoFont message={`@${userInfo?.username}`} fontStyle={reels.captionUsername} fontFamily='montserrat_light' />}
+      {userInfo?.username != undefined && <OymoFont message={`@${userInfo?.username}`} fontStyle={reels.captionUsername} fontFamily={font ? font : 'montserrat_light'} />}
     </TouchableOpacity>
   )
 }

@@ -3,10 +3,17 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import ReelsScreen from './ReelsScreen'
 import Profile from './Profile'
 import { Text, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 
 const { Navigator, Screen } = createMaterialTopTabNavigator()
 
 const Reels = () => {
+  const navigation = useNavigation()
+
+  navigation.addListener('blur', () => {
+    navigation.jumpTo('ReelsScreen')
+  })
+
   return (
     <Navigator
       screenOptions={{

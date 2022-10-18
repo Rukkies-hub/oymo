@@ -117,15 +117,11 @@ const ReelsScreen = () => {
 
         <LinearGradient colors={['transparent', color.lightText]} style={reels.gradientContainer}>
           <View style={reels.captionContainer}>
-            <UserInfo _user={item?.user?.id} />
+            <UserInfo _user={item?.user?.id} font='montserrat_bold' />
 
             {
               item?.description != '' &&
-              <OymoFont
-                message={item?.description}
-                fontStyle={reels.videoDescription}
-                fontFamily='montserrat_light'
-              />
+              <OymoFont message={item?.description} fontStyle={reels.videoDescription} fontFamily='montserrat_light' />
             }
           </View>
         </LinearGradient>
