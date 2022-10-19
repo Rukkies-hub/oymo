@@ -12,7 +12,7 @@ import { useCallback } from 'react'
 import { useSelector } from 'react-redux'
 
 const wait = (timeout) => {
-  return new Promise(resolve => setTimeout(resolve, timeout));
+  return new Promise(resolve => setTimeout(resolve, timeout))
 }
 
 const Rooms = () => {
@@ -23,7 +23,7 @@ const Rooms = () => {
   const [refreshing, setRefreshing] = useState(false)
 
   const onRefresh = useCallback(() => {
-    setRefreshing(true);
+    setRefreshing(true)
     wait(2000).then(() => getRooms())
   }, [])
 

@@ -135,10 +135,10 @@ const Header = ({
             <>
               {
                 !profile ?
-                  <TouchableOpacity onPress={() => navigation.openDrawer == undefined ? navigation.navigate("EditProfile") : navigation.openDrawer()} style={header.placeholderImage}>
+                  <TouchableOpacity onPress={() => navigation.openDrawer == undefined ? navigation.navigate('EditProfile') : navigation.openDrawer()} style={header.placeholderImage}>
                     <FontAwesome name='user-o' size={22} color={color.dark} />
                   </TouchableOpacity> :
-                  <TouchableOpacity onPress={() => navigation.openDrawer == undefined ? navigation.navigate("Profile") : navigation.openDrawer()} style={header.profileImageButton}>
+                  <TouchableOpacity onPress={() => navigation.openDrawer == undefined ? navigation.navigate('Profile') : navigation.openDrawer()} style={header.profileImageButton}>
                     {
                       profile?.photoURL ?
                         <View style={{ position: 'relative' }}>

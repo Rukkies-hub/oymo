@@ -43,12 +43,19 @@ const MessageOptions = () => {
 
       <View style={[mo.optionsView, { backgroundColor: theme ? color.dark : color.white }]}>
         <TouchableOpacity
+          activeOpacity={0.5}
+          style={[mo.replyButton, { backgroundColor: theme ? color.lightText : color.offWhite }]}
+        >
+          <OymoFont message='Copy' fontStyle={{ color: theme ? color.white : color.dark }} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
           onPress={() => {
             navigation.goBack()
             dispatch(setMessageReply(messages))
           }}
           activeOpacity={0.5}
-          style={[mo.replyButton, { backgroundColor: theme ? color.lightText : color.offWhite }]}
+          style={[mo.replyButton, { backgroundColor: theme ? color.lightText : color.offWhite, marginTop: 10 }]}
         >
           <OymoFont message='Reply' fontStyle={{ color: theme ? color.white : color.dark }} />
         </TouchableOpacity>
