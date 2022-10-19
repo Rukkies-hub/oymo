@@ -40,7 +40,7 @@ const Header = ({
   matchDetails,
   showNotification,
   backgroundColor,
-  showMessageOptions,
+  showChatOptions,
   textColor
 }) => {
   const navigation = useNavigation()
@@ -158,8 +158,8 @@ const Header = ({
           }
 
           {
-            showMessageOptions &&
-            <TouchableOpacity onPress={() => navigation.navigate('MessageOptions', { matchDetails })} style={header.showMessageOptions}>
+            showChatOptions &&
+            <TouchableOpacity onPress={() => navigation.navigate('ChatOptions', { matchDetails })} style={header.showMessageOptions}>
               <MaterialCommunityIcons name='dots-vertical' size={24} color={color.dark} />
             </TouchableOpacity>
           }

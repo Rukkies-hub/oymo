@@ -44,6 +44,7 @@ import { useIsFocused } from '@react-navigation/native'
 import * as NavigationBar from 'expo-navigation-bar'
 import EventOption from '../screens/modals/EventOption'
 import Aleart from '../screens/modals/Aleart'
+import ChatOptions from '../screens/modals/ChatOptions'
 
 const StackNavigation = () => {
   const { user, loadingInitial, theme } = useSelector(state => state.user)
@@ -136,6 +137,17 @@ const StackNavigation = () => {
                     <Screen
                       name='MessageOptions'
                       component={MessageOptions}
+                      options={{
+                        gestureEnabled: false,
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
+                    <Screen
+                      name='ChatOptions'
+                      component={ChatOptions}
                       options={{
                         gestureEnabled: false,
                         ...TransitionPresets.FadeFromBottomAndroid,
