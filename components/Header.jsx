@@ -160,7 +160,7 @@ const Header = ({
           {
             showChatOptions &&
             <TouchableOpacity onPress={() => navigation.navigate('ChatOptions', { matchDetails })} style={header.showMessageOptions}>
-              <MaterialCommunityIcons name='dots-vertical' size={24} color={color.dark} />
+              <MaterialCommunityIcons name='dots-vertical' size={24} color={theme ? color.white : color.dark} />
             </TouchableOpacity>
           }
         </View>

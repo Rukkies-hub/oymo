@@ -19,6 +19,7 @@ const MessageHeader = ({ user, matchDetails }) => {
     <Header
       showBack
       showTitle
+      showChatOptions
       showMatchAvatar
       title={userInfo?.username}
       matchDetails={matchDetails}
