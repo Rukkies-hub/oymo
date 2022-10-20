@@ -138,7 +138,7 @@ const Message = () => {
   }, [input])
 
   const sendMessage = async () => {
-    if (profile?.coins < 1) return
+    if (profile?.coins < 5) return
 
     if (input != '') {
       await addDoc(collection(db, 'matches', matchDetails?.id, 'messages'), {

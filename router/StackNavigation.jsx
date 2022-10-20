@@ -44,7 +44,7 @@ import { useIsFocused } from '@react-navigation/native'
 import * as NavigationBar from 'expo-navigation-bar'
 import EventOption from '../screens/modals/EventOption'
 import Aleart from '../screens/modals/Aleart'
-import ChatOptions from '../screens/modals/ChatOptions'
+import ChatOptions from '../screens/modals/chatOptions/ChatOptions'
 
 const StackNavigation = () => {
   const { user, loadingInitial, theme } = useSelector(state => state.user)

@@ -43,7 +43,7 @@ const ChatRow = ({ matchDetails }) => {
                 `${snapshot?.docs[0]?.data()?.username != profile?.username ? snapshot?.docs[0]?.data().username : 'You'} ${snapshot?.docs[0]?.data()?.username == profile?.username ? 'sent a video' : 'Sent you a video'}...` :
                 snapshot?.docs[0]?.data()?.mediaType == 'image' ?
                   `${snapshot?.docs[0]?.data()?.username != profile?.username ? snapshot?.docs[0]?.data().username : 'You'} ${snapshot?.docs[0]?.data()?.username == profile?.username ? 'sent an image' : 'Sent you an image'}...` :
-                  snapshot?.docs[0]?.data()?.message || snapshot?.docs[0]?.data()?.caption
+                  snapshot?.docs[0]?.data()?.coin != undefined ? `You just received ${snapshot?.docs[0]?.data()?.coin} coins` : snapshot?.docs[0]?.data()?.message || snapshot?.docs[0]?.data()?.caption
           )
       )
     })()
