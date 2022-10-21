@@ -46,6 +46,7 @@ const ChatOptions = () => {
       timestamp: serverTimestamp()
     })
     await updateDoc(doc(db, 'users', id), { coins: increment(-(5 + coin)) })
+    await updateDoc(doc(db, 'users', getMatchedUserInfo(matchDetails?.users, id)?.id), { coins: increment(coin) })
     await updateDoc(doc(db, 'admin', admin), { messages: increment(1) })
     setCoin(null)
     navigation.goBack()
