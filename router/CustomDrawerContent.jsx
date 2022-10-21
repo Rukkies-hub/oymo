@@ -82,7 +82,7 @@ const CustomDrawerContent = ({ navigation }) => {
           navigation.closeDrawer()
           navigation.navigate('EditProfile')
         }}
-        icon={() => <Feather name="edit" size={20} color={theme ? color.white : color.black} />}
+        icon={() => <Feather name='edit' size={20} color={theme ? color.white : color.black} />}
       />
       <DrawerItem
         label={() => <OymoFont message='Settings' fontStyle={{ color: theme ? color.white : color.black }} />}
@@ -90,7 +90,7 @@ const CustomDrawerContent = ({ navigation }) => {
           navigation.closeDrawer()
           navigation.navigate('Settings')
         }}
-        icon={() => <Ionicons name="cog-outline" size={20} color={theme ? color.white : color.black} />}
+        icon={() => <Ionicons name='cog-outline' size={20} color={theme ? color.white : color.black} />}
       />
       {
         (profile?.photoURL != undefined && profile?.username) &&

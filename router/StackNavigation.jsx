@@ -43,6 +43,8 @@ import Settings from '../screens/settings/Settings'
 import { useIsFocused } from '@react-navigation/native'
 import * as NavigationBar from 'expo-navigation-bar'
 import EventOption from '../screens/modals/EventOption'
+import Aleart from '../screens/modals/Aleart'
+import ChatOptions from '../screens/modals/chatOptions/ChatOptions'
 
 const StackNavigation = () => {
   const { user, loadingInitial, theme } = useSelector(state => state.user)
@@ -100,6 +102,17 @@ const StackNavigation = () => {
                     <Screen name='NewMatch' component={NewMatch} />
                     <Screen name='SetupModal' component={SetupModal} />
                     <Screen
+                      name='Aleart'
+                      component={Aleart}
+                      options={{
+                        gestureEnabled: false,
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
+                    <Screen
                       name='Upgrade'
                       component={Upgrade}
                       options={{
@@ -124,6 +137,17 @@ const StackNavigation = () => {
                     <Screen
                       name='MessageOptions'
                       component={MessageOptions}
+                      options={{
+                        gestureEnabled: false,
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
+                    <Screen
+                      name='ChatOptions'
+                      component={ChatOptions}
                       options={{
                         gestureEnabled: false,
                         ...TransitionPresets.FadeFromBottomAndroid,
@@ -199,7 +223,24 @@ const StackNavigation = () => {
                   </Group>
                 </>
               ) :
-                <Screen name='Auth' component={Auth} />
+                <>
+                  <Group>
+                    <Screen name='Auth' component={Auth} />
+                  </Group>
+                  <Group screenOptions={{ presentation: 'transparentModal' }}>
+                    <Screen
+                      name='Aleart'
+                      component={Aleart}
+                      options={{
+                        gestureEnabled: false,
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
+                  </Group>
+                </>
             }
           </>
       }

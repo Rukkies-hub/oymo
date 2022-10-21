@@ -136,7 +136,7 @@ const RecieverMessage = ({ messages, matchDetails }) => {
                     <OymoFont message={messages?.message} fontStyle={rm.replyMessageText} />
                   </View> :
                   <View style={[rm.chatView, { backgroundColor: messages?.message ? color.offWhite : color.transparent }]}>
-                    <OymoFont message={messages?.message} fontStyle={rm.replyMessageText} />
+                    <OymoFont message={messages?.coin ? `You just recieved ${messages?.coin} coins` : messages?.message} fontStyle={rm.replyMessageText} />
                   </View>
               }
               {
@@ -167,7 +167,7 @@ const RecieverMessage = ({ messages, matchDetails }) => {
                   messages?.caption != '' &&
                   <>
                     <View style={rm.messageMediaCaptionView}>
-                        <OymoFont message={messages?.caption} lines={numberOfLines} fontStyle={rm.mediaCaption} fontFamily='montserrat_light' />
+                      <OymoFont message={messages?.caption} lines={numberOfLines} fontStyle={rm.mediaCaption} fontFamily='montserrat_light' />
                     </View>
                   </>
                 }
@@ -194,19 +194,19 @@ const RecieverMessage = ({ messages, matchDetails }) => {
                   onPress={() => messages?.mediaType == 'video' ? navigation.navigate('ViewVideo', { video: messages?.media }) : null}
                   onLongPress={() => navigation.navigate('MessageOptions', { messages, matchDetails })}
                 >
-                    {
-                      messages?.thumbnail ?
-                        <Image source={{ uri: messages?.thumbnail }} resizeMode='cover' style={rm.messageMediaImage} /> :
-                        <ImageBackground
-                          source={profile?.photoURL ? { uri: profile?.photoURL } : require('../../../../assets/background2.jpg')}
-                          style={rm.thumbnailPlaceholdr}
-                          blurRadius={200}
-                        >
-                          <View style={rm.playView}>
-                            <Feather name='video' size={24} color={color.white} />
-                          </View>
-                        </ImageBackground>
-                    }
+                  {
+                    messages?.thumbnail ?
+                      <Image source={{ uri: messages?.thumbnail }} resizeMode='cover' style={rm.messageMediaImage} /> :
+                      <ImageBackground
+                        source={profile?.photoURL ? { uri: profile?.photoURL } : require('../../../../assets/background2.jpg')}
+                        style={rm.thumbnailPlaceholdr}
+                        blurRadius={200}
+                      >
+                        <View style={rm.playView}>
+                          <Feather name='video' size={24} color={color.white} />
+                        </View>
+                      </ImageBackground>
+                  }
                 </Pressable>
                 {
                   messages?.caption != '' &&

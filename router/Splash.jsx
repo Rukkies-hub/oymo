@@ -122,14 +122,14 @@ const Splash = () => {
   const setAge = async user => {
     if (!user || user == undefined) return
     function getAge (dateString) {
-      var today = new Date();
-      var birthDate = new Date(dateString);
-      var age = today.getFullYear() - birthDate.getFullYear();
-      var m = today.getMonth() - birthDate.getMonth();
+      var today = new Date()
+      var birthDate = new Date(dateString)
+      var age = today.getFullYear() - birthDate.getFullYear()
+      var m = today.getMonth() - birthDate.getMonth()
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
+        age--
       }
-      return age;
+      return age
     }
 
     const profile = await (await getDoc(doc(db, 'users', user?.uid == undefined ? user?.user?.uid : user?.uid))).data()

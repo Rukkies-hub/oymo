@@ -51,7 +51,7 @@ const BottomNavigation = () => {
           name='Reels'
           component={Reels}
           options={{
-            tabBarIcon: () => <FontAwesome name="film" size={20} color={theme ? color.white : color.black} />
+            tabBarIcon: () => <FontAwesome name='film' size={20} color={theme ? color.white : color.black} />
           }}
         />
 

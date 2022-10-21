@@ -36,11 +36,11 @@ const Drawer = () => {
       }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-      <Screen name="MatchScreen" component={BottomNavigation} options={{ title: 'Match' }} />
-      <Screen name="Notifications" component={Notifications} options={{ title: 'Notifications' }} />
-      <Screen name="Profile" component={Profile} options={{ title: 'Profile' }} />
-      <Screen name="EditProfile" component={EditProfile} options={{ title: 'Edit Profile' }} />
-      <Screen name="AddReelsNav" component={AddReels} options={{ title: 'Post' }} />
+      <Screen name='MatchScreen' component={BottomNavigation} options={{ title: 'Match' }} />
+      <Screen name='Notifications' component={Notifications} options={{ title: 'Notifications' }} />
+      <Screen name='Profile' component={Profile} options={{ title: 'Profile' }} />
+      <Screen name='EditProfile' component={EditProfile} options={{ title: 'Edit Profile' }} />
+      <Screen name='AddReelsNav' component={AddReels} options={{ title: 'Post' }} />
     </Navigator>
   )
 }

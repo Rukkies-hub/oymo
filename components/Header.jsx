@@ -40,7 +40,7 @@ const Header = ({
   matchDetails,
   showNotification,
   backgroundColor,
-  showMessageOptions,
+  showChatOptions,
   textColor
 }) => {
   const navigation = useNavigation()
@@ -135,10 +135,10 @@ const Header = ({
             <>
               {
                 !profile ?
-                  <TouchableOpacity onPress={() => navigation.openDrawer == undefined ? navigation.navigate("EditProfile") : navigation.openDrawer()} style={header.placeholderImage}>
+                  <TouchableOpacity onPress={() => navigation.openDrawer == undefined ? navigation.navigate('EditProfile') : navigation.openDrawer()} style={header.placeholderImage}>
                     <FontAwesome name='user-o' size={22} color={color.dark} />
                   </TouchableOpacity> :
-                  <TouchableOpacity onPress={() => navigation.openDrawer == undefined ? navigation.navigate("Profile") : navigation.openDrawer()} style={header.profileImageButton}>
+                  <TouchableOpacity onPress={() => navigation.openDrawer == undefined ? navigation.navigate('Profile') : navigation.openDrawer()} style={header.profileImageButton}>
                     {
                       profile?.photoURL ?
                         <View style={{ position: 'relative' }}>
@@ -158,9 +158,9 @@ const Header = ({
           }
 
           {
-            showMessageOptions &&
-            <TouchableOpacity onPress={() => navigation.navigate('MessageOptions', { matchDetails })} style={header.showMessageOptions}>
-              <MaterialCommunityIcons name='dots-vertical' size={24} color={color.dark} />
+            showChatOptions &&
+            <TouchableOpacity onPress={() => navigation.navigate('ChatOptions', { matchDetails })} style={header.showMessageOptions}>
+              <MaterialCommunityIcons name='dots-vertical' size={24} color={theme ? color.white : color.dark} />
             </TouchableOpacity>
           }
         </View>
