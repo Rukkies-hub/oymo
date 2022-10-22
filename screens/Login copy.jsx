@@ -31,7 +31,7 @@ import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firest
 import * as Location from 'expo-location'
 WebBrowser.maybeCompleteAuthSession()
 
-const Auth = () => {
+const Login = () => {
   const dispatch = useDispatch()
   const [googleLoadng, setGoogleLoadng] = useState(false)
   const [email, setEmail] = useState('')
@@ -240,4 +240,4 @@ const Auth = () => {
   )
 }
 
-export default Auth
+export default Login

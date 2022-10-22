@@ -4,7 +4,7 @@ import { createStackNavigator, TransitionPresets } from '@react-navigation/stack
 
 const { Navigator, Screen, Group } = createStackNavigator()
 
-import Auth from '../screens/Auth'
+import Login from '../screens/Login'
 import { useSelector } from 'react-redux'
 import Splash from './Splash'
 import Profile from '../screens/profile/Profile'
@@ -45,6 +45,9 @@ import * as NavigationBar from 'expo-navigation-bar'
 import EventOption from '../screens/modals/EventOption'
 import Aleart from '../screens/modals/Aleart'
 import ChatOptions from '../screens/modals/chatOptions/ChatOptions'
+import Welcome from '../screens/Welcome'
+import Signup from '../screens/Signup'
+import ForgotPassword from '../screens/ForgotPassword'
 
 const StackNavigation = () => {
   const { user, loadingInitial, theme } = useSelector(state => state.user)
@@ -225,7 +228,10 @@ const StackNavigation = () => {
               ) :
                 <>
                   <Group>
-                    <Screen name='Auth' component={Auth} />
+                    <Screen name='Welcome' component={Welcome} />
+                    <Screen name='Login' component={Login} />
+                    <Screen name='Signup' component={Signup} />
+                    <Screen name='ForgotPassword' component={ForgotPassword} />
                   </Group>
                   <Group screenOptions={{ presentation: 'transparentModal' }}>
                     <Screen
