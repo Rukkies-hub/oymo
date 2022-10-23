@@ -27,7 +27,6 @@ export const wc = StyleSheet.create({
   navigationView: {
     backgroundColor: color.faintRed,
     borderRadius: 20,
-    overflow: 'hidden',
     marginBottom: 20,
     marginTop: 80,
     width: '100%',
@@ -118,7 +117,7 @@ export const login = StyleSheet.create({
   },
 
   signInButton: {
-    backgroundColor: color.white,
+    backgroundColor: color.red,
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
@@ -133,6 +132,10 @@ export const login = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+
+  signInButtonText: {
+    color: color.white
   }
 })
 
