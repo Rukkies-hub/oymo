@@ -8,11 +8,14 @@ import AutoHeightImage from 'react-native-auto-height-image'
 const { width } = Dimensions.get('window')
 import OymoFont from '../components/OymoFont'
 import Bar from '../components/Bar'
+import { useDispatch } from 'react-redux'
+import { setSetup } from '../features/userSlice'
 
 const Welcome = () => {
   const focused = useIsFocused()
   const navigation = useNavigation()
   const { name } = useRoute()
+  const dispatch = useDispatch()
 
   if (focused) {
     NavigationBar.setBackgroundColorAsync(color.white)
@@ -28,7 +31,10 @@ const Welcome = () => {
 
       <View style={wc.navigationView}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('Signup')}
+          onPress={() => {
+            dispatch(setSetup(true))
+            navigation.navigate('Signup')
+          }}
           style={[
             wc.navigationButton, {
               backgroundColor: name == 'Welcome' ? color.white : color.transparent,

@@ -4,9 +4,22 @@ import { al } from '../../style/alert'
 import OymoFont from '../../components/OymoFont'
 import { useSelector } from 'react-redux'
 import color from '../../style/color'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
-const Aleart = ({ title, showTitle, body, showBody, showDivider, showCancel, showOk }) => {
-  const { theme } = useSelector(state => state.user)
+const Aleart = () => {
+  const {
+    theme,
+    showTitle,
+    title,
+    body,
+    showBody,
+    showDivider,
+    showCancel,
+    showOk
+  } = useRoute().params
+
+  const navigation = useNavigation()
+
   return (
     <View style={al.container}>
       <View style={[al.bubble, { backgroundColor: theme ? color.dark : color.white }]}>
@@ -16,7 +29,7 @@ const Aleart = ({ title, showTitle, body, showBody, showDivider, showCancel, sho
         }
         {
           showBody &&
-          <OymoFont message={body} fontStyle={{ color: theme ? color.white : color.dark }} />
+          <OymoFont message={body} fontStyle={{ color: theme ? color.white : color.dark, marginTop: 10 }} />
         }
         <View style={[al.bottom, { borderTopColor: theme ? color.lightBorderColor : color.borderColor }]}>
           {
@@ -31,7 +44,7 @@ const Aleart = ({ title, showTitle, body, showBody, showDivider, showCancel, sho
           }
           {
             showOk &&
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={[al.cancelButton, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
               <OymoFont message='Ok' />
             </TouchableOpacity>
           }

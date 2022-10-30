@@ -101,7 +101,7 @@ const Login = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={signin} style={login.signInButton}>
           {
-            authLoading ? <ActivityIndicator size='small' color={color.red} /> :
+            authLoading ? <ActivityIndicator size='small' color={color.white} /> :
               <OymoFont message='Sign In' fontStyle={login.signInButtonText} />
           }
         </TouchableOpacity>

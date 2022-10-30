@@ -48,9 +48,11 @@ import ChatOptions from '../screens/modals/chatOptions/ChatOptions'
 import Welcome from '../screens/Welcome'
 import Signup from '../screens/Signup'
 import ForgotPassword from '../screens/ForgotPassword'
+import Step1 from '../screens/Step1'
+import Step2 from '../screens/Step2'
 
 const StackNavigation = () => {
-  const { user, loadingInitial, theme } = useSelector(state => state.user)
+  const { user, loadingInitial, theme, setup } = useSelector(state => state.user)
 
   const focused = useIsFocused()
 
@@ -77,29 +79,36 @@ const StackNavigation = () => {
             {
               user ? (
                 <>
-                  <Group>
-                    <Screen name='Drawer' component={Drawer} />
-                    <Screen name='Profile' component={Profile} />
-                    <Screen name='EditProfile' component={EditProfile} options={{ gestureEnabled: false }} />
-                    <Screen name='SaveAvatar' component={SaveAvatar} options={{ gestureEnabled: false }} />
-                    <Screen name='ReelsComment' component={ReelsComment} />
-                    <Screen name='ViewReelsComments' component={ViewReelsComments} />
-                    <Screen name='UserProfile' component={UserProfile} />
-                    <Screen name='ViewReel' component={ViewReel} />
-                    <Screen name='Message' component={Message} />
-                    <Screen name='ViewVideo' component={ViewVideo} />
-                    <Screen name='MessageCamera' component={MessageCamera} />
-                    <Screen name='PreviewMessageImage' component={PreviewMessageImage} />
-                    <Screen name='AddReels' component={AddReels} />
-                    <Screen name='SaveReels' component={SaveReels} />
-                    <Screen name='Notifications' component={Notifications} />
-                    <Screen name='Events' component={Events} />
-                    <Screen name='Rooms' component={Rooms} />
-                    <Screen name='Event' component={Event} />
-                    <Screen name='Room' component={Room} />
-                    <Screen name='Map' component={Map} />
-                    <Screen name='Settings' component={Settings} options={{ gestureEnabled: false }} />
-                  </Group>
+                  {
+                    setup ?
+                      <Group>
+                        <Screen name='Step1' component={Step1} />
+                        <Screen name='Step2' component={Step2} />
+                      </Group> :
+                      <Group>
+                        <Screen name='Drawer' component={Drawer} />
+                        <Screen name='Profile' component={Profile} />
+                        <Screen name='EditProfile' component={EditProfile} options={{ gestureEnabled: false }} />
+                        <Screen name='SaveAvatar' component={SaveAvatar} options={{ gestureEnabled: false }} />
+                        <Screen name='ReelsComment' component={ReelsComment} />
+                        <Screen name='ViewReelsComments' component={ViewReelsComments} />
+                        <Screen name='UserProfile' component={UserProfile} />
+                        <Screen name='ViewReel' component={ViewReel} />
+                        <Screen name='Message' component={Message} />
+                        <Screen name='ViewVideo' component={ViewVideo} />
+                        <Screen name='MessageCamera' component={MessageCamera} />
+                        <Screen name='PreviewMessageImage' component={PreviewMessageImage} />
+                        <Screen name='AddReels' component={AddReels} />
+                        <Screen name='SaveReels' component={SaveReels} />
+                        <Screen name='Notifications' component={Notifications} />
+                        <Screen name='Events' component={Events} />
+                        <Screen name='Rooms' component={Rooms} />
+                        <Screen name='Event' component={Event} />
+                        <Screen name='Room' component={Room} />
+                        <Screen name='Map' component={Map} />
+                        <Screen name='Settings' component={Settings} options={{ gestureEnabled: false }} />
+                      </Group>
+                  }
 
                   <Group screenOptions={{ presentation: 'transparentModal' }}>
                     <Screen name='NewMatch' component={NewMatch} />

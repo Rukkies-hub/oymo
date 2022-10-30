@@ -7,7 +7,8 @@ export const userSlice = createSlice({
     loadingInitial: true,
     profile: null,
     passsions: [],
-    theme: false
+    theme: false,
+    setup: false
   },
   reducers: {
     setUser: (state, action) => {
@@ -30,11 +31,15 @@ export const userSlice = createSlice({
 
     setTheme: (state, action) => {
       state.theme = action.payload
+    },
+
+    setSetup: (state, action) => {
+      state.setup = action.payload
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser, logout, setProfile, setPassions, setTheme } = userSlice.actions
+export const { setUser, logout, setProfile, setPassions, setTheme, setSetup } = userSlice.actions
 
 export default userSlice.reducer
