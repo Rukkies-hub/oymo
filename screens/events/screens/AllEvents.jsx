@@ -43,7 +43,7 @@ const AllEvents = ({ navigation }) => {
   return (
     <View style={[events.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <OymoFont
-        message='Welcom to Events'
+        message='Welcome to Events'
         fontFamily='montserrat_bold'
         fontStyle={{
           fontSize: 25,

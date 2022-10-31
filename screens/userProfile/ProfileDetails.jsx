@@ -46,7 +46,7 @@ const ProfileDetails = ({ profile, user }) => {
 
   const getPendingSwipes = async () => {
     dispatch(setPendingSwipes([]))
-    const querySnapshot = await getDocs(collection(db, 'users', id, 'pendingSwipes'))
+    const querySnapshot = await getDocs(query(collection(db, 'users', id, 'pendingSwipes'), where('photoURL', '!=', null)))
 
     if (querySnapshot?.docs?.length >= 1)
       dispatch(

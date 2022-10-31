@@ -20,15 +20,24 @@ export const mo = StyleSheet.create({
     backgroundColor: color.white,
     padding: 20,
     borderTopLeftRadius: 20,
-    borderTopRightRadius: 20
+    borderTopRightRadius: 20,
+    shadowColor: color.black,
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.00,
+    elevation: 24,
   },
 
   replyButton: {
+    width: 50,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: color.offWhite,
-    borderRadius: 12
+    borderRadius: 50
   },
 
   deleteButton: {
