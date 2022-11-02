@@ -26,7 +26,7 @@ const UserReels = ({ activeUser }) => {
         }))
       )
     )
-  }, [reelsLimit, db])
+  }, [reelsLimit, db, activeUser])
 
   const getReels = async () => {
     const queryReels = await getDocs(query(collection(db, 'reels'), where('user.id', '==', activeUser), limit(reelsLimit)))
