@@ -23,7 +23,7 @@ const UserAvatar = ({ user }) => {
     <TouchableOpacity
       onPress={() => {
         user != profile?.id ?
-          navigation.navigate('UserProfile', { user: userInfo }) :
+          navigation.navigate('UserProfile', { user: userInfo, nearby: false }) :
           navigation.navigate('Profile')
       }}
       style={reels.avatarButton}

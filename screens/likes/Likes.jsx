@@ -138,12 +138,12 @@ const Likes = () => {
             showsVerticalScrollIndicator={false}
             renderItem={({ item: like }) => (
               <View style={likes.likesListContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: like })}>
+                <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: like, nearby: false })}>
                   <Avatar user={like?.id} />
                 </TouchableOpacity>
 
                 <View style={likes.rightView}>
-                  <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: like })}>
+                  <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: like, nearby: false })}>
                     <Username user={like?.id} />
                   </TouchableOpacity>
 

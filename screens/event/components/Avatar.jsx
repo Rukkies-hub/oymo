@@ -29,7 +29,7 @@ const Avatar = ({ user: _user }) => {
       {
         profile ?
           <TouchableOpacity
-            onPress={() => userInfo?.id == id ? navigation.navigate('Profile') : navigation.navigate('UserProfile', { user: userInfo })}
+            onPress={() => userInfo?.id == id ? navigation.navigate('Profile') : navigation.navigate('UserProfile', { user: userInfo, nearby: false })}
           >
             {
               userInfo?.photoURL ?

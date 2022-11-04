@@ -19,6 +19,7 @@ import AddReels from '../screens/addReels/AddReels'
 import LikesNavigation from '../screens/likes/LikesNavigation'
 import { useIsFocused } from '@react-navigation/native'
 import * as NavigationBar from 'expo-navigation-bar'
+import Nearby from '../screens/nearby/Nearby'
 
 const { Navigator, Screen } = createMaterialBottomTabNavigator()
 
@@ -40,6 +41,14 @@ const BottomNavigation = () => {
 
       <Navigator barStyle={[nav.barStyle, { backgroundColor: theme ? color.dark : color.white }]}>
         <Screen
+          name='Nearby'
+          component={Nearby}
+          options={{
+            tabBarIcon: () => <FontAwesome name="map-marker" size={20} color={theme ? color.white : color.black} />
+          }}
+        />
+
+        <Screen
           name='Match'
           component={Match}
           options={{
@@ -55,31 +64,13 @@ const BottomNavigation = () => {
           }}
         />
 
-        <Screen
-          name='AddReelsNav'
-          component={AddReels}
-          listeners={({ navigation }) => ({
-            tabPress: e => {
-              e.preventDefault()
-              if (profile?.photoURL != undefined && profile?.username != undefined)
-                navigation.navigate('AddReels')
-              else
-                navigation.navigate('SetupModal')
-            }
-          })}
-          options={{
-            tabBarIcon: () => <FontAwesome name='plus-square-o' color={theme ? color.white : color.black} size={22} />,
-            title: 'Post'
-          }}
-        />
-
         {
           (profile?.pendingSwipes != undefined && profile?.pendingSwipes > 0) ?
             <Screen
               name='Likes'
               component={LikesNavigation}
               options={{
-                tabBarIcon: () => <SimpleLineIcons name='like' size={20} color={theme ? color.white : color.black} />,
+                tabBarIcon: () => <Ionicons name="heart-outline" size={22} color={theme ? color.white : color.black} />,
                 tabBarBadge: profile?.pendingSwipes,
                 title: 'Likes'
               }}

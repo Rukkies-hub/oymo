@@ -31,7 +31,7 @@ const Reply = ({ _user, reply }) => {
       <TouchableOpacity
         onPress={() => {
           _user != id ?
-            navigation.navigate('UserProfile', { user: userInfo }) :
+            navigation.navigate('UserProfile', { user: userInfo, nearby: false }) :
             navigation.navigate('Profile')
         }}
       >

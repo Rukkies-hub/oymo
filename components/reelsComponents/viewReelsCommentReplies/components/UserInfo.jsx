@@ -27,7 +27,7 @@ const UserInfo = ({ _user }) => {
       style={{ marginRight: 5 }}
       onPress={() => {
         _user != id ?
-          navigation.navigate('UserProfile', { user: userInfo }) :
+          navigation.navigate('UserProfile', { user: userInfo, nearby: false }) :
           navigation.navigate('Profile')
       }}
     >

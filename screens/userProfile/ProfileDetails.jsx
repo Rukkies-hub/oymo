@@ -4,7 +4,7 @@ import { View, Text, ImageBackground, Image, TouchableOpacity } from 'react-nati
 import { LinearGradient } from 'expo-linear-gradient'
 import { FontAwesome, Feather, Fontisto, SimpleLineIcons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
 import color from '../../style/color'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import Bar from '../../components/Bar'
 import Header from '../../components/Header'
@@ -22,7 +22,8 @@ import { admin } from '@env'
 
 const ProfileDetails = ({ profile, user }) => {
   const navigation = useNavigation()
-  const { profiles } = useSelector(state => state.match)
+  const { nearby } = useRoute().params
+  const { profiles, nearbyProfiles } = useSelector(state => state.match)
   const { user: _user, profile: __profile, theme } = useSelector(state => state.user)
 
   const dispatch = useDispatch()
@@ -34,14 +35,30 @@ const ProfileDetails = ({ profile, user }) => {
   let id = _user?.uid == undefined ? _user?.user?.uid : _user?.uid
 
   useLayoutEffect(() => {
-    const needle = user?.id
-    const cardIndex = profiles?.findIndex(item => item.id === needle)
+    const callProfiles = () => {
+      const needle = user?.id
+      const cardIndex = profiles?.findIndex(item => item.id === needle)
 
-    if (!profiles[cardIndex]) return
+      if (!profiles[cardIndex]) return
 
-    const userSwiped = profiles[cardIndex]
+      const userSwiped = profiles[cardIndex]
 
-    if (userSwiped) setShowMatch(true)
+      if (userSwiped) setShowMatch(true)
+    }
+
+    const callNearbyProfiles = () => {
+      const needle = user?.id
+      const cardIndex = nearbyProfiles?.findIndex(item => item.id === needle)
+
+      if (!nearbyProfiles[cardIndex]) return
+
+      const userSwiped = nearbyProfiles[cardIndex]
+
+      if (userSwiped) setShowMatch(true)
+    }
+
+    if (nearby) callNearbyProfiles()
+    else callProfiles()
   }, [user])
 
   const getPendingSwipes = async () => {
@@ -77,7 +94,6 @@ const ProfileDetails = ({ profile, user }) => {
         const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
           .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
           .filter(doc => doc?.id !== id)
-          .filter(doc => distance(doc?.data()?.coords?.latitude, doc?.data()?.coords?.longitude, profile?.coords?.latitude, profile?.coords?.longitude).toFixed(2) <= profile?.radius != undefined ? profile?.radius : 1)
           .map(doc => ({
             id: doc?.id,
             ...doc?.data()

@@ -52,12 +52,12 @@ const Passes = () => {
             showsVerticalScrollIndicator={false}
             renderItem={({ item: pass }) => (
               <View style={likes.likesListContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: pass })}>
+                <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: pass, nearby: false })}>
                   <Avatar user={pass?.id} />
                 </TouchableOpacity>
 
                 <View style={likes.rightView}>
-                  <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: pass })}>
+                  <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: pass, nearby: false })}>
                     <Username user={pass?.id} />
                   </TouchableOpacity>
                   {

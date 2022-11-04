@@ -26,7 +26,7 @@ const UserInfo = ({ _user }) => {
     <TouchableOpacity
       onPress={() => {
         _user != id ?
-          navigation.navigate('UserProfile', { user: userInfo }) :
+          navigation.navigate('UserProfile', { user: userInfo, nearby: false }) :
           navigation.navigate('Profile')
       }}
     >

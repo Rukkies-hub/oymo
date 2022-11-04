@@ -28,7 +28,7 @@ const UserAvatar = ({ _user }) => {
       {
         profile ?
           <TouchableOpacity
-            onPress={() => userInfo?.id == id ? navigation.navigate('Profile') : navigation.navigate('UserProfile', { user: userInfo })}
+            onPress={() => userInfo?.id == id ? navigation.navigate('Profile') : navigation.navigate('UserProfile', { user: userInfo, nearby: false })}
             style={[cl.userAvatarContainer, { borderWidth: userInfo?.photoURL ? 4 : 2 }]}
           >
             {

@@ -92,7 +92,7 @@ const Login = () => {
             coords,
             address: address[0],
           })
-          getAllProfiles(id)
+          // getAllProfiles(id)
         }).catch(error => {
           if (error.message.includes('wrong-password'))
             alert('Wrong password. Check your passwod then try again.')

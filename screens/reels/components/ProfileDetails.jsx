@@ -139,7 +139,7 @@ const ProfileDetails = ({ activeUser }) => {
             loggedInProfile: profile,
             userSwiped
           })
-          getAllProfiles()
+          //getAllProfiles()
           getPendingSwipes()
         } else {
           setDoc(doc(db, 'users', id, 'swipes', userSwiped?.id), userSwiped)
