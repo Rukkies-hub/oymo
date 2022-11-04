@@ -39,7 +39,7 @@ const BottomNavigation = () => {
 
       <Header showLogo showAdd showAratar showNotification />
 
-      <Navigator barStyle={[nav.barStyle, { backgroundColor: theme ? color.dark : color.white }]}>
+      <Navigator initialRouteName='Match' barStyle={[nav.barStyle, { backgroundColor: theme ? color.dark : color.white }]}>
         <Screen
           name='Nearby'
           component={Nearby}
