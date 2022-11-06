@@ -50,6 +50,7 @@ import Signup from '../screens/Signup'
 import ForgotPassword from '../screens/ForgotPassword'
 import Step1 from '../screens/Step1'
 import Step2 from '../screens/Step2'
+import BottomNavigation from './BottomNavigation'
 
 const StackNavigation = () => {
   const { user, loadingInitial, theme, setup } = useSelector(state => state.user)
@@ -86,7 +87,7 @@ const StackNavigation = () => {
                         <Screen name='Step2' component={Step2} />
                       </Group> :
                       <Group>
-                        <Screen name='Drawer' component={Drawer} />
+                        <Screen name='BottomNavigation' component={BottomNavigation} />
                         <Screen name='Profile' component={Profile} />
                         <Screen name='EditProfile' component={EditProfile} options={{ gestureEnabled: false }} />
                         <Screen name='SaveAvatar' component={SaveAvatar} options={{ gestureEnabled: false }} />

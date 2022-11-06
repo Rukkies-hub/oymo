@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 import color from './color'
+
+const { width } = Dimensions.get('window')
 
 export const nav = StyleSheet.create({
   container: {
@@ -35,5 +37,84 @@ export const nav = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 50
+  },
+
+  image: {
+    width: 25,
+    height: 25
+  },
+
+  drawerContainer: {
+    flex: 1,
+    backgroundColor: color.red,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
+  },
+
+  drawerView: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    padding: 20,
+    width: width / 1.6
+  },
+
+  headDetails: {
+    marginTop: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  avatarPlaceholderView: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    backgroundColor: color.white,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  mainAvatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 100
+  },
+
+  pointsButton: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+
+  pointsImage: {
+    width: 25,
+    height: 25,
+    marginRight: 5
+  },
+
+  usernameButton: {
+    flexDirection: 'row',
+    marginTop: 15
+  },
+
+  username: {
+    fontSize: 20,
+    marginRight: 10,
+    color: color.white
+  },
+
+  coin: {
+    color: color.white,
+    fontSize: 16
+  },
+
+  age: {
+    fontSize: 20,
+    color: color.white
+  },
+
+  divider: {
+    backgroundColor: color.white,
+    height: 0.3,
+    width: width / 1.6,
+    marginVertical: 20
   }
 })

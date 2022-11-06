@@ -32,7 +32,7 @@ const Drawer = () => {
       screenOptions={{
         headerShown: false,
         drawerPosition: 'right',
-        drawerType: 'back'
+        drawerType: 'permanent'
       }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
