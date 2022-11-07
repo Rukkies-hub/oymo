@@ -1,49 +1,61 @@
-import { View, Text, SafeAreaView, Animated, StyleSheet, Image, TouchableOpacity, Dimensions, TouchableWithoutFeedback, Pressable, ScrollView } from 'react-native'
+import { View, Text, SafeAreaView, Animated, Image, TouchableOpacity, Dimensions, TouchableWithoutFeedback, Pressable, ScrollView, ImageBackground } from 'react-native'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Bar from '../components/Bar'
-import Header from '../components/Header'
 import BottomNavigationView from './BottomNavigationView'
 import { header } from '../style/header'
 import color from '../style/color'
 import OymoFont from '../components/OymoFont'
-import { useNavigation } from '@react-navigation/native'
-import { Entypo, FontAwesome, SimpleLineIcons } from '@expo/vector-icons'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { AntDesign, Entypo, EvilIcons, FontAwesome, SimpleLineIcons } from '@expo/vector-icons'
 import { nav } from '../style/navigation'
+import { signOut } from 'firebase/auth'
+import { auth } from '../hooks/firebase'
+import { logout, setProfile } from '../features/userSlice'
 const { width, height } = Dimensions.get('window')
-import * as NavigationBar from 'expo-navigation-bar'
 
 const BottomNavigation = () => {
   const navigation = useNavigation()
+  const dispatch = useDispatch()
   const { profile, theme } = useSelector(state => state.user)
-  const [currentTab, setCurrentTab] = useState('Home')
+  const [currentTab, setCurrentTab] = useState('Match')
   const [showMenu, setShowMenu] = useState(false)
 
   const offsetValue = useRef(new Animated.Value(0)).current
   const scaleValue = useRef(new Animated.Value(1)).current
   const closeButtonOffset = useRef(new Animated.Value(0)).current
 
-  useEffect(() => {
-    if (showMenu) {
-      NavigationBar.setBackgroundColorAsync(color.red)
-      NavigationBar.setButtonStyleAsync('light')
-    } else {
-      NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
-      NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
-    }
-  }, [showMenu])
-
   return (
-    <SafeAreaView style={nav.drawerContainer}>
-      <Bar color={showMenu ? 'light' : theme ? 'light' : 'dark'} />
+    <ImageBackground source={require('../assets/bg.png')} blurRadius={40} style={[nav.drawerContainer, { backgroundColor: theme ? color.dark : color.white }]}>
+      <Bar color={theme ? 'light' : 'dark'} />
       <View style={nav.drawerView}>
         <View style={nav.headDetails}>
+          {/* <View style={{ width: '100%', height: 40, marginLeft: -20, marginTop: -15 }}>
+            <TouchableOpacity
+              style={[
+                nav.closeButton,
+                {
+                  backgroundColor: theme ? color.dark : color.white,
+                  shadowColor: "#000",
+                  shadowOffset: {
+                    width: 0,
+                    height: 2,
+                  },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 3.84,
+                  elevation: 5,
+                }
+              ]}
+            >
+              <EvilIcons name="close" size={24} color="black" />
+            </TouchableOpacity>
+          </View> */}
           {
             !profile?.photoURL ?
-              <View style={nav.avatarPlaceholderView}>
-                <FontAwesome name='user-o' size={32} color={color.black} />
+              <View style={[nav.avatarPlaceholderView, { backgroundColor: theme ? color.dark : color.white }]}>
+                <FontAwesome name='user-o' size={32} color={theme ? color.white : color.black} />
               </View> :
               <TouchableWithoutFeedback onPress={() => navigation.navigate('Profile')}>
                 <Image source={{ uri: profile?.photoURL }} style={nav.mainAvatar} />
@@ -54,14 +66,14 @@ const BottomNavigation = () => {
             profile?.username != undefined &&
             <>
               <Pressable onPress={() => navigation.navigate('Profile')} style={nav.usernameButton}>
-                <OymoFont message={profile?.username} lines={1} fontFamily='montserrat_bold' fontStyle={nav.username} />
-                {profile?.age != undefined && <OymoFont message={profile?.age} lines={1} fontStyle={nav.age} />}
+                <OymoFont message={profile?.username} lines={1} fontFamily='montserrat_bold' fontStyle={{ ...nav.username, color: theme ? color.white : color.dark }} />
+                {profile?.age != undefined && <OymoFont message={profile?.age} lines={1} fontStyle={{ ...nav.age, color: theme ? color.white : color.dark }} />}
               </Pressable>
               {
                 profile?.coins != undefined &&
                 <Pressable onPress={() => navigation.navigate('Profile')} style={nav.pointsButton}>
                   <Image source={require('../assets/points.png')} style={nav.pointsImage} />
-                  <OymoFont message={`${profile?.coins} Points`} lines={1} fontStyle={nav.coin} />
+                  <OymoFont message={`${profile?.coins} Points`} lines={1} fontStyle={{ ...nav.coin, color: theme ? color.white : color.dark }} />
                 </Pressable>
               }
             </>
@@ -69,35 +81,35 @@ const BottomNavigation = () => {
         </View>
 
         <ScrollView style={{ flexGrow: 1, marginTop: 50 }} showsVerticalScrollIndicator={false}>
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Nearby', 'Nearby')}
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Match', 'Match')}
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Reels', 'Reels')}
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Likes', 'Likes')}
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Chat', 'Chat')}
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Nearby', 'Nearby')}
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Match', 'Match')}
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Reels', 'Reels')}
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Likes', 'Likes')}
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Chat', 'Chat')}
 
           <View style={nav.divider} />
-          
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Notifications', 'Notifications')}
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Profile', 'Profile')}
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Edit profile', 'EditProfile')}
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Settings', 'Settings')}
-          
+
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Notifications', 'Notifications')}
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Profile', 'Profile')}
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Edit profile', 'EditProfile')}
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Settings', 'Settings')}
+
           <View style={nav.divider} />
 
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Events', 'Events')}
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Rooms', 'Rooms')}
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Buy Coins', 'Upgrade')}
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Events', 'Events')}
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Rooms', 'Rooms')}
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Buy Coins', 'Upgrade')}
         </ScrollView>
 
         <View>
-          {TabButton(currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Log out')}
+          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Log out')}
         </View>
       </View>
 
       <Animated.View
         style={{
           flexGrow: 1,
-          backgroundColor: 'white',
+          backgroundColor: theme ? color.dark : color.white,
           position: 'absolute',
           top: 0,
           bottom: 0,
@@ -221,16 +233,25 @@ const BottomNavigation = () => {
           <BottomNavigationView />
         </Animated.View>
       </Animated.View>
-    </SafeAreaView>
+    </ImageBackground>
   )
 }
 
-const TabButton = (currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, title, nav) => {
+const TabButton = (theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, title, nav) => {
   const navigation = useNavigation()
+
+  const logoutUser = () => {
+    setShowMenu(!showMenu)
+    signOut(auth)
+    dispatch(logout())
+    dispatch(setProfile(null))
+  }
 
   return (
     <TouchableOpacity onPress={() => {
-      if (title == 'Log out') { }
+      if (title == 'Log out') {
+        logoutUser()
+      }
       else {
         navigation.navigate(nav)
         setCurrentTab(nav)
@@ -257,14 +278,19 @@ const TabButton = (currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue,
       <View style={{
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 8,
-        backgroundColor: currentTab == nav ? 'white' : 'transparent',
+        backgroundColor: title == 'Log out' ? color.red : (currentTab == nav ? (theme ? color.dark : color.white) : 'transparent'),
         borderRadius: 8,
-        paddingLeft: 20,
-        paddingRight: 50,
-        marginTop: 10
+        paddingLeft: title == 'Log out' ? 10 : (currentTab == nav ? 30 : 30),
+        marginTop: 10,
+        height: 45,
+        borderRightWidth: currentTab == nav ? (theme ? 0 : 5) : 0,
+        borderColor: currentTab == nav ? (theme ? color.transparent : color.red) : color.transparent
       }}>
-        <Text style={{ fontSize: 15, fontWeight: 'bold', color: currentTab == nav ? 'black' : 'white' }}>{title}</Text>
+        {
+          title == 'Log out' &&
+          <SimpleLineIcons name="logout" size={20} color={color.white} style={{ marginRight: 10 }} />
+        }
+        <OymoFont message={title} fontStyle={{ fontSize: 15, color: title == 'Log out' ? color.white : (currentTab == nav ? (theme ? color.white : color.dark) : (theme ? color.white : color.dark)) }} />
       </View>
     </TouchableOpacity>
   )

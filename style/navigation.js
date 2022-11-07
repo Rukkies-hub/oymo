@@ -46,7 +46,6 @@ export const nav = StyleSheet.create({
 
   drawerContainer: {
     flex: 1,
-    backgroundColor: color.red,
     alignItems: 'flex-end',
     justifyContent: 'flex-start',
   },
@@ -55,7 +54,7 @@ export const nav = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     padding: 20,
-    width: width / 1.6
+    width: width / 1.5
   },
 
   headDetails: {
@@ -113,8 +112,17 @@ export const nav = StyleSheet.create({
 
   divider: {
     backgroundColor: color.white,
-    height: 0.3,
+    height: 0.5,
     width: width / 1.6,
     marginVertical: 20
+  },
+
+  closeButton: {
+    width: 40,
+    height: 40,
+    backgroundColor: color.white,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })
