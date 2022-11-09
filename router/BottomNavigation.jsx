@@ -38,7 +38,32 @@ const BottomNavigation = () => {
               <View style={[nav.avatarPlaceholderView, { backgroundColor: theme ? color.dark : color.white }]}>
                 <FontAwesome name='user-o' size={32} color={theme ? color.white : color.black} />
               </View> :
-              <TouchableWithoutFeedback onPress={() => navigation.navigate('Profile')}>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  navigation.navigate('Profile')
+                  setCurrentTab('Match')
+
+                  Animated.timing(scaleValue, {
+                    toValue: showMenu ? 1 : 0.88,
+                    duration: 100,
+                    useNativeDriver: true
+                  }).start()
+
+                  Animated.timing(offsetValue, {
+                    toValue: showMenu ? 0 : -(width / 1.5),
+                    duration: 100,
+                    useNativeDriver: true
+                  }).start()
+
+                  Animated.timing(closeButtonOffset, {
+                    toValue: !showMenu ? -30 : 0,
+                    duration: 100,
+                    useNativeDriver: true
+                  }).start()
+
+                  setShowMenu(!showMenu)
+                }}
+              >
                 <Image source={{ uri: profile?.photoURL }} style={nav.mainAvatar} />
               </TouchableWithoutFeedback>
           }
@@ -46,13 +71,65 @@ const BottomNavigation = () => {
           {
             profile?.username != undefined &&
             <>
-              <Pressable onPress={() => navigation.navigate('Profile')} style={nav.usernameButton}>
+              <Pressable
+                onPress={() => {
+                  navigation.navigate('Profile')
+                  setCurrentTab('Match')
+
+                  Animated.timing(scaleValue, {
+                    toValue: showMenu ? 1 : 0.88,
+                    duration: 100,
+                    useNativeDriver: true
+                  }).start()
+
+                  Animated.timing(offsetValue, {
+                    toValue: showMenu ? 0 : -(width / 1.5),
+                    duration: 100,
+                    useNativeDriver: true
+                  }).start()
+
+                  Animated.timing(closeButtonOffset, {
+                    toValue: !showMenu ? -30 : 0,
+                    duration: 100,
+                    useNativeDriver: true
+                  }).start()
+
+                  setShowMenu(!showMenu)
+                }}
+                style={nav.usernameButton}
+              >
                 <OymoFont message={profile?.username} lines={1} fontFamily='montserrat_bold' fontStyle={{ ...nav.username, color: theme ? color.white : color.dark }} />
                 {profile?.age != undefined && <OymoFont message={profile?.age} lines={1} fontStyle={{ ...nav.age, color: theme ? color.white : color.dark }} />}
               </Pressable>
               {
                 profile?.coins != undefined &&
-                <Pressable onPress={() => navigation.navigate('Profile')} style={nav.pointsButton}>
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate('Profile')
+                    setCurrentTab('Match')
+
+                    Animated.timing(scaleValue, {
+                      toValue: showMenu ? 1 : 0.88,
+                      duration: 100,
+                      useNativeDriver: true
+                    }).start()
+
+                    Animated.timing(offsetValue, {
+                      toValue: showMenu ? 0 : -(width / 1.5),
+                      duration: 100,
+                      useNativeDriver: true
+                    }).start()
+
+                    Animated.timing(closeButtonOffset, {
+                      toValue: !showMenu ? -30 : 0,
+                      duration: 100,
+                      useNativeDriver: true
+                    }).start()
+
+                    setShowMenu(!showMenu)
+                  }}
+                  style={nav.pointsButton}
+                >
                   <Image source={require('../assets/points.png')} style={nav.pointsImage} />
                   <OymoFont message={`${profile?.coins} Points`} lines={1} fontStyle={{ ...nav.coin, color: theme ? color.white : color.dark }} />
                 </Pressable>
