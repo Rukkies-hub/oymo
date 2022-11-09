@@ -1,12 +1,14 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
 import React, { useLayoutEffect } from 'react'
-import { nb } from '../../style/nearby'
+import { nb } from '../style/nearby'
 import { useDispatch, useSelector } from 'react-redux'
-import color from '../../style/color'
+import color from '../style/color'
 import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore'
-import { db } from '../../hooks/firebase'
-import { setNearbyProfiles } from '../../features/matchSlice'
-import { useNavigation } from '@react-navigation/native'
+import { db } from '../hooks/firebase'
+import { setNearbyProfiles } from '../features/matchSlice'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { useEffect } from 'react'
+import { setActiveRoute } from '../features/userSlice'
 
 const Nearby = () => {
   const { theme, user, profile } = useSelector(state => state.user)
@@ -14,8 +16,14 @@ const Nearby = () => {
 
   const dispatch = useDispatch()
   const navigation = useNavigation()
+  const { name } = useRoute()
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
+  useEffect(() => {
+    const call = () => dispatch(setActiveRoute(name))
+    call()
+  }, [])
 
   const distance = (lat1, lon1, lat2, lon2, unit) => {
     var radlat1 = Math.PI * lat1 / 180

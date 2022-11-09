@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
 
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 
 import Swiper from 'react-native-deck-swiper'
 import color from '../style/color'
@@ -36,10 +36,13 @@ import { setPendingSwipes, setProfiles } from '../features/matchSlice'
 import { match } from '../style/match'
 
 import { admin } from '@env'
+import { setActiveRoute } from '../features/userSlice'
 
 const Match = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
+  const focus = useIsFocused()
+  const { name } = useRoute()
   const { user, profile, theme } = useSelector(state => state.user)
   const profiles = useSelector(state => state.match.profiles)
 
@@ -48,6 +51,11 @@ const Match = () => {
   const [stackSize, setStackSize] = useState(20)
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
+  useEffect(() => {
+    const call = () => dispatch(setActiveRoute(name))
+    call()
+  }, [])
 
   const getPendingSwipes = async () => {
     dispatch(setPendingSwipes([]))

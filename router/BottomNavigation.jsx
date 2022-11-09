@@ -8,18 +8,19 @@ import BottomNavigationView from './BottomNavigationView'
 import { header } from '../style/header'
 import color from '../style/color'
 import OymoFont from '../components/OymoFont'
-import { useNavigation, useRoute } from '@react-navigation/native'
-import { AntDesign, Entypo, EvilIcons, FontAwesome, SimpleLineIcons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
+import { AntDesign, Feather, FontAwesome, Ionicons, SimpleLineIcons } from '@expo/vector-icons'
 import { nav } from '../style/navigation'
 import { signOut } from 'firebase/auth'
 import { auth } from '../hooks/firebase'
-import { logout, setProfile } from '../features/userSlice'
-const { width, height } = Dimensions.get('window')
+import { logout, setActiveRoute, setProfile } from '../features/userSlice'
+import { dw } from '../style/drawer'
+const { width } = Dimensions.get('window')
 
 const BottomNavigation = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
-  const { profile, theme } = useSelector(state => state.user)
+  const { profile, theme, activeRoute } = useSelector(state => state.user)
   const [currentTab, setCurrentTab] = useState('Match')
   const [showMenu, setShowMenu] = useState(false)
 
@@ -28,30 +29,10 @@ const BottomNavigation = () => {
   const closeButtonOffset = useRef(new Animated.Value(0)).current
 
   return (
-    <ImageBackground source={require('../assets/bg.png')} blurRadius={40} style={[nav.drawerContainer, { backgroundColor: theme ? color.dark : color.white }]}>
+    <ImageBackground source={require('../assets/app_bg.png')} blurRadius={10} style={[nav.drawerContainer, { backgroundColor: theme ? color.dark : color.white }]}>
       <Bar color={theme ? 'light' : 'dark'} />
       <View style={nav.drawerView}>
         <View style={nav.headDetails}>
-          {/* <View style={{ width: '100%', height: 40, marginLeft: -20, marginTop: -15 }}>
-            <TouchableOpacity
-              style={[
-                nav.closeButton,
-                {
-                  backgroundColor: theme ? color.dark : color.white,
-                  shadowColor: "#000",
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 3.84,
-                  elevation: 5,
-                }
-              ]}
-            >
-              <EvilIcons name="close" size={24} color="black" />
-            </TouchableOpacity>
-          </View> */}
           {
             !profile?.photoURL ?
               <View style={[nav.avatarPlaceholderView, { backgroundColor: theme ? color.dark : color.white }]}>
@@ -81,30 +62,77 @@ const BottomNavigation = () => {
         </View>
 
         <ScrollView style={{ flexGrow: 1, marginTop: 50 }} showsVerticalScrollIndicator={false}>
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Nearby', 'Nearby')}
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Match', 'Match')}
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Reels', 'Reels')}
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Likes', 'Likes')}
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Chat', 'Chat')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Nearby', 'Nearby')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Match', 'Match')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Reels', 'Reels')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Likes', 'Likes')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Chat', 'Chat')}
 
-          <View style={nav.divider} />
+          <View style={[nav.divider, { backgroundColor: theme ? color.white : color.dark }]} />
 
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Notifications', 'Notifications')}
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Profile', 'Profile')}
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Edit profile', 'EditProfile')}
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Settings', 'Settings')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Notifications', 'Notifications')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Profile', 'Profile')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Edit profile', 'EditProfile')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Settings', 'Settings')}
 
-          <View style={nav.divider} />
+          <View style={[nav.divider, { backgroundColor: theme ? color.white : color.dark }]} />
 
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Events', 'Events')}
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Rooms', 'Rooms')}
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Buy Coins', 'Upgrade')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Events', 'Events')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Rooms', 'Rooms')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Buy Coins', 'Upgrade')}
         </ScrollView>
 
         <View>
-          {TabButton(theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Log out')}
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Log out')}
         </View>
       </View>
+
+      {
+        showMenu &&
+        <Animated.View
+          style={{
+            flexGrow: 1,
+            backgroundColor: color.transparent,
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1000,
+            borderRadius: showMenu ? 25 : 0,
+            overflow: 'hidden',
+            transform: [
+              { scale: scaleValue },
+              { translateX: offsetValue }
+            ]
+          }}
+        >
+          <TouchableOpacity
+            style={{ flex: 1, backgroundColor: color.transparent }}
+            onPress={() => {
+              Animated.timing(scaleValue, {
+                toValue: showMenu ? 1 : 0.88,
+                duration: 100,
+                useNativeDriver: true
+              }).start()
+
+              Animated.timing(offsetValue, {
+                toValue: showMenu ? 0 : -(width / 1.5),
+                duration: 100,
+                useNativeDriver: true
+              }).start()
+
+              Animated.timing(closeButtonOffset, {
+                toValue: !showMenu ? -30 : 0,
+                duration: 100,
+                useNativeDriver: true
+              }).start()
+
+              setShowMenu(!showMenu)
+            }}
+          />
+        </Animated.View>
+      }
 
       <Animated.View
         style={{
@@ -115,11 +143,19 @@ const BottomNavigation = () => {
           bottom: 0,
           left: 0,
           right: 0,
-          borderRadius: showMenu ? 15 : 0,
+          borderRadius: showMenu ? 25 : 0,
           transform: [
             { scale: scaleValue },
             { translateX: offsetValue }
-          ]
+          ],
+          shadowColor: showMenu ? color.black : color.transparent,
+          shadowOffset: {
+            width: 0,
+            height: showMenu ? 12 : 0,
+          },
+          shadowOpacity: showMenu ? 0.58 : 0,
+          shadowRadius: showMenu ? 16.00 : 0,
+          elevation: showMenu ? 24 : 0
         }}
       >
         <Animated.View style={{
@@ -166,6 +202,8 @@ const BottomNavigation = () => {
                   !profile ?
                     <TouchableOpacity
                       onPress={() => {
+                        setCurrentTab(activeRoute)
+
                         Animated.timing(scaleValue, {
                           toValue: showMenu ? 1 : 0.88,
                           duration: 100,
@@ -191,6 +229,8 @@ const BottomNavigation = () => {
                     </TouchableOpacity> :
                     <TouchableOpacity
                       onPress={() => {
+                        setCurrentTab(activeRoute)
+
                         Animated.timing(scaleValue, {
                           toValue: showMenu ? 1 : 0.88,
                           duration: 100,
@@ -237,7 +277,7 @@ const BottomNavigation = () => {
   )
 }
 
-const TabButton = (theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, title, nav) => {
+const TabButton = (profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, title, nav) => {
   const navigation = useNavigation()
 
   const logoutUser = () => {
@@ -248,49 +288,160 @@ const TabButton = (theme, dispatch, currentTab, setCurrentTab, setShowMenu, show
   }
 
   return (
-    <TouchableOpacity onPress={() => {
-      if (title == 'Log out') {
-        logoutUser()
-      }
-      else {
-        navigation.navigate(nav)
-        setCurrentTab(nav)
-        Animated.timing(scaleValue, {
-          toValue: showMenu ? 1 : 0.88,
-          duration: 100,
-          useNativeDriver: true
-        }).start()
-
-        Animated.timing(offsetValue, {
-          toValue: showMenu ? 0 : -(width / 1.5),
-          duration: 100,
-          useNativeDriver: true
-        }).start()
-
-        Animated.timing(closeButtonOffset, {
-          toValue: !showMenu ? -30 : 0,
-          duration: 100,
-          useNativeDriver: true
-        }).start()
-        setShowMenu(!showMenu)
-      }
-    }}>
-      <View style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: title == 'Log out' ? color.red : (currentTab == nav ? (theme ? color.dark : color.white) : 'transparent'),
-        borderRadius: 8,
-        paddingLeft: title == 'Log out' ? 10 : (currentTab == nav ? 30 : 30),
-        marginTop: 10,
-        height: 45,
-        borderRightWidth: currentTab == nav ? (theme ? 0 : 5) : 0,
-        borderColor: currentTab == nav ? (theme ? color.transparent : color.red) : color.transparent
-      }}>
-        {
-          title == 'Log out' &&
-          <SimpleLineIcons name="logout" size={20} color={color.white} style={{ marginRight: 10 }} />
+    <TouchableOpacity
+      onPress={() => {
+        if (title == 'Log out') {
+          logoutUser()
         }
-        <OymoFont message={title} fontStyle={{ fontSize: 15, color: title == 'Log out' ? color.white : (currentTab == nav ? (theme ? color.white : color.dark) : (theme ? color.white : color.dark)) }} />
+        else {
+          if (nav == 'Nearby' || nav == 'Match' || nav == 'Reels' || nav == 'Likes' || nav == 'Chat') {
+            dispatch(setActiveRoute(nav))
+            navigation.navigate(nav)
+            setCurrentTab(nav)
+            Animated.timing(scaleValue, {
+              toValue: showMenu ? 1 : 0.88,
+              duration: 100,
+              useNativeDriver: true
+            }).start()
+
+            Animated.timing(offsetValue, {
+              toValue: showMenu ? 0 : -(width / 1.5),
+              duration: 100,
+              useNativeDriver: true
+            }).start()
+
+            Animated.timing(closeButtonOffset, {
+              toValue: !showMenu ? -30 : 0,
+              duration: 100,
+              useNativeDriver: true
+            }).start()
+            setShowMenu(!showMenu)
+          } else {
+            navigation.navigate(nav)
+            setCurrentTab(nav)
+            Animated.timing(scaleValue, {
+              toValue: showMenu ? 1 : 0.88,
+              duration: 100,
+              useNativeDriver: true
+            }).start()
+
+            Animated.timing(offsetValue, {
+              toValue: showMenu ? 0 : -(width / 1.5),
+              duration: 100,
+              useNativeDriver: true
+            }).start()
+
+            Animated.timing(closeButtonOffset, {
+              toValue: !showMenu ? -30 : 0,
+              duration: 100,
+              useNativeDriver: true
+            }).start()
+            setShowMenu(!showMenu)
+          }
+        }
+      }}>
+      <View
+        style={[title == 'Log out' ? {
+          height: 45,
+          shadowColor: color.black,
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.20,
+          shadowRadius: 1.41,
+          elevation: 2,
+          borderRadius: 8,
+          backgroundColor: theme ? color.dark : color.white,
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
+          paddingLeft: 20
+        } :
+          currentTab == nav ? {
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: currentTab == nav ? (theme ? color.dark : color.white) : color.transparent,
+            borderRadius: 8,
+            paddingLeft: 15,
+            marginTop: 10,
+            height: 45,
+            borderRightWidth: currentTab == nav ? (theme ? 0 : 5) : 0,
+            borderColor: currentTab == nav ? (theme ? color.transparent : color.red) : color.transparent,
+            shadowColor: color.black,
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+            marginHorizontal: 5
+          } : {
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: currentTab == nav ? (theme ? color.dark : color.white) : color.transparent,
+            borderRadius: 8,
+            paddingLeft: 15,
+            marginTop: 10,
+            height: 45,
+            borderRightWidth: currentTab == nav ? (theme ? 0 : 5) : 0,
+            borderColor: currentTab == nav ? (theme ? color.transparent : color.red) : color.transparent
+          }]}
+      >
+        {title == 'Log out' && <SimpleLineIcons name="logout" size={20} color={color.red} style={{ marginRight: 15 }} />}
+        {nav == 'Nearby' && <FontAwesome name="map-marker" size={20} color={theme ? color.white : color.black} style={{ marginRight: 15 }} />}
+        {nav == 'Match' && <AntDesign name='find' size={20} color={theme ? color.white : color.black} style={{ marginRight: 15 }} />}
+        {nav == 'Reels' && <FontAwesome name='film' size={20} color={theme ? color.white : color.black} style={{ marginRight: 15 }} />}
+        {nav == 'Likes' && <Ionicons name="heart-outline" size={22} color={theme ? color.white : color.black} style={{ marginRight: 15 }} />}
+        {nav == 'Chat' && <Ionicons name='chatbubbles-outline' size={20} color={theme ? color.white : color.black} style={{ marginRight: 15 }} />}
+        {/*  */}
+        {nav == 'Notifications' && <SimpleLineIcons name='bell' size={20} color={theme ? color.white : color.dark} style={{ marginRight: 15 }} />}
+        {nav == 'Profile' && <FontAwesome name='user-o' size={20} color={theme ? color.white : color.black} style={{ marginRight: 15 }} />}
+        {nav == 'EditProfile' && <Feather name='edit' size={20} color={theme ? color.white : color.black} style={{ marginRight: 15 }} />}
+        {nav == 'Settings' && <Ionicons name='cog-outline' size={20} color={theme ? color.white : color.black} style={{ marginRight: 15 }} />}
+        {/*  */}
+        {nav == 'Events' && <Image source={require('../assets/event.png')} style={[dw.star, { marginRight: 15 }]} />}
+        {nav == 'Rooms' && <Image source={require('../assets/room.png')} style={[dw.star, { marginRight: 15 }]} />}
+        {nav == 'Upgrade' && <Image source={require('../assets/room.png')} style={[dw.star, { marginRight: 15 }]} />}
+        {/*  */}
+        {/*  */}
+        {/*  */}
+        <OymoFont message={title} fontStyle={{ fontSize: 15, color: title == 'Log out' ? color.red : (currentTab == nav ? (theme ? color.white : color.dark) : (theme ? color.white : color.dark)) }} />
+        {/*  */}
+        <View style={{ flex: 1 }} />
+        {
+          (nav == 'Likes' && profile?.pendingSwipes >= 1) &&
+          <View
+            style={{
+              height: 20,
+              paddingHorizontal: profile?.pendingSwipes >= 10 ? 6 : 8,
+              borderRadius: 6,
+              backgroundColor: color.red,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginRight: 15
+            }}
+          >
+            <OymoFont message={profile?.pendingSwipes >= 10 ? '9+' : profile?.pendingSwipes} fontStyle={{ color: color.white }} />
+          </View>
+        }
+        {
+          (nav == 'Notifications' && profile?.notificationCount >= 1) &&
+          <View
+            style={{
+              height: 20,
+              paddingHorizontal: profile?.notificationCount >= 10 ? 6 : 8,
+              borderRadius: 6,
+              backgroundColor: color.red,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginRight: 15
+            }}
+          >
+            <OymoFont message={profile?.notificationCount >= 10 ? '9+' : profile?.notificationCount} fontStyle={{ color: color.white }} />
+          </View>
+        }
       </View>
     </TouchableOpacity>
   )

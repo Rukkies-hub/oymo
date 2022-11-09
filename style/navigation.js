@@ -114,15 +114,6 @@ export const nav = StyleSheet.create({
     backgroundColor: color.white,
     height: 0.5,
     width: width / 1.6,
-    marginVertical: 20
-  },
-
-  closeButton: {
-    width: 40,
-    height: 40,
-    backgroundColor: color.white,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center'
+    marginVertical: 10
   }
 })

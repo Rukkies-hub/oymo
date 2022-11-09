@@ -8,7 +8,8 @@ export const userSlice = createSlice({
     profile: null,
     passsions: [],
     theme: false,
-    setup: false
+    setup: false,
+    activeRoute: ''
   },
   reducers: {
     setUser: (state, action) => {
@@ -35,11 +36,15 @@ export const userSlice = createSlice({
 
     setSetup: (state, action) => {
       state.setup = action.payload
-    }
+    },
+
+    setActiveRoute: (state, action) => {
+      state.activeRoute = action.payload
+    },
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { setUser, logout, setProfile, setPassions, setTheme, setSetup } = userSlice.actions
+export const { setUser, logout, setProfile, setPassions, setTheme, setSetup, setActiveRoute } = userSlice.actions
 
 export default userSlice.reducer
