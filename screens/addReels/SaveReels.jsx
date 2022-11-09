@@ -40,10 +40,12 @@ Notifications.setNotificationHandler({
 
 const SaveReels = () => {
   const { user, profile, theme } = useSelector(state => state.user)
-  const navigation = useNavigation()
   const { source, thumbnail, mediaType } = useRoute().params
 
+  const navigation = useNavigation()
   const focused = useIsFocused()
+
+
   if (focused) {
     NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
     NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
@@ -113,7 +115,7 @@ const SaveReels = () => {
                 .then(thumbnailSnapshot => {
                   getDownloadURL(thumbnailSnapshot.ref)
                     .then(async thumbnailDownloadURL => {
-                      navigation.navigate('Reels')
+                      if (focused) navigation.navigate('Reels')
                       await addDoc(collection(db, 'reels'), {
                         user: { id: id },
                         media: downloadURL,
