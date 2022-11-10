@@ -14,6 +14,7 @@ import { addDoc, collection, doc, increment, serverTimestamp, updateDoc } from '
 import { db } from '../../../hooks/firebase'
 import { admin } from '@env'
 import * as NavigationBar from 'expo-navigation-bar'
+import { FontAwesome5 } from '@expo/vector-icons'
 
 const ChatOptions = () => {
   const { messages, matchDetails } = useRoute().params
@@ -102,9 +103,9 @@ const ChatOptions = () => {
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={sendCoin}
-            style={[mo.replyButton, { paddingHorizontal: 20, marginLeft: 20, backgroundColor: color.red }]}
+            style={[mo.replyButton, { marginLeft: 20, backgroundColor: color.red }]}
           >
-            <OymoFont message='Send' fontStyle={{ color: theme ? color.white : color.dark }} />
+            <FontAwesome5 name='paper-plane' color={color.white} size={20} />
           </TouchableOpacity>
         </View>
       </ScrollView>

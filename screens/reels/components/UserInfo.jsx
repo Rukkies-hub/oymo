@@ -26,7 +26,7 @@ const UserInfo = ({ _user, font }) => {
     <TouchableOpacity
       onPress={() => {
         (profile?.photoURL != undefined && profile?.username != undefined) ? (
-          userInfo?.id == id ? navigation.navigate('Profile') : navigation.navigate('UserProfile', { user: userInfo })
+          userInfo?.id == id ? navigation.navigate('Profile') : navigation.navigate('UserProfile', { user: userInfo, nearby: false })
         ) : navigation.navigate('SetupModal')
       }}
       style={{

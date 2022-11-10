@@ -9,11 +9,12 @@ import { AntDesign, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { useState } from 'react'
 import * as Location from 'expo-location'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../hooks/firebase'
+import { auth, db } from '../hooks/firebase'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../features/userSlice'
-import { updateDoc } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from 'firebase/firestore'
 import Bar from '../components/Bar'
+import { setProfiles } from '../features/matchSlice'
 
 const Login = () => {
   const focused = useIsFocused()
@@ -29,6 +30,50 @@ const Login = () => {
   const [password, setPassword] = useState('')
   const [securePasswordEntry, setSecurePasswordEntry] = useState(true)
   const [authLoading, setAuthLoading] = useState(false)
+
+  const distance = (lat1, lon1, lat2, lon2, unit) => {
+    var radlat1 = Math.PI * lat1 / 180
+    var radlat2 = Math.PI * lat2 / 180
+    var theta = lon1 - lon2
+    var radtheta = Math.PI * theta / 180
+    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
+    dist = Math.acos(dist)
+    dist = dist * 180 / Math.PI
+    dist = dist * 60 * 1.1515
+    if (unit == "K") { dist = dist * 1.609344 }
+    if (unit == "N") { dist = dist * 0.8684 }
+    return dist
+  }
+
+  const getAllProfiles = async id => {
+    const profile = await (await getDoc(doc(db, 'users', id))).data()
+    if (!profile) return
+
+    const passes = await getDocs(collection(db, 'users', id, 'passes'))
+      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
+
+    const passeedUserIds = (await passes).length > 0 ? passes : ['test']
+
+    const swipes = await getDocs(collection(db, 'users', id, 'swipes'))
+      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
+
+    const swipededUserIds = (await swipes).length > 0 ? swipes : ['test']
+
+    onSnapshot(query(collection(db, 'users'), where('id', 'not-in', [...passeedUserIds, ...swipededUserIds])),
+      snapshot => {
+        const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
+          .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
+          .filter(doc => doc?.id !== id)
+          .filter(doc => distance(doc?.data()?.coords?.latitude, doc?.data()?.coords?.longitude, profile?.coords?.latitude, profile?.coords?.longitude).toFixed(2) <= profile?.radius != undefined ? profile?.radius : 1)
+          .map(doc => ({
+            id: doc?.id,
+            ...doc?.data()
+          }))
+
+        if (array.length >= 1) dispatch(setProfiles(array))
+        else dispatch(setProfiles([]))
+      })
+  }
 
   let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
@@ -47,6 +92,7 @@ const Login = () => {
             coords,
             address: address[0],
           })
+          // getAllProfiles(id)
         }).catch(error => {
           if (error.message.includes('wrong-password'))
             alert('Wrong password. Check your passwod then try again.')

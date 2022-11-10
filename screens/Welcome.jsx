@@ -51,7 +51,13 @@ const Welcome = () => {
         >
           <OymoFont message='Register' />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Login')} style={[wc.navigationButton, { backgroundColor: name != 'Welcome' ? color.white : color.transparent }]}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Login')
+            dispatch(setSetup(false))
+          }}
+          style={[wc.navigationButton, { backgroundColor: name != 'Welcome' ? color.white : color.transparent }]}
+        >
           <OymoFont message='Sign In' />
         </TouchableOpacity>
       </View>

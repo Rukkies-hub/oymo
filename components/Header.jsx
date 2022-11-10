@@ -41,7 +41,8 @@ const Header = ({
   showNotification,
   backgroundColor,
   showChatOptions,
-  textColor
+  textColor,
+  showAdd
 }) => {
   const navigation = useNavigation()
   const { user, profile, theme } = useSelector(state => state.user)
@@ -90,14 +91,14 @@ const Header = ({
 
           {
             showMatchAvatar &&
-            <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: getMatchedUserInfo(matchDetails?.users, id) })}>
+            <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: getMatchedUserInfo(matchDetails?.users, id), nearby: false })}>
               <Image source={{ uri: matchAvatar }} style={header.showMatchAvatar} />
             </TouchableOpacity>
           }
 
           {
             showTitle &&
-            <Text style={[header.showTitle, {color: theme ? color.white : color.dark}]}>
+            <Text style={[header.showTitle, { color: theme ? color.white : color.dark }]}>
               {title}
             </Text>
           }
@@ -115,8 +116,26 @@ const Header = ({
             profile &&
             <>
               {
+                showAdd &&
+                <TouchableOpacity onPress={() => {
+                  if (profile?.photoURL != undefined && profile?.username != undefined)
+                    navigation.navigate('AddReels')
+                  else
+                    navigation.navigate('SetupModal')
+                }}
+                  style={[header.notificationButton, { backgroundColor: theme ? color.dark : color.offWhite }]}>
+                  <FontAwesome name='plus-square-o' color={theme ? color.white : color.black} size={22} />
+                </TouchableOpacity>
+              }
+            </>
+          }
+
+          {
+            profile &&
+            <>
+              {
                 showNotification &&
-                <TouchableOpacity onPress={() => navigation.navigate('Notifications')} style={[header.notificationButton, {backgroundColor: theme ? color.dark : color.offWhite}]}>
+                <TouchableOpacity onPress={() => navigation.navigate('Notifications')} style={[header.notificationButton, { backgroundColor: theme ? color.dark : color.offWhite }]}>
                   <SimpleLineIcons name='bell' size={20} color={theme ? color.white : color.dark} />
 
                   {
@@ -136,7 +155,7 @@ const Header = ({
               {
                 !profile ?
                   <TouchableOpacity onPress={() => navigation.openDrawer == undefined ? navigation.navigate('EditProfile') : navigation.openDrawer()} style={header.placeholderImage}>
-                    <FontAwesome name='user-o' size={22} color={color.dark} />
+                    <FontAwesome name='user-o' size={22} color={theme ? color.white : color.dark} />
                   </TouchableOpacity> :
                   <TouchableOpacity onPress={() => navigation.openDrawer == undefined ? navigation.navigate('Profile') : navigation.openDrawer()} style={header.profileImageButton}>
                     {

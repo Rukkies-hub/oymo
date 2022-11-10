@@ -29,7 +29,7 @@ const UserInfo = ({ _user }) => {
           <TouchableOpacity
             onPress={() =>
               userInfo?.id == id ? navigation.navigate('Profile') :
-                navigation.navigate('UserProfile', { user: userInfo })}
+                navigation.navigate('UserProfile', { user: userInfo, nearby: false })}
           >
             <OymoFont message={userInfo?.username} fontStyle={cl.captionUsername} fontFamily='montserrat_bold' />
           </TouchableOpacity> :

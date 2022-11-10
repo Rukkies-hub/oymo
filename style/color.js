@@ -4,6 +4,7 @@ export default {
   blue: '#4169e1',
   darkBlue: '#1e45bc',
   facebookBlue: '#0084FF',
+  indigo: '#304FFE',
   deepBlueSea: '#17202D',
   darkRed: 'red',
   red: '#ff4040',

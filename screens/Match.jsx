@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
 
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation, useRoute } from '@react-navigation/native'
 
 import Swiper from 'react-native-deck-swiper'
 import color from '../style/color'
@@ -36,10 +36,13 @@ import { setPendingSwipes, setProfiles } from '../features/matchSlice'
 import { match } from '../style/match'
 
 import { admin } from '@env'
+import { setActiveRoute } from '../features/userSlice'
 
 const Match = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
+  const focus = useIsFocused()
+  const { name } = useRoute()
   const { user, profile, theme } = useSelector(state => state.user)
   const profiles = useSelector(state => state.match.profiles)
 
@@ -49,9 +52,14 @@ const Match = () => {
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
 
+  useEffect(() => {
+    const call = () => dispatch(setActiveRoute(name))
+    call()
+  }, [])
+
   const getPendingSwipes = async () => {
     dispatch(setPendingSwipes([]))
-    const querySnapshot = await getDocs(collection(db, 'users', id, 'pendingSwipes'))
+    const querySnapshot = await getDocs(query(collection(db, 'users', id, 'pendingSwipes'), where('photoURL', '!=', null)))
 
     if (querySnapshot?.docs?.length >= 1)
       dispatch(
@@ -210,8 +218,6 @@ const Match = () => {
               cardVerticalMargin={0}
               onSwipedLeft={cardIndex => (profile?.photoURL != undefined && profile?.username != undefined) ? swipeLeft(cardIndex) : disabled()}
               onSwipedRight={cardIndex => (profile?.photoURL != undefined && profile?.username != undefined) ? swipeRight(cardIndex) : disabled()}
-              onTapCard={() => !profile ? disabled() : null}
-              dragStart={() => !profile ? disabled() : null}
               overlayLabels={{
                 left: { title: 'NOPE', style: { label: match.nope } },
                 right: { title: 'MATCH', style: { label: match.match } }
@@ -223,7 +229,7 @@ const Match = () => {
 
                   <LinearGradient colors={['transparent', theme ? color.dark : color.black]} style={match.cardGradient}>
                     <View style={match.userDetail}>
-                      <TouchableOpacity onPress={() => (profile?.photoURL != undefined && profile?.username != undefined) ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.usernameButton}>
+                      <TouchableOpacity onPress={() => (profile?.photoURL != undefined && profile?.username != undefined) ? navigation.navigate('UserProfile', { user: card, nearby: false }) : disabled()} style={match.usernameButton}>
                         <OymoFont fontStyle={match.username} fontFamily='montserrat_bold' message={card?.username} />
                         {
                           card?.age != undefined &&
@@ -231,7 +237,7 @@ const Match = () => {
                         }
                       </TouchableOpacity>
 
-                      <TouchableOpacity onPress={() => (profile?.photoURL != undefined && profile?.username != undefined) ? navigation.navigate('UserProfile', { user: card }) : disabled()} style={match.moreInfoButton}>
+                      <TouchableOpacity onPress={() => (profile?.photoURL != undefined && profile?.username != undefined) ? navigation.navigate('UserProfile', { user: card, nearby: false }) : disabled()} style={match.moreInfoButton}>
                         <MaterialCommunityIcons name='information-outline' size={20} color={color.white} />
                       </TouchableOpacity>
                     </View>

@@ -37,7 +37,7 @@ const UserInfo = ({ _user }) => {
 
   return (
     <View>
-      <OymoFont message={`@${userInfo?.username}`} fontFamily='montserrat_bold' fontStyle={{ ...mo.username, color: theme ? color.white : color.dark }} />
+      <OymoFont message={userInfo?.username} fontFamily='montserrat_bold' fontStyle={{ ...mo.username, color: theme ? color.white : color.dark }} />
       <OymoFont message={`${distance(userInfo?.coords?.latitude, userInfo?.coords?.longitude, profile?.coords?.latitude, profile?.coords?.longitude).toFixed(2) } kilometers away`} fontStyle={{ ...mo.distance, color: theme ? color.white : color.dark }} />
     </View>
   )

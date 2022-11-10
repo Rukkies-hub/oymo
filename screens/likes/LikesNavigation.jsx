@@ -2,25 +2,33 @@ import React, { useState } from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import Likes from './Likes'
 import Passes from './Passes'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { likes } from '../../style/likes'
 
 import OymoFont from '../../components/OymoFont'
 import color from '../../style/color'
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { useEffect } from 'react'
+import { setActiveRoute } from '../../features/userSlice'
 const { Navigator, Screen } = createMaterialTopTabNavigator()
 
 const LikesNavigation = () => {
   const { profile, theme } = useSelector(state => state.user)
-  const [visible, setVisible] = useState('likes')
 
   const navigation = useNavigation()
+  const dispatch = useDispatch()
+  const { name } = useRoute()
 
   navigation.addListener('blur', () => {
     navigation.jumpTo('LikesTab')
   })
+
+  useEffect(() => {
+    const call = () => dispatch(setActiveRoute(name))
+    call()
+  }, [])
 
   return (
     <>
