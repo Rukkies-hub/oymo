@@ -43,7 +43,7 @@ import Settings from '../screens/settings/Settings'
 import { useIsFocused } from '@react-navigation/native'
 import * as NavigationBar from 'expo-navigation-bar'
 import EventOption from '../screens/modals/EventOption'
-import Aleart from '../screens/modals/Aleart'
+import Alert from '../screens/modals/Alert'
 import ChatOptions from '../screens/modals/chatOptions/ChatOptions'
 import Welcome from '../screens/Welcome'
 import Signup from '../screens/Signup'
@@ -61,6 +61,8 @@ const StackNavigation = () => {
     NavigationBar.setBackgroundColorAsync(theme ? color.dark : color.white)
     NavigationBar.setButtonStyleAsync(theme ? 'light' : 'dark')
   }
+
+
 
   return (
     <Navigator
@@ -115,8 +117,8 @@ const StackNavigation = () => {
                     <Screen name='NewMatch' component={NewMatch} />
                     <Screen name='SetupModal' component={SetupModal} />
                     <Screen
-                      name='Aleart'
-                      component={Aleart}
+                      name='Alert'
+                      component={Alert}
                       options={{
                         gestureEnabled: false,
                         ...TransitionPresets.FadeFromBottomAndroid,
@@ -245,8 +247,8 @@ const StackNavigation = () => {
                   </Group>
                   <Group screenOptions={{ presentation: 'transparentModal' }}>
                     <Screen
-                      name='Aleart'
-                      component={Aleart}
+                      name='Alert'
+                      component={Alert}
                       options={{
                         gestureEnabled: false,
                         ...TransitionPresets.FadeFromBottomAndroid,

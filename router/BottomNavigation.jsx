@@ -159,9 +159,7 @@ const BottomNavigation = () => {
           {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Buy Coins', 'Upgrade')}
         </ScrollView>
 
-        <View>
-          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Log out')}
-        </View>
+        {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Log out')}
       </View>
 
       {
@@ -366,6 +364,7 @@ const TabButton = (profile, theme, dispatch, currentTab, setCurrentTab, setShowM
 
   return (
     <TouchableOpacity
+      activeOpacity={0.5}
       onPress={() => {
         if (title == 'Log out') {
           logoutUser()
@@ -420,14 +419,6 @@ const TabButton = (profile, theme, dispatch, currentTab, setCurrentTab, setShowM
       <View
         style={[title == 'Log out' ? {
           height: 45,
-          shadowColor: color.black,
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.20,
-          shadowRadius: 1.41,
-          elevation: 2,
           borderRadius: 8,
           backgroundColor: theme ? color.dark : color.white,
           flexDirection: 'row',

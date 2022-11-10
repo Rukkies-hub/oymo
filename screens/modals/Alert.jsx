@@ -5,8 +5,9 @@ import OymoFont from '../../components/OymoFont'
 import { useSelector } from 'react-redux'
 import color from '../../style/color'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import { BlurView } from 'expo-blur'
 
-const Aleart = () => {
+const Alert = () => {
   const {
     theme,
     showTitle,
@@ -21,7 +22,7 @@ const Aleart = () => {
   const navigation = useNavigation()
 
   return (
-    <View style={al.container}>
+    <BlurView style={al.container} tint={theme ? 'dark' : 'light'} intensity={100}>
       <View style={[al.bubble, { backgroundColor: theme ? color.dark : color.white }]}>
         {
           showTitle &&
@@ -29,7 +30,7 @@ const Aleart = () => {
         }
         {
           showBody &&
-          <OymoFont message={body} fontStyle={{ color: theme ? color.white : color.dark, marginTop: 10 }} />
+          <OymoFont message={body} fontStyle={{ color: theme ? color.white : color.dark, marginTop: 10, textAlign: 'center' }} />
         }
         <View style={[al.bottom, { borderTopColor: theme ? color.lightBorderColor : color.borderColor }]}>
           {
@@ -44,14 +45,14 @@ const Aleart = () => {
           }
           {
             showOk &&
-            <TouchableOpacity onPress={() => navigation.goBack()} style={[al.cancelButton, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
-              <OymoFont message='Ok' />
+            <TouchableOpacity onPress={() => navigation.goBack()} style={[al.okButton, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
+              <OymoFont message='Ok' fontFamily='montserrat_bold' fontStyle={{ color: theme ? color.white : color.indigo }} />
             </TouchableOpacity>
           }
         </View>
       </View>
-    </View>
+    </BlurView>
   )
 }
 
-export default Aleart
+export default Alert

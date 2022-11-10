@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native'
-import { collection, deleteDoc, doc, increment, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { collection, deleteDoc, doc, increment, onSnapshot, orderBy, query, updateDoc } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import { useNavigation } from '@react-navigation/native'
 import { Feather } from '@expo/vector-icons'
@@ -52,12 +52,12 @@ const Passes = () => {
             showsVerticalScrollIndicator={false}
             renderItem={({ item: pass }) => (
               <View style={likes.likesListContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: pass, nearby: false })}>
+                <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: pass, nearby: false, passed: true })}>
                   <Avatar user={pass?.id} />
                 </TouchableOpacity>
 
                 <View style={likes.rightView}>
-                  <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: pass, nearby: false })}>
+                  <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { user: pass, nearby: false, passed: true })}>
                     <Username user={pass?.id} />
                   </TouchableOpacity>
                   {
@@ -73,7 +73,7 @@ const Passes = () => {
                   }
                   <View style={likes.controlesView}>
                     <TouchableOpacity onPress={() => profile ? undoPass(pass) : disabled()} style={likes.matchButon}>
-                      <OymoFont message='Undo pass' fontStyle={{ ...likes.infoText, marginLeft: 0, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                      <OymoFont message='Undo pass' fontStyle={{ ...likes.infoText, marginLeft: 0, color: color.white }} fontFamily='montserrat_bold' />
                     </TouchableOpacity>
                   </View>
                 </View>

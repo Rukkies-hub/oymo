@@ -57,9 +57,23 @@ const Signup = () => {
         dispatch(setProfile(profile))
       }).catch(error => {
         if (error.message.includes('email-already-in-use'))
-          alert('Ooops. Seems this email is already in use. Try another')
+          navigation.navigate('Alert', {
+            theme: false,
+            showTitle: true,
+            title: 'Oops!!!',
+            showBody: true,
+            body: 'Seems this email is already in use. \nTry another 🙂',
+            showOk: true
+          })
         else if (error.message.includes('weak-password'))
-          alert('weak-password\nPassword should be at least 6 characters')
+          navigation.navigate('Alert', {
+            theme: false,
+            showTitle: true,
+            title: 'Oops!!!',
+            showBody: true,
+            body: 'weak-password\nPassword should be at least 6 characters',
+            showOk: true
+          })
       }).finally(() => setAuthLoading(false))
   }
 
@@ -107,12 +121,12 @@ const Signup = () => {
             if (email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/) && (password != '' && password.length >= 6))
               signupUser()
             else
-              navigation.navigate('Aleart', {
+              navigation.navigate('Alert', {
                 theme: false,
                 showTitle: true,
-                title: 'Signup error',
+                title: 'Oops!!!',
                 showBody: true,
-                body: 'You need a valid email, and a password length longer than 6 characters',
+                body: 'weak-password\nPassword should be at least 6 characters',
                 showOk: true
               })
           }}

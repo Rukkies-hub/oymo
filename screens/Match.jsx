@@ -37,6 +37,7 @@ import { match } from '../style/match'
 
 import { admin } from '@env'
 import { setActiveRoute } from '../features/userSlice'
+import { setNearbyProfiles } from '../features/matchSlice'
 
 const Match = () => {
   const navigation = useNavigation()
@@ -44,7 +45,7 @@ const Match = () => {
   const focus = useIsFocused()
   const { name } = useRoute()
   const { user, profile, theme } = useSelector(state => state.user)
-  const profiles = useSelector(state => state.match.profiles)
+  const { nearbyProfiles, profiles } = useSelector(state => state.match)
 
   const swipeRef = useRef(null)
 
@@ -101,10 +102,44 @@ const Match = () => {
       })
   }
 
+  const getAllNearbyProfiles = async () => {
+    const profile = await (await getDoc(doc(db, 'users', id))).data()
+    if (!profile) return
+
+    const passes = await getDocs(collection(db, 'users', id, 'passes'))
+      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
+
+    const passeedUserIds = (await passes).length > 0 ? passes : ['test']
+
+    const swipes = await getDocs(collection(db, 'users', id, 'swipes'))
+      .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
+
+    const swipededUserIds = (await swipes).length > 0 ? swipes : ['test']
+
+    onSnapshot(query(collection(db, 'users'), where('id', 'not-in', [...passeedUserIds, ...swipededUserIds])),
+      snapshot => {
+        const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
+          .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')
+          .filter(doc => doc?.id !== id)
+          .filter(doc => distance(doc?.data()?.coords?.latitude, doc?.data()?.coords?.longitude, profile?.coords?.latitude, profile?.coords?.longitude).toFixed(2) <= 1)
+          .map(doc => ({
+            id: doc?.id,
+            ...doc?.data()
+          }))
+
+        if (array.length >= 1) {
+          dispatch(setNearbyProfiles([]))
+          dispatch(setNearbyProfiles(array))
+        }
+        else dispatch(setNearbyProfiles([]))
+      })
+  }
+
   useEffect(() => {
     getAllProfiles()
     getPendingSwipes()
-  }, [db])
+    getAllNearbyProfiles()
+  }, [db, navigation])
 
   const swipeLeft = async cardIndex => {
     setStackSize(stackSize + 1)
@@ -112,11 +147,20 @@ const Match = () => {
 
     const userSwiped = profiles[cardIndex]
 
+
     if (profile?.coins < 10) return
 
     setDoc(doc(db, 'users', id, 'passes', userSwiped?.id), userSwiped)
     await updateDoc(doc(db, 'users', id), { coins: increment(-10) })
     await updateDoc(doc(db, 'admin', admin), { passes: increment(1) })
+
+    const nearbyArray = nearbyProfiles.filter(obj => obj.id != userSwiped.id)
+    dispatch(setNearbyProfiles(
+      nearbyArray.map(doc => ({
+        id: doc?.id,
+        ...doc?.data()
+      }))
+    ))
 
     getAllProfiles()
     getPendingSwipes()
@@ -129,6 +173,14 @@ const Match = () => {
     const userSwiped = profiles[cardIndex]
 
     if (profile?.coins < 20) return
+
+    const nearbyArray = nearbyProfiles.filter(obj => obj.id != userSwiped.id)
+    dispatch(setNearbyProfiles(
+      nearbyArray.map(doc => ({
+        id: doc?.id,
+        ...doc?.data()
+      }))
+    ))
 
     getDoc(doc(db, 'users', userSwiped?.id, 'swipes', id))
       .then(async documentSnapshot => {
@@ -196,9 +248,7 @@ const Match = () => {
   if (!loaded) return null
 
   return (
-    <View
-      style={[match.container, { backgroundColor: theme ? color.dark : color.white }]}
-    >
+    <View style={[match.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <View style={{ flex: 1, marginTop: -5 }}>
         {
           profiles?.length >= 1 ?
@@ -218,6 +268,7 @@ const Match = () => {
               cardVerticalMargin={0}
               onSwipedLeft={cardIndex => (profile?.photoURL != undefined && profile?.username != undefined) ? swipeLeft(cardIndex) : disabled()}
               onSwipedRight={cardIndex => (profile?.photoURL != undefined && profile?.username != undefined) ? swipeRight(cardIndex) : disabled()}
+              onTapCard={cardIndex => swipeLeft(cardIndex)}
               overlayLabels={{
                 left: { title: 'NOPE', style: { label: match.nope } },
                 right: { title: 'MATCH', style: { label: match.match } }

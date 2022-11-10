@@ -22,7 +22,7 @@ import { admin } from '@env'
 
 const ProfileDetails = ({ profile, user }) => {
   const navigation = useNavigation()
-  const { nearby } = useRoute().params
+  const { nearby, passed } = useRoute().params
   const { profiles, nearbyProfiles } = useSelector(state => state.match)
   const { user: _user, profile: __profile, theme } = useSelector(state => state.user)
 
@@ -175,7 +175,19 @@ const ProfileDetails = ({ profile, user }) => {
       <View style={_profile.profileDetailes}>
         {
           profile?.photoURL ?
-            <TouchableOpacity onPress={() => navigation.navigate('ViewAvatar', { avatar: profile?.photoURL })}>
+            <TouchableOpacity
+              onPress={() => {
+                if (passed)
+                  navigation.navigate('Alert', {
+                    theme,
+                    showBody: true,
+                    body: 'Sorry you passed on this user. Please undo the pass to match again🙂',
+                    showOk: true
+                  })
+                else
+                  navigation.navigate('ViewAvatar', { avatar: profile?.photoURL })
+              }}
+            >
               <Image source={{ uri: profile?.photoURL }} style={_profile.avatar} />
             </TouchableOpacity> :
             <BlurView intensity={50} tint='light' style={[_profile.blurView, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
@@ -193,7 +205,20 @@ const ProfileDetails = ({ profile, user }) => {
         </View>
         {
           showMatch &&
-          <TouchableOpacity onPress={() => (__profile?.photoURL != undefined && __profile?.username != undefined) ? swipeRight() : navigation.navigate('SetupModal')} style={_profile.matchButton}>
+          <TouchableOpacity
+            onPress={
+              () =>
+                (__profile?.photoURL != undefined && __profile?.username != undefined) ?
+                  (passed ? navigation.navigate('Alert', {
+                    theme,
+                    showBody: true,
+                    body: 'Sorry you passed on this user. Please undo the pass to match again🙂',
+                    showOk: true
+                  }) : swipeRight()) :
+                  navigation.navigate('SetupModal')
+            }
+            style={_profile.matchButton}
+          >
             <AntDesign name='hearto' size={20} color={color.white} />
           </TouchableOpacity>
         }

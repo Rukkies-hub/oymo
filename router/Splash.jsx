@@ -1,4 +1,4 @@
-import { View, Text, Image, ActivityIndicator } from 'react-native'
+import { View, Text, Image, ActivityIndicator, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import color from '../style/color'
 import OymoFont from '../components/OymoFont'
@@ -13,6 +13,8 @@ import { setPendingSwipes, setProfiles } from '../features/matchSlice'
 import { useLayoutEffect } from 'react'
 import * as Location from 'expo-location'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+
+const { width, height } = Dimensions.get('screen')
 
 const Splash = () => {
   const { user } = useSelector(state => state.user)

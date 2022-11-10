@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import color from './color'
 
 export const al = StyleSheet.create({
@@ -18,14 +18,14 @@ export const al = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     overflow: 'hidden',
-    shadowColor: "#000",
+    shadowColor: color.black,
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 12,
     },
-    shadowOpacity: 0.34,
-    shadowRadius: 6.27,
-    elevation: 10
+    shadowOpacity: 0.58,
+    shadowRadius: 16.00,
+    elevation: 24
   },
 
   title: {
@@ -51,6 +51,14 @@ export const al = StyleSheet.create({
   },
 
   cancelButton: {
+    flex: 1,
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12
+  },
+
+  okButton: {
     flex: 1,
     height: 45,
     justifyContent: 'center',
