@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, ActivityIndicator, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { login } from '../style/auth'
 import OymoFont from '../components/OymoFont'
@@ -11,7 +11,7 @@ import * as Location from 'expo-location'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth, db } from '../hooks/firebase'
 import { useDispatch } from 'react-redux'
-import { setUser } from '../features/userSlice'
+import { setSetup, setUser } from '../features/userSlice'
 import { collection, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from 'firebase/firestore'
 import Bar from '../components/Bar'
 import { setProfiles } from '../features/matchSlice'
@@ -78,7 +78,14 @@ const Login = () => {
   let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
   const signin = async () => {
-    if (email.match(regexEmail) && password != '') {
+    if (!email.match(regexEmail) && password == '') {
+      navigation.navigate('Alert', {
+        theme: false,
+        showBody: true,
+        body: 'Please complete the form and try again 🙂',
+        showOk: true
+      })
+    } else {
       setAuthLoading(true)
       let { coords } = await Location.getCurrentPositionAsync({})
       const address = await Location.reverseGeocodeAsync(coords)
@@ -92,12 +99,26 @@ const Login = () => {
             coords,
             address: address[0],
           })
-          // getAllProfiles(id)
+          getAllProfiles(id)
         }).catch(error => {
           if (error.message.includes('wrong-password'))
-            alert('Wrong password. Check your passwod then try again.')
+            navigation.navigate('Alert', {
+              theme: false,
+              showTitle: true,
+              title: 'Oops!!!',
+              showBody: true,
+              body: 'Wrong password. Check your passwod then try again. 🙂',
+              showOk: true
+            })
           else if (error.message.includes('user-not-found'))
-            alert('Oops. Seems like tou do not have an account with Oymo')
+            navigation.navigate('Alert', {
+              theme: false,
+              showTitle: true,
+              title: 'Oops!!!',
+              showBody: true,
+              body: 'Seems like tou do not have an account with us \n Please create an account 🙂',
+              showOk: true
+            })
         }).finally(() => setAuthLoading(false))
     }
   }
@@ -142,7 +163,12 @@ const Login = () => {
       </View>
 
       <View style={login.navigationView}>
-        <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(setSetup(true))
+            navigation.navigate('Signup')
+          }}
+        >
           <Text style={login.bottomText}>Don't have an account? <OymoFont message='Register' fontFamily='montserrat_bold' fontStyle={{ color: color.black }} /></Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={signin} style={login.signInButton}>

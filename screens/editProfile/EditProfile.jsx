@@ -259,24 +259,30 @@ const EditProfile = () => {
               profile &&
               <>
                 {
-                  profile?.passions != undefined &&
-                  <TouchableOpacity onPress={() => navigation.navigate('Passion')}>
-                    <OymoFont message='Passions' fontStyle={editProfile.passionsText} fontFamily='montserrat_bold' />
+                  profile?.passions != '' &&
+                  <TouchableOpacity style={{ marginVertical: 20 }} onPress={() => navigation.navigate('Passion')}>
+                    <OymoFont message='Hobbies' fontStyle={editProfile.passionsText} fontFamily='montserrat_bold' />
 
-                    <View
-                      style={[
-                        editProfile.passionContainer,
-                        { backgroundColor: profile?.passions.length < 1 ? color.offWhite : color.transparent }
-                      ]}
-                    >
-                      {
-                        profile?.passions?.map((passion, index) => (
-                          <View key={index} style={[editProfile.passions, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
-                            <OymoFont message={passion} fontStyle={{ ...editProfile.passion, color: theme ? color.white : color.dark }} />
-                          </View>
-                        ))
-                      }
-                    </View>
+                    {
+                      profile?.passions == undefined ?
+                        <View>
+                          <OymoFont message='Select your hobbies' />
+                        </View> :
+                        <View
+                          style={[
+                            editProfile.passionContainer,
+                            { backgroundColor: profile?.passions.length < 1 ? color.offWhite : color.transparent }
+                          ]}
+                        >
+                          {
+                            profile?.passions?.map((passion, index) => (
+                              <View key={index} style={[editProfile.passions, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
+                                <OymoFont message={passion} fontStyle={{ ...editProfile.passion, color: theme ? color.white : color.dark }} />
+                              </View>
+                            ))
+                          }
+                        </View>
+                    }
                   </TouchableOpacity>
                 }
               </>

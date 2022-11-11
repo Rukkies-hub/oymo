@@ -3,7 +3,7 @@ import { View, Text, Pressable, Image, FlatList, ActivityIndicator } from 'react
 
 import color from '../../style/color'
 
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { collection, getDocs, limit, onSnapshot, query, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import OymoFont from '../../components/OymoFont'
@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux'
 const Reels = ({ profile, user }) => {
   const { theme } = useSelector(state => state.user)
   const navigation = useNavigation()
+  const { passed } = useRoute().params
 
   const [reels, setReels] = useState([])
   const [reelsLimit, setLimit] = useState(50)
@@ -54,8 +55,17 @@ const Reels = ({ profile, user }) => {
                 return (
                   <Pressable
                     key={index}
-                    onPress={() => navigation.navigate('ViewReel', { reel })}
-                    onLongPress={() => navigation.navigate('ReelsOption', { reel })}
+                    onPress={() => {
+                      if (passed)
+                        navigation.navigate('Alert', {
+                          theme,
+                          showBody: true,
+                          body: 'Sorry you passed on this user. Please undo the pass to match again🙂',
+                          showOk: true
+                        })
+                      else
+                        navigation.navigate('ViewReel', { reel })
+                    }}
                     delayLongPress={500}
                     style={pReels.reelsList}
                   >

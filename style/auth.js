@@ -200,10 +200,10 @@ export const su = StyleSheet.create({
   input: {
     marginBottom: 30,
     flex: 1,
-    height: 45,
+    height: 55,
     borderWidth: 1,
     borderColor: color.borderColor,
-    borderRadius: 50,
+    borderRadius: 12,
     fontFamily: 'text',
     paddingHorizontal: 20
   },
@@ -229,10 +229,10 @@ export const su = StyleSheet.create({
   locationButton: {
     marginBottom: 30,
     flex: 1,
-    height: 45,
+    height: 55,
     borderWidth: 1,
     borderColor: color.borderColor,
-    borderRadius: 50,
+    borderRadius: 12,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',

@@ -101,15 +101,15 @@ const Passion = () => {
 
   return (
     <SafeAreaView style={[ps.container, { backgroundColor: theme ? color.dark : color.white }]}>
-      <Header showBack showTitle title='Select Passion' />
+      <Header showBack showTitle title='Select Hobbies' />
 
       <OymoFont
-        message="Select passions that you'd like to share with the people you connect with. Choose a minimum of 3."
+        message="Select hobbies that you'd like to share with the people you connect with. Choose a minimum of 3."
         fontStyle={{ ...ps.headText, color: theme ? color.white : color.dark }}
       />
 
       <View style={ps.infoView}>
-        <OymoFont message='Edit Passions' fontStyle={{ ...ps.titleText, color: theme ? color.white : color.dark }} />
+        <OymoFont message='Edit Hobbies' fontStyle={{ ...ps.titleText, color: theme ? color.white : color.dark }} />
         {
           passions?.length > 0 &&
           <OymoFont message={`${passions?.length}/5`} fontStyle={{ ...ps.passionCount, color: theme ? color.white : color.dark }} />
@@ -117,7 +117,7 @@ const Passion = () => {
       </View>
 
       <View style={ps.scrollViewContainer}>
-        <ScrollView style={ps.scrollView}>
+        <ScrollView style={ps.scrollView} showsVerticalScrollIndicator={false}>
           <View style={ps.passionsContainerView}>
             {
               passionList?.map((passion, index) => {
@@ -148,7 +148,7 @@ const Passion = () => {
           {
             passionsLoading ?
               <ActivityIndicator size='small' color={color.white} /> :
-              <OymoFont message='Subscribe for $5.00' fontStyle={ps.updateButtonText} />
+              <OymoFont message='Set hobbies' fontStyle={ps.updateButtonText} />
           }
         </TouchableOpacity>
       </View>
