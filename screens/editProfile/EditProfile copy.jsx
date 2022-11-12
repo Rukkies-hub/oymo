@@ -51,8 +51,7 @@ const EditProfile = () => {
   const [expoPushToken, setExpoPushToken] = useState('')
   const [notification, setNotification] = useState(false)
   const [errorMsg, setErrorMsg] = useState(null)
-  const [yourHeight, setYourHeight] = useState(profile?.height != undefined ? profile?.height : 155)
-  const [yourWeight, setYourWeight] = useState(profile?.weight != undefined ? profile?.weight : 75)
+  const [yourHeight, setYourHeight] = useState(155)
 
   // INPUTS
   const [city, setCity] = useState(profile?.address?.city)
@@ -155,19 +154,13 @@ const EditProfile = () => {
     })
   }
 
-  useEffect(() => {
-    const call = () => {
-      updateDoc(doc(db, 'users', id), { height: yourHeight })
-    }
-    call()
-  }, [yourHeight])
+  const setPurposeOfDating = (purpose) => {
+    updateDoc(doc(db, 'users', id), { purposeOfDating: purpose })
+  }
 
-  useEffect(() => {
-    const call = () => {
-      updateDoc(doc(db, 'users', id), { weight: yourWeight })
-    }
-    call()
-  }, [yourWeight])
+  const setHairColor = (color) => {
+    updateDoc(doc(db, 'users', id), { hairColor: color })
+  }
 
   return (
     <KeyboardAvoidingView style={[editProfile.container, { backgroundColor: theme ? color.dark : color.white }]}>
@@ -266,7 +259,7 @@ const EditProfile = () => {
 
                 <SelectDropdown
                   data={['Find the ideal woman', 'Romantic date', 'Serious relationship', 'Travel together']}
-                  onSelect={(selectedItem, index) => { updateDoc(doc(db, 'users', id), { purposeOfDating: selectedItem }) }}
+                  onSelect={(selectedItem, index) => setPurposeOfDating(selectedItem)}
                   rowTextForSelection={(item, index) => item}
                   defaultButtonText={profile?.purposeOfDating || 'The purposes of dating'}
                   buttonStyle={{
@@ -309,7 +302,7 @@ const EditProfile = () => {
 
                 <SelectDropdown
                   data={['Blond', 'Brunette', 'Brown-haired', 'Redhead', 'Light brown', 'Black']}
-                  onSelect={(selectedItem, index) => { updateDoc(doc(db, 'users', id), { hairColor: selectedItem }) }}
+                  onSelect={(selectedItem, index) => setHairColor(selectedItem)}
                   rowTextForSelection={(item, index) => item}
                   defaultButtonText={profile?.hairColor || 'Hair color'}
                   buttonStyle={{
@@ -367,285 +360,6 @@ const EditProfile = () => {
             }
 
             {
-              profile &&
-              <View style={editProfile.aboutContainer}>
-                <OymoFont message={`Weight: ${yourWeight}kg`} fontStyle={editProfile.aboutText} fontFamily='montserrat_bold' />
-
-                <Slider
-                  style={{ width, height: 40, marginLeft: -10 }}
-                  step={1}
-                  value={yourWeight}
-                  minimumValue={40}
-                  maximumValue={150}
-                  thumbTintColor={color.red}
-                  minimumTrackTintColor={color.lightBorderColor}
-                  maximumTrackTintColor={theme ? color.white : color.dark}
-                  onSlidingComplete={(low, high, fromUser) => {
-                    setYourWeight(low)
-                  }}
-                />
-              </View>
-            }
-
-            {
-              profile &&
-              <View style={editProfile.aboutContainer}>
-                <OymoFont message='Eyes color' fontStyle={editProfile.aboutText} fontFamily='montserrat_bold' />
-
-                <SelectDropdown
-                  data={['Blue', 'Green', 'Brown', 'Grey']}
-                  onSelect={(selectedItem, index) => { updateDoc(doc(db, 'users', id), { eyeColor: selectedItem }) }}
-                  rowTextForSelection={(item, index) => item}
-                  defaultButtonText={profile?.eyeColor || 'Eyes color'}
-                  buttonStyle={{
-                    flex: 1,
-                    height: 50,
-                    width: '100%',
-                    borderRadius: 12,
-                    backgroundColor: theme ? color.lightText : color.offWhite,
-                    padding: 0,
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start'
-                  }}
-                  buttonTextStyle={{
-                    color: theme ? color.white : color.dark,
-                    fontFamily: 'text',
-                    fontSize: 12,
-                    textAlign: 'left',
-                    marginLeft: 8
-                  }}
-                  dropdownStyle={{
-                    overflow: 'hidden',
-                    borderRadius: 12
-                  }}
-                  dropdownOverlayColor={color.transparent}
-                  rowStyle={{ backgroundColor: color.white }}
-                  rowTextStyle={{
-                    textAlign: 'left',
-                    marginLeft: 10
-                  }}
-                  selectedRowStyle={{ backgroundColor: color.red }}
-                  selectedRowTextStyle={{ color: color.white }}
-                />
-              </View>
-            }
-
-            {
-              profile &&
-              <View style={editProfile.aboutContainer}>
-                <OymoFont message='Relationship status' fontStyle={editProfile.aboutText} fontFamily='montserrat_bold' />
-
-                <SelectDropdown
-                  data={['Free', "It's complicated", 'Divorced']}
-                  onSelect={(selectedItem, index) => { updateDoc(doc(db, 'users', id), { relationshipStatus: selectedItem }) }}
-                  rowTextForSelection={(item, index) => item}
-                  defaultButtonText={profile?.relationshipStatus || 'Relationship status'}
-                  buttonStyle={{
-                    flex: 1,
-                    height: 50,
-                    width: '100%',
-                    borderRadius: 12,
-                    backgroundColor: theme ? color.lightText : color.offWhite,
-                    padding: 0,
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start'
-                  }}
-                  buttonTextStyle={{
-                    color: theme ? color.white : color.dark,
-                    fontFamily: 'text',
-                    fontSize: 12,
-                    textAlign: 'left',
-                    marginLeft: 8
-                  }}
-                  dropdownStyle={{
-                    overflow: 'hidden',
-                    borderRadius: 12
-                  }}
-                  dropdownOverlayColor={color.transparent}
-                  rowStyle={{ backgroundColor: color.white }}
-                  rowTextStyle={{
-                    textAlign: 'left',
-                    marginLeft: 10
-                  }}
-                  selectedRowStyle={{ backgroundColor: color.red }}
-                  selectedRowTextStyle={{ color: color.white }}
-                />
-              </View>
-            }
-
-            {
-              profile &&
-              <View style={editProfile.aboutContainer}>
-                <OymoFont message='Children' fontStyle={editProfile.aboutText} fontFamily='montserrat_bold' />
-
-                <SelectDropdown
-                  data={['No children', 'Have children']}
-                  onSelect={(selectedItem, index) => { updateDoc(doc(db, 'users', id), { children: selectedItem }) }}
-                  rowTextForSelection={(item, index) => item}
-                  defaultButtonText={profile?.children || 'Children'}
-                  buttonStyle={{
-                    flex: 1,
-                    height: 50,
-                    width: '100%',
-                    borderRadius: 12,
-                    backgroundColor: theme ? color.lightText : color.offWhite,
-                    padding: 0,
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start'
-                  }}
-                  buttonTextStyle={{
-                    color: theme ? color.white : color.dark,
-                    fontFamily: 'text',
-                    fontSize: 12,
-                    textAlign: 'left',
-                    marginLeft: 8
-                  }}
-                  dropdownStyle={{
-                    overflow: 'hidden',
-                    borderRadius: 12
-                  }}
-                  dropdownOverlayColor={color.transparent}
-                  rowStyle={{ backgroundColor: color.white }}
-                  rowTextStyle={{
-                    textAlign: 'left',
-                    marginLeft: 10
-                  }}
-                  selectedRowStyle={{ backgroundColor: color.red }}
-                  selectedRowTextStyle={{ color: color.white }}
-                />
-              </View>
-            }
-
-            {
-              profile &&
-              <View style={editProfile.aboutContainer}>
-                <OymoFont message='Drinking' fontStyle={editProfile.aboutText} fontFamily='montserrat_bold' />
-
-                <SelectDropdown
-                  data={['Non drinker', 'Occationally drink', 'Social drinker', 'Heavy drinker']}
-                  onSelect={(selectedItem, index) => { updateDoc(doc(db, 'users', id), { drinking: selectedItem }) }}
-                  rowTextForSelection={(item, index) => item}
-                  defaultButtonText={profile?.drinking || 'Drinking'}
-                  buttonStyle={{
-                    flex: 1,
-                    height: 50,
-                    width: '100%',
-                    borderRadius: 12,
-                    backgroundColor: theme ? color.lightText : color.offWhite,
-                    padding: 0,
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start'
-                  }}
-                  buttonTextStyle={{
-                    color: theme ? color.white : color.dark,
-                    fontFamily: 'text',
-                    fontSize: 12,
-                    textAlign: 'left',
-                    marginLeft: 8
-                  }}
-                  dropdownStyle={{
-                    overflow: 'hidden',
-                    borderRadius: 12
-                  }}
-                  dropdownOverlayColor={color.transparent}
-                  rowStyle={{ backgroundColor: color.white }}
-                  rowTextStyle={{
-                    textAlign: 'left',
-                    marginLeft: 10
-                  }}
-                  selectedRowStyle={{ backgroundColor: color.red }}
-                  selectedRowTextStyle={{ color: color.white }}
-                />
-              </View>
-            }
-
-            {
-              profile &&
-              <View style={editProfile.aboutContainer}>
-                <OymoFont message='Smoking' fontStyle={editProfile.aboutText} fontFamily='montserrat_bold' />
-
-                <SelectDropdown
-                  data={['Non smoker', 'Occationally smoke', 'Social smoker', 'Smoker']}
-                  onSelect={(selectedItem, index) => { updateDoc(doc(db, 'users', id), { smoking: selectedItem }) }}
-                  rowTextForSelection={(item, index) => item}
-                  defaultButtonText={profile?.smoking || 'Smoking'}
-                  buttonStyle={{
-                    flex: 1,
-                    height: 50,
-                    width: '100%',
-                    borderRadius: 12,
-                    backgroundColor: theme ? color.lightText : color.offWhite,
-                    padding: 0,
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start'
-                  }}
-                  buttonTextStyle={{
-                    color: theme ? color.white : color.dark,
-                    fontFamily: 'text',
-                    fontSize: 12,
-                    textAlign: 'left',
-                    marginLeft: 8
-                  }}
-                  dropdownStyle={{
-                    overflow: 'hidden',
-                    borderRadius: 12
-                  }}
-                  dropdownOverlayColor={color.transparent}
-                  rowStyle={{ backgroundColor: color.white }}
-                  rowTextStyle={{
-                    textAlign: 'left',
-                    marginLeft: 10
-                  }}
-                  selectedRowStyle={{ backgroundColor: color.red }}
-                  selectedRowTextStyle={{ color: color.white }}
-                />
-              </View>
-            }
-
-            {
-              profile &&
-              <View style={editProfile.aboutContainer}>
-                <OymoFont message='Occupation' fontStyle={editProfile.aboutText} fontFamily='montserrat_bold' />
-
-                <SelectDropdown
-                  data={['IT', 'Study', 'Health care', 'Finance', 'Politics', 'Sport', 'Law', 'Engineering', 'Education', 'Economy', 'Agriculture', 'Construction', 'Own business', 'Do not work yet', 'Other']}
-                  onSelect={(selectedItem, index) => { updateDoc(doc(db, 'users', id), { occupation: selectedItem }) }}
-                  rowTextForSelection={(item, index) => item}
-                  defaultButtonText={profile?.occupation || 'Occupation'}
-                  buttonStyle={{
-                    flex: 1,
-                    height: 50,
-                    width: '100%',
-                    borderRadius: 12,
-                    backgroundColor: theme ? color.lightText : color.offWhite,
-                    padding: 0,
-                    flexDirection: 'row',
-                    justifyContent: 'flex-start'
-                  }}
-                  buttonTextStyle={{
-                    color: theme ? color.white : color.dark,
-                    fontFamily: 'text',
-                    fontSize: 12,
-                    textAlign: 'left',
-                    marginLeft: 8
-                  }}
-                  dropdownStyle={{
-                    overflow: 'hidden',
-                    borderRadius: 12
-                  }}
-                  dropdownOverlayColor={color.transparent}
-                  rowStyle={{ backgroundColor: color.white }}
-                  rowTextStyle={{
-                    textAlign: 'left',
-                    marginLeft: 10
-                  }}
-                  selectedRowStyle={{ backgroundColor: color.red }}
-                  selectedRowTextStyle={{ color: color.white }}
-                />
-              </View>
-            }
-
-            {
               (profile && profile?.age == undefined) &&
               <View style={{ marginBottom: 20 }}>
                 <OymoFont message='Date of birth' fontStyle={editProfile.passionsText} fontFamily='montserrat_bold' />
@@ -661,7 +375,7 @@ const EditProfile = () => {
               <>
                 {
                   profile?.passions != '' &&
-                  <TouchableOpacity style={{ marginVertical: 20 }} onPress={() => navigation.navigate('Passion')}>
+                  <TouchableOpacity style={{ marginTop: 20 }} onPress={() => navigation.navigate('Passion')}>
                     <OymoFont message='Hobbies' fontStyle={editProfile.passionsText} fontFamily='montserrat_bold' />
 
                     {
