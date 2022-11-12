@@ -124,7 +124,7 @@ const Settings = () => {
                 thumbTintColor={color.red}
                 minimumTrackTintColor={color.lightBorderColor}
                 maximumTrackTintColor={theme ? color.white : color.dark}
-                onValueChange={(low, high, fromUser) => {
+                onSlidingComplete={(low, high, fromUser) => {
                   setDistance(low)
                 }}
               />

@@ -44,7 +44,7 @@ const Reels = () => {
   }
 
   return (
-    <View>
+    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white, paddingTop: 10 }}>
       {
         reels?.length < 1 ?
           <View style={pReels.indicatorContainer}>

@@ -3,21 +3,22 @@ import { View, Text, Image, TouchableOpacity } from 'react-native'
 
 import { FontAwesome, Feather, Fontisto, SimpleLineIcons, Ionicons } from '@expo/vector-icons'
 import color from '../../style/color'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import OymoFont from '../../components/OymoFont'
 
 import { profile as _profile } from '../../style/profile'
 import { useSelector } from 'react-redux'
 
-const ProfileDetails = ({ profile, user }) => {
+const ProfileDetails = () => {
   const navigation = useNavigation()
+  const { profile, user } = useRoute().params
 
   const [aboutLimit, setAboutLimit] = useState(2)
 
   const { theme } = useSelector(state => state.user)
 
   return (
-    <View>
+    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white, paddingTop: 10 }}>
       <View style={_profile.profileDetailes}>
         {
           profile?.photoURL ?

@@ -13,18 +13,14 @@ const LookingFor = () => {
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
 
-  const lookingForMen = async () => {
+  const lookingForMen = () => {
+    updateDoc(doc(db, 'users', id), { lookingFor: 'male' })
     setLookingFor('male')
-    try {
-      await updateDoc(doc(db, 'users', id), { lookingFor: 'male' })
-    } catch (error) { return }
   }
 
-  const lookingForWomen = async () => {
+  const lookingForWomen = () => {
+    updateDoc(doc(db, 'users', id), { lookingFor: 'female' })
     setLookingFor('female')
-    try {
-      await updateDoc(doc(db, 'users', id), { lookingFor: 'female' })
-    } catch (error) { return }
   }
 
   const [loaded] = useFonts({
