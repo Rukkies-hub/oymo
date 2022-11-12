@@ -479,7 +479,7 @@ const EditProfile = () => {
                 <OymoFont message='Children' fontStyle={editProfile.aboutText} fontFamily='montserrat_bold' />
 
                 <SelectDropdown
-                  data={['No children', 'Have children']}
+                  data={["Don't have children", 'Have children']}
                   onSelect={(selectedItem, index) => { updateDoc(doc(db, 'users', id), { children: selectedItem }) }}
                   rowTextForSelection={(item, index) => item}
                   defaultButtonText={profile?.children || 'Children'}

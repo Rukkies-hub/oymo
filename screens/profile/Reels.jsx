@@ -32,17 +32,6 @@ const Reels = () => {
     )
   }, [reelsLimit, db])
 
-  const getReels = async () => {
-    const queryReels = await getDocs(query(collection(db, 'reels'), where('user.id', '==', id), limit(reelsLimit)))
-
-    setReels(
-      queryReels?.docs?.map(doc => ({
-        id: doc?.id,
-        ...doc?.data()
-      }))
-    )
-  }
-
   return (
     <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white, paddingTop: 10 }}>
       {
