@@ -44,7 +44,7 @@ const Events = () => {
   }
 
   return (
-    <>
+    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white, paddingTop: 10 }}>
       {
         events?.length < 1 ?
           <View style={pEvents.indicatorContainer}>
@@ -85,7 +85,7 @@ const Events = () => {
           </>
 
       }
-    </>
+    </View>
   )
 }
 

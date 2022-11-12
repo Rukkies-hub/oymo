@@ -11,6 +11,10 @@ import Header from '../../components/Header'
 import OymoFont from '../../components/OymoFont'
 import { useState } from 'react'
 
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+
+const { Navigator, Screen } = createMaterialTopTabNavigator()
+
 const Profile = () => {
   const { user, profile: _profile, theme } = useSelector(state => state.user)
 
@@ -25,29 +29,29 @@ const Profile = () => {
         title={_profile?.username}
         showAratar={_profile?.photoURL ? true : false}
       />
-      <ScrollView style={[profile.container, { backgroundColor: theme ? color.dark : color.white }]} showsVerticalScrollIndicator={false}>
-        <>
-          {
-            _profile && user &&
-            <>
-              <ProfileDetails profile={_profile} user={user} />
-              <View style={profile.navigationView}>
-                <TouchableOpacity onPress={() => setView('reels')} style={profile.navigationViewButtons}>
-                  <OymoFont message='Reels' fontStyle={{ color: view == 'reels' ? color.red : (theme ? color.white : color.lightText) }} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setView('events')} style={profile.navigationViewButtons}>
-                  <OymoFont message='Events' fontStyle={{ color: view == 'events' ? color.red : (theme ? color.white : color.lightText) }} />
-                </TouchableOpacity>
-              </View>
-              {
-                view == 'reels' ?
-                  <Reels /> :
-                  <Events />
-              }
-            </>
+      <Navigator
+        screenOptions={{
+          tabBarStyle: {
+            height: 45,
+            elevation: 0,
+            backgroundColor: theme ? color.dark : color.white
+          },
+
+          tabBarIndicatorStyle: {
+            backgroundColor: color.red
+          },
+
+          tabBarLabelStyle: {
+            color: theme ? color.white : color.dark,
+            textTransform: 'capitalize',
+            fontWeight: 'bold'
           }
-        </>
-      </ScrollView>
+        }}
+      >
+        <Screen name="ProfileDetails" component={ProfileDetails} initialParams={{ profile: _profile, user: user }} options={{ tabBarLabel: 'Profile' }} />
+        <Screen name="Reels" component={Reels} initialParams={{ profile: _profile, user: user }} />
+        <Screen name="Events" component={Events} initialParams={{ profile: _profile, user: user }} />
+      </Navigator>
     </View>
   )
 }

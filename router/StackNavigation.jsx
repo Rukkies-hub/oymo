@@ -90,7 +90,7 @@ const StackNavigation = () => {
                       </Group> :
                       <Group>
                         <Screen name='BottomNavigation' component={BottomNavigation} />
-                        <Screen name='Profile' component={Profile} />
+                        <Screen name='Profile' component={Profile} options={{ gestureEnabled: false }} />
                         <Screen name='EditProfile' component={EditProfile} options={{ gestureEnabled: false }} />
                         <Screen name='SaveAvatar' component={SaveAvatar} options={{ gestureEnabled: false }} />
                         <Screen name='ReelsComment' component={ReelsComment} />
