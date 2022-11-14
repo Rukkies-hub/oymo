@@ -9,11 +9,30 @@ import OymoFont from '../../components/OymoFont'
 import { useSelector } from 'react-redux'
 import { LinearGradient } from 'expo-linear-gradient'
 import { up } from '../../style/userProfile'
+import { useEffect } from 'react'
+import { collection, getDocs, onSnapshot, query, where } from 'firebase/firestore'
+import { db } from '../../hooks/firebase'
 
 const ProfileDetails = () => {
   const navigation = useNavigation()
   const { profile, user } = useRoute().params
   const { theme } = useSelector(state => state.user)
+
+  const [reels, setReels] = useState(0)
+
+  let id = user?.uid == undefined ? user?.user?.uid : user?.uid
+
+  useEffect(() => {
+    const call = () => {
+      onSnapshot(query(collection(db, 'reels'),
+        where('user.id', '==', id)),
+        snapshot => {
+          setReels(snapshot?.docs?.length)
+        }
+      )
+    }
+    call()
+  }, [db])
 
   return (
     <ScrollView style={[up.container, { backgroundColor: theme ? color.dark : color.white }]} showsVerticalScrollIndicator={false}>
@@ -32,7 +51,7 @@ const ProfileDetails = () => {
             <OymoFont message='Likes' fontStyle={up.subStat} />
           </View>
           <View style={up.statsCol}>
-            <OymoFont message={200} fontStyle={up.mainStat} fontFamily='montserrat_bold' />
+            <OymoFont message={reels} fontStyle={up.mainStat} fontFamily='montserrat_bold' />
             <OymoFont message='Posts' fontStyle={up.subStat} />
           </View>
           <View style={up.statsCol}>

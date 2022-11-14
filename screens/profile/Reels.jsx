@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react'
-import { View, Text, Pressable, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { View, Text, Pressable, Image, FlatList, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native'
 
 import color from '../../style/color'
 
@@ -10,6 +10,7 @@ import OymoFont from '../../components/OymoFont'
 
 import { pReels } from '../../style/profileReels'
 import { useSelector } from 'react-redux'
+import { Entypo } from '@expo/vector-icons'
 
 const Reels = () => {
   const navigation = useNavigation()
@@ -33,13 +34,19 @@ const Reels = () => {
   }, [reelsLimit, db])
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white, paddingTop: 10 }}>
+    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white }}>
+      <View style={pReels.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={pReels.goBack}>
+          <Entypo name='chevron-left' size={24} color={theme ? color.white : color.dark} />
+        </TouchableOpacity>
+        <OymoFont message='Reels' fontStyle={{...pReels.goBackText, color: theme ? color.white : color.dark}} />
+      </View>
       {
         reels?.length < 1 ?
           <View style={pReels.indicatorContainer}>
             <ActivityIndicator size='large' color={theme ? color.white : color.black} />
           </View> :
-          <>
+          <ScrollView>
             {
               reels?.map((reel, index) => {
                 return (
@@ -75,7 +82,7 @@ const Reels = () => {
                 )
               })
             }
-          </>
+          </ScrollView>
 
       }
     </View>
