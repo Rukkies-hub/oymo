@@ -9,14 +9,18 @@ import color from '../../style/color'
 import OymoFont from '../../components/OymoFont'
 import { useSelector } from 'react-redux'
 
-const UserReels = ({ activeUser }) => {
+const UserReels = () => {
   const { theme } = useSelector(state => state.user)
+  const { activeReelUser } = useSelector(state => state.reels)
   const navigation = useNavigation()
+
+  const activeUser = activeReelUser?.user?.id
 
   const [reels, setReels] = useState([])
   const [reelsLimit, setLimit] = useState(50)
 
   useEffect(() => {
+    if (activeUser == undefined) return
     return onSnapshot(query(collection(db, 'reels'),
       where('user.id', '==', activeUser), limit(reelsLimit)),
       snapshot => setReels(
@@ -40,7 +44,7 @@ const UserReels = ({ activeUser }) => {
   }
 
   return (
-    <>
+    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white }}>
       {
         reels?.length < 1 ?
           <View style={pReels.indicatorContainer}>
@@ -82,7 +86,7 @@ const UserReels = ({ activeUser }) => {
             }
           </>
       }
-    </>
+    </View>
   )
 }
 

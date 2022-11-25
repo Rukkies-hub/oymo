@@ -1,7 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react'
-import { ScrollView, View } from 'react-native'
 import color from '../../style/color'
-import { profile } from '../../style/profile'
 
 import { useRoute } from '@react-navigation/native'
 
@@ -10,22 +8,30 @@ import { useFonts } from 'expo-font'
 
 import ProfileDetails from './ProfileDetails'
 import Reels from './Reels'
-import { doc, getDoc } from 'firebase/firestore'
+import { query, collection, where, getDocs } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
-import Header from '../../components/Header'
+
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+const { Navigator, Screen } = createMaterialTopTabNavigator()
 
 const UserProfile = () => {
   const { user } = useRoute().params
   const { theme } = useSelector(state => state.user)
 
-  const [_profile, setProfile] = useState(null)
+  const [reels, setReels] = useState([])
 
   useLayoutEffect(() => {
     (async () => {
-      const _user = await (await getDoc(doc(db, 'users', user?.id))).data()
-      setProfile(_user)
+      await getDocs(query(collection(db, 'reels'), where('user.id', '==', user?.id)),
+        snapshot => setReels(
+          snapshot?.docs?.map(doc => ({
+            id: doc?.id,
+            ...doc?.data()
+          }))
+        )
+      )
     })()
-  }, [])
+  }, [db])
 
   const [loaded] = useFonts({
     text: require('../../assets/fonts/Montserrat_Alternates/MontserratAlternates-Medium.ttf')
@@ -34,26 +40,29 @@ const UserProfile = () => {
   if (!loaded) return null
 
   return (
-    <View style={[profile.container, { backgroundColor: theme ? color.dark : color.white }]}>
-      <Header
-        showBack
-        showTitle
-        showNotification
-        title={_profile?.username}
-        showAratar={_profile?.photoURL ? true : false}
-      />
-      <ScrollView style={[profile.container, { backgroundColor: theme ? color.dark : color.white }]} showsVerticalScrollIndicator={false}>
-        <>
-          {
-            _profile && user &&
-            <>
-              <ProfileDetails profile={_profile} user={user} />
-              <Reels profile={_profile} user={user} />
-            </>
-          }
-        </>
-      </ScrollView>
-    </View>
+    <Navigator
+      tabBarPosition='bottom'
+      screenOptions={{
+        tabBarStyle: {
+          height: 45,
+          elevation: 0,
+          backgroundColor: theme ? color.dark : color.white
+        },
+
+        tabBarIndicatorStyle: {
+          backgroundColor: color.red
+        },
+
+        tabBarLabelStyle: {
+          color: theme ? color.white : color.dark,
+          textTransform: 'capitalize',
+          fontWeight: 'bold'
+        }
+      }}
+    >
+      <Screen name="ProfileDetails" component={ProfileDetails} initialParams={{ user, reels }} options={{ tabBarLabel: 'Profile' }} />
+      <Screen name="ProfileReels" component={Reels} initialParams={{ user, reels }} options={{ tabBarLabel: 'Reels' }} />
+    </Navigator>
   )
 }
 

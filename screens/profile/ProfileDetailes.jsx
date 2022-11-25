@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState } from 'react'
 import { View, Text, Image, TouchableOpacity, ScrollView, ImageBackground } from 'react-native'
 
-import { FontAwesome, Feather, Fontisto, SimpleLineIcons, Ionicons, AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
+import { FontAwesome, Feather, Fontisto, SimpleLineIcons, Ionicons, AntDesign, Entypo, MaterialIcons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons'
 import color from '../../style/color'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import OymoFont from '../../components/OymoFont'
@@ -35,13 +35,12 @@ const ProfileDetails = () => {
   }, [db])
 
   return (
-    <ScrollView style={[up.container, { backgroundColor: theme ? color.dark : color.white }]} showsVerticalScrollIndicator={false}>
+    <View style={[up.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <TouchableOpacity style={up.goBack} onPress={() => navigation.goBack()}>
         <Entypo name='chevron-left' size={24} color={color.white} />
       </TouchableOpacity>
       <ImageBackground source={{ uri: profile?.photoURL }} style={up.photoURL}>
-        <LinearGradient colors={['transparent', theme ? color.dark : color.lightText]} style={up.gradient}>
-        </LinearGradient>
+        <LinearGradient colors={['transparent', theme ? color.dark : color.lightText]} style={up.gradient} />
       </ImageBackground>
 
       <View style={up.bottom}>
@@ -78,7 +77,7 @@ const ProfileDetails = () => {
 
           {
             profile?.about != '' &&
-            <View style={up.aboutView}>
+            <ScrollView style={up.aboutView} showsVerticalScrollIndicator={false}>
               <OymoFont message='About me' fontFamily='montserrat_bold' fontStyle={up.heading} />
               <OymoFont message={profile?.about} fontFamily='montserrat_light' fontStyle={up.subText} />
               {
@@ -150,7 +149,7 @@ const ProfileDetails = () => {
               {
                 profile?.eyeColor &&
                 <View style={up.infoListContainer}>
-                  <MaterialCommunityIcons name="head-heart-outline" size={14} color={theme ? color.white : color.dark} />
+                  <Feather name="eye" size={14} color={theme ? color.white : color.dark} />
 
                   <View style={up.infoList}>
                     <OymoFont message='Eye color' fontStyle={{ ...up.title, color: theme ? color.white : color.dark }} />
@@ -161,7 +160,7 @@ const ProfileDetails = () => {
               {
                 profile?.hairColor &&
                 <View style={up.infoListContainer}>
-                  <MaterialCommunityIcons name="head-heart-outline" size={14} color={theme ? color.white : color.dark} />
+                  <FontAwesome name="user-o" size={14} color={theme ? color.white : color.dark} />
 
                   <View style={up.infoList}>
                     <OymoFont message='Hair color' fontStyle={{ ...up.title, color: theme ? color.white : color.dark }} />
@@ -172,7 +171,7 @@ const ProfileDetails = () => {
               {
                 profile?.height &&
                 <View style={up.infoListContainer}>
-                  <MaterialCommunityIcons name="head-heart-outline" size={14} color={theme ? color.white : color.dark} />
+                  <MaterialCommunityIcons name="human-male-height-variant" size={14} color={theme ? color.white : color.dark} />
 
                   <View style={up.infoList}>
                     <OymoFont message='I am' fontStyle={{ ...up.title, color: theme ? color.white : color.dark }} />
@@ -184,7 +183,7 @@ const ProfileDetails = () => {
               {
                 profile?.weight &&
                 <View style={up.infoListContainer}>
-                  <MaterialCommunityIcons name="head-heart-outline" size={14} color={theme ? color.white : color.dark} />
+                  <FontAwesome5 name="cloudscale" size={14} color={theme ? color.white : color.dark} />
 
                   <View style={up.infoList}>
                     <OymoFont message='I weigh' fontStyle={{ ...up.title, color: theme ? color.white : color.dark }} />
@@ -194,20 +193,20 @@ const ProfileDetails = () => {
               }
               {
                 profile?.occupation &&
-                <View style={up.infoListContainer}>
-                  <MaterialCommunityIcons name="head-heart-outline" size={14} color={theme ? color.white : color.dark} />
+                <View style={[up.infoListContainer, { paddingBottom: 20 }]}>
+                  <Feather name="briefcase" size={14} color={theme ? color.white : color.dark} />
 
                   <View style={up.infoList}>
                     <OymoFont message={profile?.occupation} fontStyle={{ ...up.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
                   </View>
                 </View>
               }
-            </View>
+            </ScrollView>
           }
 
         </View>
       </View>
-    </ScrollView>
+    </View>
   )
 }
 
