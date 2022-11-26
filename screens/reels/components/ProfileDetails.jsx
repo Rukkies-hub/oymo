@@ -223,7 +223,7 @@ const ProfileDetails = () => {
               <View style={[up.sheet, { backgroundColor: theme ? color.dark : color.white }]}>
                 <View style={up.detailesView}>
                   <View style={up.left}>
-                    <OymoFont message={userInfo?.username} fontFamily='montserrat_bold' fontStyle={up.username} />
+                    <OymoFont message={userInfo?.username} fontFamily='montserrat_bold' fontStyle={{ ...up.username, color: theme ? color.white : color.dark }} />
                     <OymoFont message={`${userInfo?.address?.city}, ${userInfo?.address?.country}`} fontStyle={{ ...up.location, color: theme ? color.white : color.lightText }} />
                   </View>
                   <View style={up.right}>
@@ -247,8 +247,8 @@ const ProfileDetails = () => {
                 {
                   userInfo?.about != '' &&
                   <ScrollView style={up.aboutView}>
-                    <OymoFont message='About me' fontFamily='montserrat_bold' fontStyle={up.heading} />
-                    <OymoFont message={userInfo?.about} fontFamily='montserrat_light' fontStyle={up.subText} />
+                    <OymoFont message='About me' fontFamily='montserrat_bold' fontStyle={{ ...up.heading, color: theme ? color.white : color.dark }} />
+                      <OymoFont message={userInfo?.about} fontFamily='montserrat_light' fontStyle={{ ...up.subText, color: theme ? color.white : color.dark }} />
                     {
                       userInfo?.address &&
                       <View style={up.infoListContainer}>

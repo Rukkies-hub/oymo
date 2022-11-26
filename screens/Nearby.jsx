@@ -78,7 +78,7 @@ const Nearby = () => {
 
   return (
     <ScrollView
-      style={[nb.containr, { backgroundColor: theme ? color.black : color.white }]}
+      style={[nb.containr, { backgroundColor: theme ? color.dark : color.white }]}
       contentContainerStyle={nb.scrollViewContainer}
       showsVerticalScrollIndicator={false}
     >
