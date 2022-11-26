@@ -17,9 +17,9 @@ import Header from '../../components/Header'
 import { AntDesign, SimpleLineIcons } from '@expo/vector-icons'
 import { useFonts } from 'expo-font'
 import { useNavigation } from '@react-navigation/native'
-import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
+import { arrayUnion, doc, getDoc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore'
 import { auth, db } from '../../hooks/firebase'
-import { getStorage } from 'firebase/storage'
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import Constants from 'expo-constants'
 import * as ImagePicker from 'expo-image-picker'
 import * as Notifications from 'expo-notifications'
@@ -33,6 +33,7 @@ import { signOut } from 'firebase/auth'
 import * as Location from 'expo-location'
 import SelectDropdown from 'react-native-select-dropdown'
 import Slider from '@react-native-community/slider'
+import uuid from 'uuid-random'
 
 const { width } = Dimensions.get('window')
 
@@ -53,6 +54,8 @@ const EditProfile = () => {
   const [errorMsg, setErrorMsg] = useState(null)
   const [yourHeight, setYourHeight] = useState(profile?.height != undefined ? profile?.height : 155)
   const [yourWeight, setYourWeight] = useState(profile?.weight != undefined ? profile?.weight : 75)
+  const [galleryImage, setGalleryImage] = useState(null);
+  const [galleryLoading, setGalleryLoading] = useState(false);
 
   // INPUTS
   const [city, setCity] = useState(profile?.address?.city)
@@ -169,6 +172,54 @@ const EditProfile = () => {
     call()
   }, [yourWeight])
 
+  const pickGalleryImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+      aspect: [9, 16]
+    });
+
+    if (!result.canceled) {
+      setGalleryImage(result.uri)
+
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        xhr.onload = () => resolve(xhr.response)
+
+        xhr.responseType = 'blob'
+        xhr.open('GET', result?.uri, true)
+        xhr.send(null)
+      })
+
+      const link = `gallery/${id}/${uuid()}`
+
+      const photoRef = ref(storage, link)
+
+      if (result?.uri && result?.type != 'image') return
+      if (profile?.gallery?.length >= 6) return
+
+      setGalleryLoading(true)
+      uploadBytes(photoRef, blob)
+        .then(snapshot => {
+          getDownloadURL(snapshot?.ref)
+            .then(downloadURL => {
+              updateDoc(doc(db, 'users', id), {
+                gallery: arrayUnion({
+                  photoURL: downloadURL,
+                  photoLink: link,
+                  media: result
+                })
+              }).then(() => {
+                schedulePushNotification('Update successful', 'Your gallery has been updated successfully')
+                setGalleryLoading(false)
+              }).catch(() => setGalleryLoading(false))
+            })
+        })
+    }
+  }
+
   return (
     <KeyboardAvoidingView style={[editProfile.container, { backgroundColor: theme ? color.dark : color.white }]}>
       <Header showBack showTitle showAratar title='Edit Profile' />
@@ -199,6 +250,32 @@ const EditProfile = () => {
           }
         </View>
       </TouchableWithoutFeedback>
+
+      <View style={[editProfile.gallery, { justifyContent: profile?.gallery.length <= 2 ? 'flex-start' : 'space-between' }]}>
+        {
+          (profile?.gallery != undefined && profile?.gallery.length != 0) &&
+          <>
+            {
+              profile?.gallery.map((photo, i) => (
+                <TouchableOpacity key={i} style={[editProfile.imageContainer, { backgroundColor: theme ? color.lightText : color.offWhite, marginRight: profile?.gallery.length <= 2 ? 10 : 0 }]}>
+                  <Image source={{ uri: photo?.media?.uri }} style={editProfile.galleryImage} />
+                </TouchableOpacity>
+              ))
+            }
+          </>
+        }
+
+        {
+          profile?.gallery?.length == 6 &&
+          <TouchableOpacity onPress={pickGalleryImage} style={editProfile.addMediaButton}>
+            {
+              galleryLoading ?
+                <ActivityIndicator color={color.white} /> :
+                <OymoFont message='Add media' fontStyle={{ color: color.white }} />
+            }
+          </TouchableOpacity>
+        }
+      </View>
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView style={{ flex: 1 }}>
@@ -760,7 +837,6 @@ async function registerForPushNotificationsAsync () {
       return
     }
     token = (await Notifications.getExpoPushTokenAsync()).data
-    // console.log(token)
   } else {
     alert('Must use physical device for Push Notifications')
   }

@@ -58,6 +58,39 @@ export const editProfile = StyleSheet.create({
     marginLeft: 10
   },
 
+  gallery: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 10,
+    flexWrap: 'wrap',
+    marginTop: 20
+  },
+
+  imageContainer: {
+    width: (width / 3) - 10,
+    backgroundColor: color.red,
+    borderRadius: 12,
+    height: (width / 3) - 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    overflow: 'hidden'
+  },
+
+  galleryImage: {
+    width: '100%',
+    height: '100%'
+  },
+
+  addMediaButton: {
+    height: 45,
+    backgroundColor: color.red,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%'
+  },
+
   inputContainer: {
     marginTop: 40,
     paddingHorizontal: 10
