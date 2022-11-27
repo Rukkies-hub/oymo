@@ -208,8 +208,7 @@ const EditProfile = () => {
               updateDoc(doc(db, 'users', id), {
                 gallery: arrayUnion({
                   photoURL: downloadURL,
-                  photoLink: link,
-                  media: result
+                  photoLink: link
                 })
               }).then(() => {
                 schedulePushNotification('Update successful', 'Your gallery has been updated successfully')
@@ -251,34 +250,34 @@ const EditProfile = () => {
         </View>
       </TouchableWithoutFeedback>
 
-      <View style={[editProfile.gallery, { justifyContent: profile?.gallery.length <= 2 ? 'flex-start' : 'space-between' }]}>
-        {
-          (profile?.gallery != undefined && profile?.gallery.length != 0) &&
-          <>
-            {
-              profile?.gallery.map((photo, i) => (
-                <TouchableOpacity key={i} style={[editProfile.imageContainer, { backgroundColor: theme ? color.lightText : color.offWhite, marginRight: profile?.gallery.length <= 2 ? 10 : 0 }]}>
-                  <Image source={{ uri: photo?.media?.uri }} style={editProfile.galleryImage} />
-                </TouchableOpacity>
-              ))
-            }
-          </>
-        }
-
-        {
-          profile?.gallery?.length == 6 &&
-          <TouchableOpacity onPress={pickGalleryImage} style={editProfile.addMediaButton}>
-            {
-              galleryLoading ?
-                <ActivityIndicator color={color.white} /> :
-                <OymoFont message='Add media' fontStyle={{ color: color.white }} />
-            }
-          </TouchableOpacity>
-        }
-      </View>
-
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView style={{ flex: 1 }}>
+          <View style={[editProfile.gallery, { justifyContent: profile?.gallery.length <= 2 ? 'flex-start' : 'space-between' }]}>
+            {
+              (profile?.gallery != undefined && profile?.gallery.length != 0) &&
+              <>
+                {
+                  profile?.gallery.map((photo, i) => (
+                    <TouchableOpacity key={i} onPress={() => navigation.navigate('DeleteGalleryImage', { id, index: i, photo, theme })} style={[editProfile.imageContainer, { backgroundColor: theme ? color.lightText : color.offWhite, marginRight: profile?.gallery.length <= 2 ? 10 : 0 }]}>
+                      <Image source={{ uri: photo?.photoURL }} style={editProfile.galleryImage} />
+                    </TouchableOpacity>
+                  ))
+                }
+              </>
+            }
+
+            {
+              profile?.gallery?.length != 6 &&
+              <TouchableOpacity onPress={pickGalleryImage} style={editProfile.addMediaButton}>
+                {
+                  galleryLoading ?
+                    <ActivityIndicator color={color.white} /> :
+                    <OymoFont message='Add media' fontStyle={{ color: color.white }} />
+                }
+              </TouchableOpacity>
+            }
+          </View>
+
           <View style={editProfile.inputContainer}>
             <TextInput
               value={username}

@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native'
 import color from './color'
 
-const { width } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window')
 
 export const editProfile = StyleSheet.create({
   container: {
@@ -74,7 +74,8 @@ export const editProfile = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    position: 'relative'
   },
 
   galleryImage: {
@@ -380,5 +381,30 @@ export const gender = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     marginTop: 10
+  }
+})
+
+export const galleryMoal = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: color.faintBlack
+  },
+
+  sheet: {
+    height: height - 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    overflow: 'hidden',
+    justifyContent: 'space-between'
+  },
+
+  delete: {
+    backgroundColor: color.red,
+    marginHorizontal: 10,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 45
   }
 })
