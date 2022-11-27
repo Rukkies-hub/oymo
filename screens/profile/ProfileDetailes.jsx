@@ -11,6 +11,7 @@ import { profile as _profile } from '../../style/profile'
 import { useSelector } from 'react-redux'
 import { collection, onSnapshot, query, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
+import { editProfile } from '../../style/editProfile'
 
 const ProfileDetails = () => {
   const navigation = useNavigation()
@@ -86,6 +87,33 @@ const ProfileDetails = () => {
       </View>
 
       <ScrollView>
+        {
+          (profile?.gallery != undefined && profile?.gallery.length != 0) &&
+          <View style={_profile.infoListContainer}>
+            <OymoFont message='Photos' fontFamily='montserrat_bold' fontStyle={{ fontSize: 16, color: theme ? color.white : color.dark }} />
+          </View>
+        }
+
+        <View style={_profile.infoListContainer}>
+          {
+            (profile?.gallery != undefined && profile?.gallery.length != 0) &&
+            <View style={[_profile.gallery, { justifyContent: profile?.gallery.length <= 2 ? 'flex-start' : 'space-between', marginHorizontal: 0 }]}>
+              {
+                (profile?.gallery != undefined && profile?.gallery.length != 0) &&
+                <>
+                  {
+                    profile?.gallery.map((photo, i) => (
+                      <TouchableOpacity key={i} onPress={() => navigation.navigate('ViewAvatar', { avatar: photo?.photoURL })} style={[_profile.imageContainer, { backgroundColor: theme ? color.lightText : color.offWhite, marginRight: profile?.gallery.length <= 2 ? 10 : 0 }]}>
+                        <Image source={{ uri: photo?.photoURL }} style={_profile.galleryImage} />
+                      </TouchableOpacity>
+                    ))
+                  }
+                </>
+              }
+            </View>
+          }
+        </View>
+
         <View style={_profile.infoListContainer}>
           <OymoFont message='About me' fontFamily='montserrat_bold' fontStyle={{ fontSize: 16, color: theme ? color.white : color.dark }} />
         </View>

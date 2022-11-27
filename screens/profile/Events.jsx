@@ -11,6 +11,7 @@ import OymoFont from '../../components/OymoFont'
 import { pReels as pEvents, pReels } from '../../style/profileReels'
 import { useSelector } from 'react-redux'
 import { Entypo } from '@expo/vector-icons'
+import Header from '../../components/Header'
 
 const Events = () => {
   const navigation = useNavigation()
@@ -45,13 +46,8 @@ const Events = () => {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white, paddingTop: 10 }}>
-      <View style={pReels.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={pReels.goBack}>
-          <Entypo name='chevron-left' size={24} color={theme ? color.white : color.dark} />
-        </TouchableOpacity>
-        <OymoFont message='Events' fontStyle={{ ...pReels.goBackText, color: theme ? color.white : color.dark }} />
-      </View>
+    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white }}>
+      <Header showBack showLogo showNotification showAratar />
       {
         events?.length < 1 ?
           <View style={pEvents.indicatorContainer}>

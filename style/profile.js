@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 import color from './color'
+
+const { width } = Dimensions.get('window')
 
 export const profile = StyleSheet.create({
   container: {
@@ -138,6 +140,29 @@ export const profile = StyleSheet.create({
     paddingHorizontal: 10,
     marginHorizontal: 10,
     borderRadius: 12
+  },
+
+  gallery: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap'
+  },
+
+  imageContainer: {
+    width: (width / 3) - 20,
+    backgroundColor: color.red,
+    borderRadius: 12,
+    height: (width / 3) - 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    overflow: 'hidden',
+    position: 'relative'
+  },
+
+  galleryImage: {
+    width: '100%',
+    height: '100%'
   },
 
   iconContainer: {

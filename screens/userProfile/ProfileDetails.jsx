@@ -230,6 +230,33 @@ const ProfileDetails = () => {
       }
 
       <ScrollView>
+        {
+          (user?.gallery != undefined && user?.gallery.length != 0) &&
+          <View style={_profile.infoListContainer}>
+            <OymoFont message='Photos' fontFamily='montserrat_bold' fontStyle={{ fontSize: 16, color: theme ? color.white : color.dark }} />
+          </View>
+        }
+
+        <View style={_profile.infoListContainer}>
+          {
+            (user?.gallery != undefined && user?.gallery.length != 0) &&
+            <View style={[_profile.gallery, { justifyContent: user?.gallery.length <= 2 ? 'flex-start' : 'space-between', marginHorizontal: 0 }]}>
+              {
+                (user?.gallery != undefined && user?.gallery.length != 0) &&
+                <>
+                  {
+                    user?.gallery.map((photo, i) => (
+                      <TouchableOpacity key={i} onPress={() => navigation.navigate('ViewAvatar', { avatar: photo?.photoURL })} style={[_profile.imageContainer, { backgroundColor: theme ? color.lightText : color.offWhite, marginRight: user?.gallery.length <= 2 ? 10 : 0 }]}>
+                        <Image source={{ uri: photo?.photoURL }} style={_profile.galleryImage} />
+                      </TouchableOpacity>
+                    ))
+                  }
+                </>
+              }
+            </View>
+          }
+        </View>
+
         <View style={_profile.infoListContainer}>
           <OymoFont message={`About ${user?.username}`} fontFamily='montserrat_bold' fontStyle={{ fontSize: 16, color: theme ? color.white : color.dark }} />
         </View>

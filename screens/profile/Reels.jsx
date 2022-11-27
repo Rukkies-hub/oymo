@@ -11,6 +11,7 @@ import OymoFont from '../../components/OymoFont'
 import { pReels } from '../../style/profileReels'
 import { useSelector } from 'react-redux'
 import { Entypo } from '@expo/vector-icons'
+import Header from '../../components/Header'
 
 const Reels = () => {
   const navigation = useNavigation()
@@ -35,12 +36,7 @@ const Reels = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white }}>
-      <View style={pReels.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={pReels.goBack}>
-          <Entypo name='chevron-left' size={24} color={theme ? color.white : color.dark} />
-        </TouchableOpacity>
-        <OymoFont message='Reels' fontStyle={{...pReels.goBackText, color: theme ? color.white : color.dark}} />
-      </View>
+      <Header showBack showLogo showNotification showAratar />
       {
         reels?.length < 1 ?
           <View style={pReels.indicatorContainer}>
