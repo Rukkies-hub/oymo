@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from 'react-native'
 import color from './color'
 
-const { width } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window')
 
 export const editProfile = StyleSheet.create({
   container: {
@@ -56,6 +56,40 @@ export const editProfile = StyleSheet.create({
     backgroundColor: color.offWhite,
     borderRadius: 12,
     marginLeft: 10
+  },
+
+  gallery: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 10,
+    flexWrap: 'wrap',
+    marginTop: 20
+  },
+
+  imageContainer: {
+    width: (width / 3) - 10,
+    backgroundColor: color.red,
+    borderRadius: 12,
+    height: (width / 3) - 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    overflow: 'hidden',
+    position: 'relative'
+  },
+
+  galleryImage: {
+    width: '100%',
+    height: '100%'
+  },
+
+  addMediaButton: {
+    height: 45,
+    backgroundColor: color.red,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%'
   },
 
   inputContainer: {
@@ -347,5 +381,30 @@ export const gender = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     marginTop: 10
+  }
+})
+
+export const galleryMoal = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: color.faintBlack
+  },
+
+  sheet: {
+    height: height - 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    overflow: 'hidden',
+    justifyContent: 'space-between'
+  },
+
+  delete: {
+    backgroundColor: color.red,
+    marginHorizontal: 10,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 45
   }
 })

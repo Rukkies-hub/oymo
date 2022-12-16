@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react'
-import { View, Text, Pressable, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { View, Text, Pressable, Image, FlatList, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native'
 
 import color from '../../style/color'
 
@@ -10,6 +10,8 @@ import OymoFont from '../../components/OymoFont'
 
 import { pReels } from '../../style/profileReels'
 import { useSelector } from 'react-redux'
+import { Entypo } from '@expo/vector-icons'
+import Header from '../../components/Header'
 
 const Reels = () => {
   const navigation = useNavigation()
@@ -33,13 +35,14 @@ const Reels = () => {
   }, [reelsLimit, db])
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white, paddingTop: 10 }}>
+    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white }}>
+      <Header showBack showLogo showNotification showAratar />
       {
         reels?.length < 1 ?
           <View style={pReels.indicatorContainer}>
             <ActivityIndicator size='large' color={theme ? color.white : color.black} />
           </View> :
-          <>
+          <ScrollView>
             {
               reels?.map((reel, index) => {
                 return (
@@ -75,7 +78,7 @@ const Reels = () => {
                 )
               })
             }
-          </>
+          </ScrollView>
 
       }
     </View>

@@ -116,7 +116,7 @@ const Match = () => {
 
     const swipededUserIds = (await swipes).length > 0 ? swipes : ['test']
 
-    onSnapshot(query(collection(db, 'users'), where('id', 'not-in', [...passeedUserIds, ...swipededUserIds])),
+    onSnapshot(query(collection(db, 'users'), where('id', '!=', id), where('id', 'not-in', [...passeedUserIds, ...swipededUserIds])),
       snapshot => {
         const array = snapshot?.docs?.filter(doc => doc?.data()?.photoURL != null)
           .filter(doc => doc?.data()?.username != null || doc?.data()?.username != '')

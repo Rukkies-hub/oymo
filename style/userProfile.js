@@ -6,7 +6,7 @@ const { width, height } = Dimensions.get('window')
 export const up = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.white,
+    backgroundColor: color.white
   },
 
   goBack: {
@@ -84,7 +84,7 @@ export const up = StyleSheet.create({
   },
 
   aboutView: {
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
     marginTop: 10
   },
 

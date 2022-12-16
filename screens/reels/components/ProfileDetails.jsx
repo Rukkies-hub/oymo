@@ -1,10 +1,10 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { View, Text, ImageBackground, Image, TouchableOpacity } from 'react-native'
+import { View, Text, ImageBackground, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native'
 
 import { LinearGradient } from 'expo-linear-gradient'
-import { FontAwesome, Feather, Fontisto, SimpleLineIcons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
+import { FontAwesome, Feather, Fontisto, SimpleLineIcons, AntDesign, MaterialCommunityIcons, Entypo, Ionicons, MaterialIcons, FontAwesome5 } from '@expo/vector-icons'
 import color from '../../../style/color'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import Bar from '../../../components/Bar'
 import Header from '../../../components/Header'
@@ -19,23 +19,29 @@ import generateId from '../../../lib/generateId'
 import { setPendingSwipes, setProfiles } from '../../../features/matchSlice'
 
 import { admin } from '@env'
+import { up } from '../../../style/userProfile'
 
-const ProfileDetails = ({ activeUser }) => {
+const ProfileDetails = () => {
   const navigation = useNavigation()
+  const params = useRoute()
   const { profiles } = useSelector(state => state.match)
   const { user, profile, theme } = useSelector(state => state.user)
   const { activeReelUser } = useSelector(state => state.reels)
+
+  const activeUser = activeReelUser?.user?.id
 
   const dispatch = useDispatch()
 
   const [aboutLimit, setAboutLimit] = useState(2)
   const [showMatch, setShowMatch] = useState(false)
   const [userInfo, setUserInfo] = useState(null)
+  const [reels, setReels] = useState(0)
 
   let id = user?.uid == undefined ? user?.user?.uid : user?.uid
 
   useEffect(() => {
     const getProfile = async () => {
+      if (activeUser == undefined) return
       let I = await (await getDoc(doc(db, 'users', activeUser))).data()
       setUserInfo(I)
     }
@@ -56,6 +62,20 @@ const ProfileDetails = ({ activeUser }) => {
     if (userSwiped) setShowMatch(true)
   }, [activeUser, navigation, userInfo])
 
+  useEffect(() => {
+    if (activeUser == undefined) return
+    const call = () => {
+      onSnapshot(query(collection(db, 'reels'),
+        where('user.id', '==', activeUser)),
+        snapshot => {
+          setReels(snapshot?.docs?.length)
+        }
+      )
+
+    }
+    call()
+  }, [db, activeUser])
+
   const getPendingSwipes = async () => {
     dispatch(setPendingSwipes([]))
     const querySnapshot = await getDocs(query(collection(db, 'users', id, 'pendingSwipes'), where('photoURL', '!=', null)))
@@ -73,7 +93,7 @@ const ProfileDetails = ({ activeUser }) => {
   const getAllProfiles = async () => {
     const profile = await (await getDoc(doc(db, 'users', id))).data()
     if (!profile) return
-    
+
     const passes = await getDocs(collection(db, 'users', id, 'passes'))
       .then(snapshot => snapshot?.docs?.map(doc => doc?.id))
 
@@ -104,6 +124,8 @@ const ProfileDetails = ({ activeUser }) => {
   }
 
   const swipeRight = async () => {
+    if (activeUser == undefined) return
+
     const needle = activeUser
     const cardIndex = profiles?.findIndex(item => item.id === needle)
 
@@ -167,117 +189,258 @@ const ProfileDetails = ({ activeUser }) => {
   }
 
   return (
-    <View>
-      <View style={_profile.profileDetailes}>
-        {
-          userInfo?.photoURL ?
-            <TouchableOpacity onPress={() => navigation.navigate('ViewAvatar', { avatar: userInfo?.photoURL })}>
-              <Image source={{ uri: userInfo?.photoURL }} style={_profile.avatar} />
-            </TouchableOpacity> :
-            <View style={_profile.blurView}>
-              <SimpleLineIcons name='user' size={30} color={color.lightText} />
-            </View>
-        }
+    <>
+      {
+        !userInfo ?
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme ? color.dark : color.white }}>
+            <ActivityIndicator color={theme ? color.white : color.black} size='large' />
+          </View> :
+          <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white }}>
+            <View style={_profile.profileDetailes}>
+              {
+                userInfo?.photoURL ?
+                  <TouchableOpacity onPress={() => navigation.navigate('ViewAvatar', { avatar: userInfo?.photoURL })}>
+                    <Image source={{ uri: userInfo?.photoURL }} style={_profile.avatar} />
+                  </TouchableOpacity> :
+                  <View style={[_profile.blurView, { backgroundColor: theme ? color.lightText : color.offWhite }]}>
+                    <SimpleLineIcons name='user' size={30} color={theme ? color.white : color.lightText} />
+                  </View>
+              }
 
-        <View style={_profile.userInfoContainer}>
-          {
-            userInfo?.username != undefined &&
-            <View style={_profile.userInfo}>
-              <OymoFont message={userInfo?.username} fontStyle={{ ..._profile.username, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+              <View style={_profile.userInfoContainer}>
+                {
+                  userInfo?.username != '' &&
+                  <View style={_profile.userInfo}>
+                    <OymoFont message={userInfo?.username || 'Username'} fontStyle={{ ..._profile.username, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+
+                    <View style={_profile.userInfoStatsContainer}>
+                      <View style={_profile.userInfoStats}>
+                        <OymoFont message={userInfo?.likesCount} fontFamily='montserrat_bold' fontStyle={{ marginRight: 5, color: theme ? color.white : color.dark }} />
+                        <OymoFont message='Likes' fontStyle={{ color: theme ? color.white : color.dark }} />
+                      </View>
+                      <View style={_profile.userInfoStats}>
+                        <OymoFont message={reels} fontFamily='montserrat_bold' fontStyle={{ marginRight: 5, color: theme ? color.white : color.dark }} />
+                        <OymoFont message='Reels' fontStyle={{ color: theme ? color.white : color.dark }} />
+                      </View>
+                    </View>
+                  </View>
+                }
+              </View>
             </View>
-          }
-        </View>
-        {
-          id != activeUser &&
-          <>
+
             {
               showMatch &&
-              <TouchableOpacity onPress={() => profile?.photoURL != undefined ? swipeRight() : navigation.navigate('SetupModal')} style={_profile.matchButton}>
-                <AntDesign name='hearto' size={20} color={color.white} />
-              </TouchableOpacity>
-            }
-          </>
-        }
-      </View>
-
-      {
-        userInfo?.about != undefined &&
-        <View style={_profile.aboutContainer}>
-          <Text
-            numberOfLines={aboutLimit}
-            style={{
-              fontFamily: 'text',
-              fontSize: 14,
-              color: theme ? color.white : color.dark
-            }}
-          >
-            {userInfo?.about}
-          </Text>
-          {
-            userInfo?.about?.length >= 100 &&
-            <>
-              {
-                aboutLimit == 2 &&
-                <TouchableOpacity onPress={() => setAboutLimit(100)}>
-                  <OymoFont message='Read more' fontStyle={{ ..._profile.about, color: theme ? color.white : color.dark }} fontFamily='montserrat_medium' />
+              <View style={_profile.controlesContainer}>
+                <TouchableOpacity onPress={swipeRight} style={[_profile.editProfileButton, { backgroundColor: color.red, width: '100%' }]}>
+                  <OymoFont message='Match' fontStyle={{ color: color.white }} />
                 </TouchableOpacity>
-              }
-              {
-                aboutLimit > 2 &&
-                <TouchableOpacity onPress={() => setAboutLimit(2)}>
-                  <OymoFont message='Show less' fontStyle={{ ..._profile.about, color: theme ? color.white : color.dark }} fontFamily='montserrat_medium' />
-                </TouchableOpacity>
-              }
-            </>
-          }
-        </View>
-      }
-
-      {
-        (userInfo?.passions && userInfo?.passions?.length > 1) &&
-        <View style={_profile.passionsContainer}>
-          {
-            userInfo?.passions?.map((passion, index) =>
-              <View key={index} style={[_profile.passions, { backgroundColor: theme ? color.black : color.offWhite }]}>
-                <OymoFont message={passion} fontStyle={{ ..._profile.passion, color: theme ? color.white : color.dark }} />
               </View>
-            )
-          }
-        </View>
-      }
+            }
 
-      {
-        userInfo?.address != undefined &&
-        <View style={_profile.infoListContainer}>
-          <Feather name='home' size={14} color={theme ? color.white : color.dark} />
+            <ScrollView>
+              {
+                (userInfo?.gallery != undefined && userInfo?.gallery.length != 0) &&
+                <View style={_profile.infoListContainer}>
+                  <OymoFont message='Photos' fontFamily='montserrat_bold' fontStyle={{ fontSize: 16, color: theme ? color.white : color.dark }} />
+                </View>
+              }
 
-          <View style={_profile.infoList}>
-            <OymoFont message='Lives in' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
-            <OymoFont message={`${userInfo?.address?.city}, ${userInfo?.address?.country}`} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+              <View style={_profile.infoListContainer}>
+                {
+                  (userInfo?.gallery != undefined && userInfo?.gallery.length != 0) &&
+                  <View style={[_profile.gallery, { justifyContent: userInfo?.gallery.length <= 2 ? 'flex-start' : 'space-between', marginHorizontal: 0 }]}>
+                    {
+                      (userInfo?.gallery != undefined && userInfo?.gallery.length != 0) &&
+                      <>
+                        {
+                          userInfo?.gallery.map((photo, i) => (
+                            <TouchableOpacity key={i} onPress={() => navigation.navigate('ViewAvatar', { avatar: photo?.photoURL })} style={[_profile.imageContainer, { backgroundColor: theme ? color.lightText : color.offWhite, marginRight: userInfo?.gallery.length <= 2 ? 10 : 0 }]}>
+                              <Image source={{ uri: photo?.photoURL }} style={_profile.galleryImage} />
+                            </TouchableOpacity>
+                          ))
+                        }
+                      </>
+                    }
+                  </View>
+                }
+              </View>
+
+              <View style={_profile.infoListContainer}>
+                <OymoFont message={`About ${userInfo?.username}`} fontFamily='montserrat_bold' fontStyle={{ fontSize: 16, color: theme ? color.white : color.dark }} />
+              </View>
+
+              <View style={_profile.infoListContainer}>
+                <OymoFont message={userInfo?.about} fontStyle={{ color: theme ? color.white : color.dark }} />
+              </View>
+
+              <View style={_profile.infoListContainer}>
+                <View style={[_profile.iconContainer, { backgroundColor: color.pink }]}>
+                  <Fontisto name='date' size={14} color={color.white} />
+                </View>
+
+                <View style={_profile.infoList}>
+                  <OymoFont message='Joined' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+                  <OymoFont message={userInfo?.timestamp?.toDate().toDateString()} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                </View>
+              </View>
+
+              {
+                userInfo?.address &&
+                <View style={_profile.infoListContainer}>
+                  <View style={[_profile.iconContainer, { backgroundColor: color.blue }]}>
+                    <Feather name='home' size={14} color={color.white} />
+                  </View>
+
+                  <View style={_profile.infoList}>
+                    <OymoFont message='Lives in' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+                    <OymoFont message={`${userInfo?.address?.city}, ${userInfo?.address?.country}`} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                  </View>
+                </View>
+              }
+
+              {
+                userInfo?.relationshipStatus &&
+                <View style={_profile.infoListContainer}>
+                  <View style={[_profile.iconContainer, { backgroundColor: color.goldDark }]}>
+                    <AntDesign name="hearto" size={14} color={color.white} />
+                  </View>
+
+                  <View style={_profile.infoList}>
+                    <OymoFont message='Currently' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+                    <OymoFont message={userInfo?.relationshipStatus} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                  </View>
+                </View>
+              }
+
+              {
+                userInfo?.children &&
+                <View style={_profile.infoListContainer}>
+                  <View style={[_profile.iconContainer, { backgroundColor: color.lightBlue }]}>
+                    <MaterialIcons name="child-care" size={14} color={color.white} />
+                  </View>
+
+                  <View style={_profile.infoList}>
+                    <OymoFont message='Have children?' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+                    <OymoFont message={userInfo?.children} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                  </View>
+                </View>
+              }
+
+              {
+                userInfo?.drinking &&
+                <View style={_profile.infoListContainer}>
+                  <View style={[_profile.iconContainer, { backgroundColor: color.lightGreen }]}>
+                    <Entypo name="drink" size={14} color={color.white} />
+                  </View>
+
+                  <View style={_profile.infoList}>
+                    <OymoFont message='Do you drink?' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+                    <OymoFont message={userInfo?.drinking} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                  </View>
+                </View>
+              }
+
+              {
+                userInfo?.smoking &&
+                <View style={_profile.infoListContainer}>
+                  <View style={[_profile.iconContainer, { backgroundColor: color.purple }]}>
+                    <MaterialIcons name="smoking-rooms" size={14} color={color.white} />
+                  </View>
+
+                  <View style={_profile.infoList}>
+                    <OymoFont message='Do you smoke?' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+                    <OymoFont message={userInfo?.smoking} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                  </View>
+                </View>
+              }
+
+              {
+                userInfo?.purposeOfDating &&
+                <View style={_profile.infoListContainer}>
+                  <View style={[_profile.iconContainer, { backgroundColor: color.lightPurple }]}>
+                    <MaterialCommunityIcons name="head-heart-outline" size={14} color={color.white} />
+                  </View>
+
+                  <View style={_profile.infoList}>
+                    <OymoFont message='Purpose of dating' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+                    <OymoFont message={userInfo?.purposeOfDating} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                  </View>
+                </View>
+              }
+
+              {
+                userInfo?.eyeColor &&
+                <View style={_profile.infoListContainer}>
+                  <View style={[_profile.iconContainer, { backgroundColor: color.red }]}>
+                    <Feather name="eye" size={14} color={color.white} />
+                  </View>
+
+                  <View style={_profile.infoList}>
+                    <OymoFont message='Eye color' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+                    <OymoFont message={userInfo?.eyeColor} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                  </View>
+                </View>
+              }
+
+              {
+                userInfo?.hairColor &&
+                <View style={_profile.infoListContainer}>
+                  <View style={[_profile.iconContainer, { backgroundColor: color.lightText }]}>
+                    <FontAwesome name="user-o" size={14} color={color.white} />
+                  </View>
+
+                  <View style={_profile.infoList}>
+                    <OymoFont message='Hair color' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+                    <OymoFont message={userInfo?.hairColor} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                  </View>
+                </View>
+              }
+
+              {
+                userInfo?.height &&
+                <View style={_profile.infoListContainer}>
+                  <View style={[_profile.iconContainer, { backgroundColor: color.green }]}>
+                    <MaterialCommunityIcons name="human-male-height-variant" size={14} color={color.white} />
+                  </View>
+
+                  <View style={_profile.infoList}>
+                    <OymoFont message='I am' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+                    <OymoFont message={`${userInfo?.height}CM`} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                    <OymoFont message='tall' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark, marginLeft: 5 }} />
+                  </View>
+                </View>
+              }
+
+              {
+                userInfo?.weight &&
+                <View style={_profile.infoListContainer}>
+                  <View style={[_profile.iconContainer, { backgroundColor: color.deepBlueSea }]}>
+                    <FontAwesome5 name="cloudscale" size={14} color={color.white} />
+                  </View>
+
+                  <View style={_profile.infoList}>
+                    <OymoFont message='I weigh' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
+                    <OymoFont message={`${userInfo?.weight}KG`} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                  </View>
+                </View>
+              }
+
+              {
+                userInfo?.occupation &&
+                <View style={[_profile.infoListContainer, { paddingBottom: 20 }]}>
+                  <View style={[_profile.iconContainer, { backgroundColor: color.lightRed }]}>
+                    <Feather name="briefcase" size={14} color={color.white} />
+                  </View>
+
+                  <View style={_profile.infoList}>
+                    <OymoFont message={userInfo?.occupation} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
+                  </View>
+                </View>
+              }
+            </ScrollView>
           </View>
-        </View>
       }
-
-      <View style={_profile.infoListContainer}>
-        <Fontisto name='date' size={14} color={theme ? color.white : color.dark} />
-
-        <View style={_profile.infoList}>
-          <OymoFont message='Joined' fontStyle={{ ..._profile.title, color: theme ? color.white : color.dark }} />
-          <OymoFont message={userInfo?.timestamp?.toDate().toDateString()} fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }} fontFamily='montserrat_bold' />
-        </View>
-      </View>
-
-      {
-        (userInfo?.coords != undefined && profile?.coords) &&
-        <View style={[_profile.infoListContainer, { marginBottom: 20 }]}>
-          <MaterialCommunityIcons name="map-marker-radius-outline" size={17} color={theme ? color.white : color.dark} />
-          <OymoFont
-            message={`${distance(userInfo?.coords?.latitude, userInfo?.coords?.longitude, profile?.coords?.latitude, profile?.coords?.longitude).toFixed(2)} kilometers away`}
-            fontStyle={{ ..._profile.info, color: theme ? color.white : color.dark }}
-          />
-        </View>
-      }
-    </View>
+    </>
   )
 }
 

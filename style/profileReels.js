@@ -4,6 +4,27 @@ import color from './color'
 const { width } = Dimensions.get('window')
 
 export const pReels = StyleSheet.create({
+  header: {
+    height: 50,
+    marginTop: 50,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+
+  goBack: {
+    width: 50,
+    height: 50,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  goBackText: {
+    fontSize: 16
+  },
+
   indicatorContainer: {
     flex: 1,
     justifyContent: 'center',

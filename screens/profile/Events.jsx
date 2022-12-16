@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react'
-import { View, Text, Pressable, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { View, Text, Pressable, Image, FlatList, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native'
 
 import color from '../../style/color'
 
@@ -8,8 +8,10 @@ import { collection, getDocs, limit, onSnapshot, query, where } from 'firebase/f
 import { db } from '../../hooks/firebase'
 import OymoFont from '../../components/OymoFont'
 
-import { pReels as pEvents } from '../../style/profileReels'
+import { pReels as pEvents, pReels } from '../../style/profileReels'
 import { useSelector } from 'react-redux'
+import { Entypo } from '@expo/vector-icons'
+import Header from '../../components/Header'
 
 const Events = () => {
   const navigation = useNavigation()
@@ -44,13 +46,14 @@ const Events = () => {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white, paddingTop: 10 }}>
+    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white }}>
+      <Header showBack showLogo showNotification showAratar />
       {
         events?.length < 1 ?
           <View style={pEvents.indicatorContainer}>
             <ActivityIndicator size='large' color={theme ? color.white : color.black} />
           </View> :
-          <>
+          <ScrollView>
             {
               events?.map((event, index) => {
                 return (
@@ -82,7 +85,7 @@ const Events = () => {
                 )
               })
             }
-          </>
+          </ScrollView>
 
       }
     </View>

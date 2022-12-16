@@ -1,5 +1,7 @@
-import { StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 import color from './color'
+
+const { width } = Dimensions.get('window')
 
 export const profile = StyleSheet.create({
   container: {
@@ -10,7 +12,8 @@ export const profile = StyleSheet.create({
   profileDetailes: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    paddingTop: 10
   },
 
   navigationView: {
@@ -50,30 +53,47 @@ export const profile = StyleSheet.create({
   },
 
   userInfo: {
+    justifyContent: 'center',
+    alignItems: 'flex-start'
+  },
+
+  userInfoStatsContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-start'
+  },
+
+  userInfoStats: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'center'
+    marginRight: 20
+  },
+
+  controlesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginHorizontal: 10,
+    marginTop: 10
   },
 
   username: {
     color: color.dark,
-    fontSize: 20
+    fontSize: 25
   },
 
   editProfileButton: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 12,
+    borderRadius: 8,
     height: 40,
-    width: 40,
+    paddingHorizontal: 10
   },
 
   matchButton: {
     width: 45,
     height: 45,
     borderRadius: 12,
-    backgroundColor: color.red,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -117,7 +137,41 @@ export const profile = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    marginHorizontal: 10,
+    borderRadius: 12
+  },
+
+  gallery: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap'
+  },
+
+  imageContainer: {
+    width: (width / 3) - 20,
+    backgroundColor: color.red,
+    borderRadius: 12,
+    height: (width / 3) - 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    overflow: 'hidden',
+    position: 'relative'
+  },
+
+  galleryImage: {
+    width: '100%',
+    height: '100%'
+  },
+
+  iconContainer: {
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12,
+    overflow: 'hidden'
   },
 
   infoList: {
@@ -131,6 +185,17 @@ export const profile = StyleSheet.create({
     fontSize: 14,
     color: color.dark,
     marginLeft: 5
+  },
+
+  info: {
+    fontSize: 14,
+    color: color.dark,
+    marginLeft: 5
+  },
+
+  title: {
+    fontSize: 14,
+    color: color.dark
   },
 
   info: {

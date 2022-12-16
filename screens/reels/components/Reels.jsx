@@ -3,15 +3,16 @@ import { View, Text, Pressable, Image, FlatList, ActivityIndicator } from 'react
 
 import color from '../../style/color'
 
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { collection, getDocs, limit, onSnapshot, query, where } from 'firebase/firestore'
 import { db } from '../../hooks/firebase'
 import OymoFont from '../../components/OymoFont'
 
 import { pReels } from '../../style/profileReels'
 
-const Reels = ({ profile, user }) => {
+const Reels = () => {
   const navigation = useNavigation()
+  const { profile, user } = useRoute().params
 
   const [reels, setReels] = useState([])
   const [reelsLimit, setLimit] = useState(50)

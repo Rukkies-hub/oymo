@@ -147,6 +147,7 @@ const BottomNavigation = () => {
 
           <View style={[nav.divider, { backgroundColor: theme ? color.white : color.dark }]} />
 
+          {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Add Reels', 'AddReels')}
           {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Notifications', 'Notifications')}
           {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Profile', 'Profile')}
           {TabButton(profile, theme, dispatch, currentTab, setCurrentTab, setShowMenu, showMenu, scaleValue, offsetValue, closeButtonOffset, 'Edit profile', 'EditProfile')}
@@ -464,6 +465,7 @@ const TabButton = (profile, theme, dispatch, currentTab, setCurrentTab, setShowM
         {nav == 'Likes' && <Ionicons name="heart-outline" size={22} color={theme ? color.white : color.black} style={{ marginRight: 15 }} />}
         {nav == 'Chat' && <Ionicons name='chatbubbles-outline' size={20} color={theme ? color.white : color.black} style={{ marginRight: 15 }} />}
         {/*  */}
+        {nav == 'AddReels' && <FontAwesome name='plus-square-o' color={theme ? color.white : color.black} size={20} style={{ marginRight: 15 }} />}
         {nav == 'Notifications' && <SimpleLineIcons name='bell' size={20} color={theme ? color.white : color.dark} style={{ marginRight: 15 }} />}
         {nav == 'Profile' && <FontAwesome name='user-o' size={20} color={theme ? color.white : color.black} style={{ marginRight: 15 }} />}
         {nav == 'EditProfile' && <Feather name='edit' size={20} color={theme ? color.white : color.black} style={{ marginRight: 15 }} />}

@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect } from 'react'
-import { View, Text, Pressable, Image, FlatList, ActivityIndicator } from 'react-native'
+import { View, Text, Pressable, Image, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native'
 
 import color from '../../style/color'
 
@@ -10,11 +10,12 @@ import OymoFont from '../../components/OymoFont'
 
 import { pReels } from '../../style/profileReels'
 import { useSelector } from 'react-redux'
+import { Entypo } from '@expo/vector-icons'
 
-const Reels = ({ profile, user }) => {
+const Reels = () => {
   const { theme } = useSelector(state => state.user)
   const navigation = useNavigation()
-  const { passed } = useRoute().params
+  const { passed, profile, user } = useRoute().params
 
   const [reels, setReels] = useState([])
   const [reelsLimit, setLimit] = useState(50)
@@ -31,19 +32,14 @@ const Reels = ({ profile, user }) => {
     )
   }, [reelsLimit, db])
 
-  const getReels = async () => {
-    const queryReels = await getDocs(query(collection(db, 'reels'), where('user.id', '==', user?.id), limit(reelsLimit)))
-
-    setReels(
-      queryReels?.docs?.map(doc => ({
-        id: doc?.id,
-        ...doc?.data()
-      }))
-    )
-  }
-
   return (
-    <>
+    <View style={{ flex: 1, backgroundColor: theme ? color.dark : color.white }}>
+      <View style={pReels.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={pReels.goBack}>
+          <Entypo name='chevron-left' size={24} color={theme ? color.white : color.dark} />
+        </TouchableOpacity>
+        <OymoFont message='Reels' fontStyle={{ ...pReels.goBackText, color: theme ? color.white : color.dark }} />
+      </View>
       {
         reels?.length < 1 ?
           <View style={pReels.indicatorContainer}>
@@ -96,7 +92,7 @@ const Reels = ({ profile, user }) => {
             }
           </>
       }
-    </>
+    </View>
   )
 }
 

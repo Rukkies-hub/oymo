@@ -51,6 +51,7 @@ import ForgotPassword from '../screens/ForgotPassword'
 import Step1 from '../screens/Step1'
 import Step2 from '../screens/Step2'
 import BottomNavigation from './BottomNavigation'
+import DeleteGalleryImage from '../screens/modals/DeleteGalleryImage'
 
 const StackNavigation = () => {
   const { user, loadingInitial, theme, setup } = useSelector(state => state.user)
@@ -224,6 +225,16 @@ const StackNavigation = () => {
                     <Screen
                       name='ViewAvatar'
                       component={ViewAvatar}
+                      options={{
+                        ...TransitionPresets.FadeFromBottomAndroid,
+                        cardStyle: {
+                          backgroundColor: color.transparent
+                        }
+                      }}
+                    />
+                    <Screen
+                      name='DeleteGalleryImage'
+                      component={DeleteGalleryImage}
                       options={{
                         ...TransitionPresets.FadeFromBottomAndroid,
                         cardStyle: {
